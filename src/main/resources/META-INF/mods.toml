@@ -1,0 +1,33 @@
+modLoader="javafml" # mandatory
+loaderVersion="[40,)" # Forge for 1.18.2 starts at 40.x
+license="MIT"
+# Optional: replace with a real link later
+# issueTrackerURL="https://github.com/yourname/yourmod/issues"
+
+[[mods]]
+modId="greed"
+version="1.0.0"
+displayName="Greed"
+authors="Natsu91"
+description='''
+A mod that reworks Minecraft base mechanics, to make the game
+feel more balanced. The main mechanics are Food, Enchantments and Potions.
+Greed lets you experience an unsatiable thirst for knowledge.
+'''
+
+[[dependencies.greed]]
+modId="forge"
+mandatory=true
+versionRange="[40,)" # Forge 40.x = 1.18.2
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.greed]]
+modId="minecraft"
+mandatory=true
+versionRange="[1.18.2,1.19)"
+ordering="NONE"
+side="BOTH"
+
+[[mixins]]
+    config="mixins.greed.json"
