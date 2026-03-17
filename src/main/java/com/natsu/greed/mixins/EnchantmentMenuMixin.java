@@ -31,56 +31,73 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(EnchantmentMenu.class)
 public abstract class EnchantmentMenuMixin {
 
-	@Shadow
-	@Final
-	private ContainerLevelAccess access;
-	
-    @ModifyReturnValue(method = "getEnchantmentList", at = @At("RETURN"))
-    private List<EnchantmentInstance> interceptEnchant(List<EnchantmentInstance> original) {
-        if (original == null) return null;
-        if (original.isEmpty()) return original;
-        
-        EnchantmentMenu menu = (EnchantmentMenu)(Object)this;
-        ItemStack item = menu.slots.get(0).getItem();
-        if (item == null) return original;
+    //@Shadow @Final
+    //private ContainerLevelAccess access;
 
-    	List<EnchantmentInstance> modified = new ArrayList<EnchantmentInstance>();
-    	
-        //This is gonna be REALLY weird
-        Optional<EnchantmentTableState> c = this.access.evaluate((level, block) -> {
-        	try {
-        		Block below = level.getBlockState(block.below()).getBlock();
-            	if (below == Blocks.LAPIS_BLOCK) return EnchantmentTableState.LAPIS_STATE;
-            	if (below == Blocks.AMETHYST_CLUSTER) return EnchantmentTableState.AMETHYST_STATE;
-            	return EnchantmentTableState.DEFAULT;
-        	} catch (Exception err) {
-        		//To avoid Block == null, etc, or weird thing if an enchant table is at Y = 0 (or -64 now) because below is null
-        		return EnchantmentTableState.DEFAULT;
-        	}
-        });
-        if (c.get() == EnchantmentTableState.AMETHYST_STATE) { return original; }		// In amethyst mode, return everything
-        if (c.get() == EnchantmentTableState.DEFAULT && item.getItem() == Items.BOOK) { return modified; }		// In default mode, return null for books
+    @ModifyReturnValue(
+        method = "getEnchantmentList",
+        at = @At("RETURN")
+    )
+    private List<EnchantmentInstance> interceptEnchant(List<EnchantmentInstance> original) {
+        if (original == null || original.isEmpty()) return original;
+
+        ContainerLevelAccess access = ((EnchantmentMenuAccessor)(Object)this).getAccess();
         
-        if (c.get() == EnchantmentTableState.DEFAULT) {
-        	if (new Random().nextFloat() <= 10) {
-        		Enchantment[] curses = new Enchantment[] {Enchantments.BINDING_CURSE, Enchantments.VANISHING_CURSE, GreedCurseRegistry.CURSE_OF_ABSORPTION.get(), 
-        				GreedCurseRegistry.CURSE_OF_CREEPING.get(), GreedCurseRegistry.CURSE_OF_THE_SPONGE.get(), GreedCurseRegistry.CURSE_OF_VOIDING.get()};
-        		modified.add(new EnchantmentInstance(curses[new Random().nextInt(0, curses.length)], 1));
-        	} else {
-            	EnchantmentInstance instance = new EnchantmentInstance(original.getFirst().enchantment, 1);
-                modified.add(instance);	
-        	}
-        } else if (c.get() == EnchantmentTableState.LAPIS_STATE) {
-        	for (EnchantmentInstance ench : original) {
-        		modified.add(new EnchantmentInstance(ench.enchantment, 1));
-        	}
-        	if (new Random().nextFloat() <= 10) {
-        		Enchantment[] curses = new Enchantment[] {Enchantments.BINDING_CURSE, Enchantments.VANISHING_CURSE, GreedCurseRegistry.CURSE_OF_ABSORPTION.get(), 
-        				GreedCurseRegistry.CURSE_OF_CREEPING.get(), GreedCurseRegistry.CURSE_OF_THE_SPONGE.get(), GreedCurseRegistry.CURSE_OF_VOIDING.get()};
-        		modified.add(new EnchantmentInstance(curses[new Random().nextInt(0, curses.length)], 1));
-        	}
+        ItemStack item = ((EnchantmentMenu)(Object)this).slots.get(0).getItem();
+        if (item.isEmpty()) return original;
+
+        Optional<EnchantmentTableState> c = access.evaluate((level, block) -> {
+            try {
+                Block below = level.getBlockState(block.below()).getBlock();
+                if (below == Blocks.LAPIS_BLOCK) return EnchantmentTableState.LAPIS_STATE;
+                if (below == Blocks.AMETHYST_CLUSTER) return EnchantmentTableState.AMETHYST_STATE;
+                return EnchantmentTableState.DEFAULT;
+            } catch (Exception err) {
+                return EnchantmentTableState.DEFAULT;
+            }
+        });
+
+        // Si l'Optional est vide pour une raison quelconque
+        if (!c.isPresent()) return original;
+        EnchantmentTableState state = c.get();
+
+        // Amethyst : on retourne tout sans modification
+        if (state == EnchantmentTableState.AMETHYST_STATE) return original;
+
+        List<EnchantmentInstance> modified = new ArrayList<>();
+        Random rng = new Random();
+
+        Enchantment[] curses = {
+            Enchantments.BINDING_CURSE,
+            Enchantments.VANISHING_CURSE,
+            GreedCurseRegistry.CURSE_OF_ABSORPTION.get(),
+            GreedCurseRegistry.CURSE_OF_CREEPING.get(),
+            GreedCurseRegistry.CURSE_OF_THE_SPONGE.get(),
+            GreedCurseRegistry.CURSE_OF_VOIDING.get()
+        };
+
+        if (state == EnchantmentTableState.DEFAULT) {
+            // Books : aucun enchantement
+            if (item.getItem() == Items.BOOK) return modified;
+
+            // 10% de chance d'avoir une malédiction, sinon le premier enchantement au niveau 1
+            if (rng.nextFloat() <= 0.10f) {
+                modified.add(new EnchantmentInstance(curses[rng.nextInt(curses.length)], 1));
+            } else {
+                modified.add(new EnchantmentInstance(original.get(0).enchantment, 1));
+            }
+
+        } else if (state == EnchantmentTableState.LAPIS_STATE) {
+            // Tous les enchantements au niveau 1
+            for (EnchantmentInstance ench : original) {
+                modified.add(new EnchantmentInstance(ench.enchantment, 1));
+            }
+            // 10% de chance d'ajouter une malédiction en bonus
+            if (rng.nextFloat() <= 0.10f) {
+                modified.add(new EnchantmentInstance(curses[rng.nextInt(curses.length)], 1));
+            }
         }
+
         return modified;
     }
-    
 }
