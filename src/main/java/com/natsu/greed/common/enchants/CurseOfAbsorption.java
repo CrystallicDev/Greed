@@ -3,6 +3,7 @@ package com.natsu.greed.common.enchants;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.item.enchantment.Enchantment.Rarity;
 
 public class CurseOfAbsorption extends Enchantment {
@@ -16,4 +17,9 @@ public class CurseOfAbsorption extends Enchantment {
 		return true;
 	}
 
+	@Override
+	protected boolean checkCompatibility(Enchantment enchant) {
+		return this != enchant && enchant != Enchantments.MENDING;
+	}
+	
 }
