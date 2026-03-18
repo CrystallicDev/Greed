@@ -11,7 +11,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 public class GreedLootModifiers {
 
-	public static final DeferredRegister<GlobalLootModifierSerializer<?>> SERIALIZERS = DeferredRegister.create(ForgeRegistries.LOOT_MODIFIER_SERIALIZERS.get(), Greed.MODID);
+	public static final DeferredRegister<GlobalLootModifierSerializer<?>> SERIALIZERS = DeferredRegister.create(ForgeRegistries.Keys.LOOT_MODIFIER_SERIALIZERS, Greed.MODID);
 	
 	public static final RegistryObject<VoidingLootModifier.Serializer> VOIDING_MODIFIER = SERIALIZERS.register("voiding", VoidingLootModifier.Serializer::new);
 	public static final RegistryObject<ScarcityLootModifier.Serializer> SCARCITY_MODIFIER = SERIALIZERS.register("scarcity", ScarcityLootModifier.Serializer::new);
