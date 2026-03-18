@@ -5,9 +5,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import com.natsu.greed.common.registry.GreedCurseRegistry;
+import com.natsu.greed.common.registry.GreedEnchants;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -34,8 +35,8 @@ public class EnchantListener {
 	    Player player = event.getPlayer();
 
 	    for (ItemStack armor : player.getArmorSlots()) {
-	        if (EnchantmentHelper.getItemEnchantmentLevel(GreedCurseRegistry.CURSE_OF_ABSORPTION.get(), armor) > 0) {
-	            event.getOrb().value -= 1;
+	        if (EnchantmentHelper.getItemEnchantmentLevel(GreedEnchants.CURSE_OF_ABSORPTION.get(), armor) > 0) {
+	            event.getOrb().value *= 0.75;
 	            return;
 	        }
 	    }
@@ -50,40 +51,24 @@ public class EnchantListener {
 	    boolean hasCurse = false;
 
 	    for (ItemStack armor : player.getArmorSlots()) {
-	        if (EnchantmentHelper.getItemEnchantmentLevel(GreedCurseRegistry.CURSE_OF_THE_SPONGE.get(), armor) > 0) {
+	        if (EnchantmentHelper.getItemEnchantmentLevel(GreedEnchants.CURSE_OF_THE_SPONGE.get(), armor) > 0) {
 	            hasCurse = true;
 	        }
 	    }
 
 	    if (!hasCurse) return;
 
-	    MobEffectInstance effect = event.getPotionEffect();
+	    MobEffectInstance original = event.getPotionEffect();
 
-	    if (effect.getEffect().isBeneficial()) {
-	        effect = new MobEffectInstance(
-	                effect.getEffect(),
-	                (int)Math.round(new Random().nextFloat(0.6f, 0.8f) * effect.getDuration()),
-	                effect.getAmplifier()
-	        );
-	        event.setCanceled(true);
-	        event.getEntityLiving().addEffect(effect);
-	    }
-	}
-	
-	@SubscribeEvent
-	public static void onBlockDrops(BlockEvent.BreakEvent event) {
-
-	    Player player = event.getPlayer();
-	    if (player == null) return;
-
-	    ItemStack tool = player.getMainHandItem();
-
-	    if (EnchantmentHelper.getItemEnchantmentLevel(GreedCurseRegistry.CURSE_OF_VOIDING.get(), tool) > 0) {
-
-	    	LevelAccessor level = event.getWorld();
-	    	BlockPos pos = event.getPos();
-	        List<ItemStack> drops = Block.getDrops(level.getBlockState(pos), (ServerLevel)level, pos, level.getBlockEntity(pos), player, tool);
-	        drops.removeIf(stack -> player.getRandom().nextFloat() < 0.5f);
+	    if (original.getEffect().isBeneficial()) {
+	        int newDura = Math.max(1, (int)Math.round(original.getDuration() * (new Random().nextFloat(0.6f, 0.8f))));
+	        player.getLevel().getServer().tell(new TickTask(0, 
+	        		() -> {
+	        			player.removeEffect(original.getEffect());
+	        			player.addEffect(new MobEffectInstance(original.getEffect(), newDura, original.getAmplifier(),
+	        					original.isAmbient(), original.isVisible(), original.showIcon()));
+	        			
+	        		}));
 	    }
 	}
 	
@@ -95,7 +80,7 @@ public class EnchantListener {
 
 	    ItemStack boots = player.getItemBySlot(EquipmentSlot.FEET);
 
-	    if (EnchantmentHelper.getItemEnchantmentLevel(GreedCurseRegistry.CURSE_OF_CREEPING.get(), boots) > 0) {
+	    if (EnchantmentHelper.getItemEnchantmentLevel(GreedEnchants.CURSE_OF_CREEPING.get(), boots) > 0) {
 
 	        if (player.isCrouching() && player.isOnGround()) {
 	            player.setDeltaMovement(0, player.getDeltaMovement().y, 0);
@@ -110,13 +95,14 @@ public class EnchantListener {
 	    if (hasCurse(left) || hasCurse(right)) {
 	        event.setOutput(ItemStack.EMPTY);
 	        event.setCost(40); 
+	        if (event.isCancelable()) { event.setCanceled(true); }
 	    }
 	}
 	
 	public static boolean hasCurse(ItemStack stack) {
 		Map<Enchantment, Integer> enchants = EnchantmentHelper.getEnchantments(stack);
 		for (Enchantment enchant : enchants.keySet()) {
-			if (enchant == GreedCurseRegistry.CURSE_OF_COMBINATION.get()) {
+			if (enchant == GreedEnchants.CURSE_OF_COMBINATION.get()) {
 				return true;
 			}
 		}

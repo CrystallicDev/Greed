@@ -4,6 +4,7 @@ import com.natsu.greed.Greed;
 import com.natsu.greed.common.enchants.CurseOfAbsorption;
 import com.natsu.greed.common.enchants.CurseOfCombination;
 import com.natsu.greed.common.enchants.CurseOfCreeping;
+import com.natsu.greed.common.enchants.CurseOfScarcity;
 import com.natsu.greed.common.enchants.CurseOfTheSponge;
 import com.natsu.greed.common.enchants.CurseOfVoiding;
 
@@ -12,7 +13,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-public class GreedCurseRegistry {
+public class GreedEnchants {
 
 	public static final DeferredRegister<Enchantment> ENCHANTMENTS = DeferredRegister.create(ForgeRegistries.ENCHANTMENTS, Greed.MODID);
 	
@@ -26,4 +27,6 @@ public class GreedCurseRegistry {
 			() -> new CurseOfCreeping());
 	public static final RegistryObject<Enchantment> CURSE_OF_COMBINATION = ENCHANTMENTS.register("curse_of_combination", 
 			() -> new CurseOfCombination());
+	public static final RegistryObject<Enchantment> CURSE_OF_SCARCITY = ENCHANTMENTS.register("curse_of_scarcity", 
+			() -> new CurseOfScarcity());
 }

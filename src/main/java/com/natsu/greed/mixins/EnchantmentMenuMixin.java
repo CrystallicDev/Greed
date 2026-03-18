@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import com.natsu.greed.common.registry.GreedCurseRegistry;
+import com.natsu.greed.common.registry.GreedEnchants;
 import com.natsu.greed.server.enchants.EnchantmentTableState;
 
 import net.minecraft.world.entity.player.Player;
@@ -70,15 +70,16 @@ public abstract class EnchantmentMenuMixin {
         Enchantment[] curses = {
             Enchantments.BINDING_CURSE,
             Enchantments.VANISHING_CURSE,
-            GreedCurseRegistry.CURSE_OF_ABSORPTION.get(),
-            GreedCurseRegistry.CURSE_OF_CREEPING.get(),
-            GreedCurseRegistry.CURSE_OF_THE_SPONGE.get(),
-            GreedCurseRegistry.CURSE_OF_VOIDING.get()
+            GreedEnchants.CURSE_OF_ABSORPTION.get(),
+            GreedEnchants.CURSE_OF_CREEPING.get(),
+            GreedEnchants.CURSE_OF_THE_SPONGE.get(),
+            GreedEnchants.CURSE_OF_VOIDING.get(),
+            GreedEnchants.CURSE_OF_SCARCITY.get()
         };
 
         if (state == EnchantmentTableState.DEFAULT) {
             // Books : aucun enchantement
-            if (item.getItem() == Items.BOOK) return modified;
+            if (item.getItem() == Items.BOOK) return new ArrayList<>();
 
             // 10% de chance d'avoir une malédiction, sinon le premier enchantement au niveau 1
             if (rng.nextFloat() <= 0.10f) {
@@ -88,11 +89,9 @@ public abstract class EnchantmentMenuMixin {
             }
 
         } else if (state == EnchantmentTableState.LAPIS_STATE) {
-            // Tous les enchantements au niveau 1
             for (EnchantmentInstance ench : original) {
                 modified.add(new EnchantmentInstance(ench.enchantment, 1));
             }
-            // 10% de chance d'ajouter une malédiction en bonus
             if (rng.nextFloat() <= 0.10f) {
                 modified.add(new EnchantmentInstance(curses[rng.nextInt(curses.length)], 1));
             }

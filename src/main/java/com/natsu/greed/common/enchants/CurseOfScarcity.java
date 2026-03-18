@@ -5,10 +5,10 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.Enchantment.Rarity;
 
-public class CurseOfVoiding extends Enchantment {
+public class CurseOfScarcity extends Enchantment {
 
-	public CurseOfVoiding() {
-		super(Rarity.RARE, EnchantmentCategory.DIGGER, new EquipmentSlot[]{EquipmentSlot.MAINHAND});
+	public CurseOfScarcity() {
+		super(Rarity.RARE, EnchantmentCategory.ARMOR, new EquipmentSlot[]{EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET});
 	}
 	
 	@Override
