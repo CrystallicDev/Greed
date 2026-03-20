@@ -20,6 +20,7 @@ public class GreedLangEN extends LanguageProvider {
 		add(GreedEnchants.CURSE_OF_SCARCITY.get(), "Curse of Scarcity");
 		add(GreedEnchants.CURSE_OF_THE_SPONGE.get(), "Curse of The Sponge");
 		add(GreedEnchants.CURSE_OF_VOIDING.get(), "Curse of Voiding");
+		add(GreedEnchants.CURSE_OF_HEAVYWEIGHT.get(), "Curse of Heavyweight");
 	}
 
 }

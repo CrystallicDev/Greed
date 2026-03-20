@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import com.natsu.greed.Greed;
 import com.natsu.greed.common.registry.GreedEnchants;
+import com.natsu.greed.server.enchants.EnchantmentTableState;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.TickTask;
@@ -14,20 +16,24 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.AnvilUpdateEvent;
+import net.minecraftforge.event.enchanting.EnchantmentLevelSetEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.PotionEvent;
 import net.minecraftforge.event.entity.player.PlayerXpEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber
+@Mod.EventBusSubscriber(modid = Greed.MODID)
 public class EnchantListener {
 
 	@SubscribeEvent
@@ -73,6 +79,17 @@ public class EnchantListener {
 	}
 	
 	@SubscribeEvent
+	public static void onDamage(LivingHurtEvent event) {
+		if (event.getSource().isFall()) {
+			ItemStack boots = event.getEntityLiving().getItemBySlot(EquipmentSlot.FEET);
+			if (boots != null) { return; }
+		    if (EnchantmentHelper.getItemEnchantmentLevel(GreedEnchants.CURSE_OF_HEAVYWEIGHT.get(), boots) > 0) {
+		    	event.setAmount(event.getAmount() * 2);
+		    }
+		}
+	}
+	
+	@SubscribeEvent
 	public static void onPlayerTick(LivingEvent.LivingUpdateEvent event) {
 
 	    if (!(event.getEntity() instanceof Player player))
@@ -86,6 +103,19 @@ public class EnchantListener {
 	            player.setDeltaMovement(0, player.getDeltaMovement().y, 0);
 	        }
 	    }
+	}
+	
+	@SubscribeEvent
+	public static void onEnchantLevelSet(EnchantmentLevelSetEvent event) {
+		Block below = event.getWorld().getBlockState(event.getPos().below()).getBlock();
+		EnchantmentTableState state;
+		if (below == Blocks.LAPIS_BLOCK) state = EnchantmentTableState.LAPIS_STATE;
+		else if (below == Blocks.AMETHYST_CLUSTER) state = EnchantmentTableState.AMETHYST_STATE;
+		else state = EnchantmentTableState.DEFAULT;
+        
+		if (event.getItem().getItem() == Items.BOOK && state == EnchantmentTableState.DEFAULT) {
+			event.setLevel(-1);
+		}
 	}
 	
 	@SubscribeEvent

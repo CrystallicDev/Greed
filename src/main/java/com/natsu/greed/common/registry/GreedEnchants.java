@@ -4,6 +4,7 @@ import com.natsu.greed.Greed;
 import com.natsu.greed.common.enchants.CurseOfAbsorption;
 import com.natsu.greed.common.enchants.CurseOfCombination;
 import com.natsu.greed.common.enchants.CurseOfCreeping;
+import com.natsu.greed.common.enchants.CurseOfHeavyweight;
 import com.natsu.greed.common.enchants.CurseOfScarcity;
 import com.natsu.greed.common.enchants.CurseOfTheSponge;
 import com.natsu.greed.common.enchants.CurseOfVoiding;
@@ -29,4 +30,6 @@ public class GreedEnchants {
 			() -> new CurseOfCombination());
 	public static final RegistryObject<Enchantment> CURSE_OF_SCARCITY = ENCHANTMENTS.register("curse_of_scarcity", 
 			() -> new CurseOfScarcity());
+	public static final RegistryObject<Enchantment> CURSE_OF_HEAVYWEIGHT = ENCHANTMENTS.register("curse_of_heavyweight", 
+			() -> new CurseOfHeavyweight());
 }

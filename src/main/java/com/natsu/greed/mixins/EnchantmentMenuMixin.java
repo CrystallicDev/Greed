@@ -34,6 +34,33 @@ public abstract class EnchantmentMenuMixin {
     //@Shadow @Final
     //private ContainerLevelAccess access;
 
+	/*@Inject(
+			method = "getEnchantmentList",
+	        at = @At("RETURN")
+	)
+	private void onEnchant(ItemStack item, int index, int cost, CallbackInfoReturnable<List<EnchantmentInstance>> cb) {
+		ContainerLevelAccess access = ((EnchantmentMenuAccessor)(Object)this).getAccess();
+		EnchantmentMenu self = (EnchantmentMenu)(Object)this;
+		Optional<EnchantmentTableState> c = access.evaluate((level, block) -> {
+            try {
+                Block below = level.getBlockState(block.below()).getBlock();
+                if (below == Blocks.LAPIS_BLOCK) return EnchantmentTableState.LAPIS_STATE;
+                if (below == Blocks.AMETHYST_CLUSTER) return EnchantmentTableState.AMETHYST_STATE;
+                return EnchantmentTableState.DEFAULT;
+            } catch (Exception err) {
+                return EnchantmentTableState.DEFAULT;
+            }
+        });
+		
+		if (c.isPresent()) {
+			EnchantmentTableState state = c.get();
+			if (state == EnchantmentTableState.DEFAULT && item.getItem() == Items.BOOK) {
+				self.costs[index] = -1;		// Disabling the current enchant list item
+			}
+		}
+		
+	}*/
+	
     @ModifyReturnValue(
         method = "getEnchantmentList",
         at = @At("RETURN")
@@ -74,7 +101,8 @@ public abstract class EnchantmentMenuMixin {
             GreedEnchants.CURSE_OF_CREEPING.get(),
             GreedEnchants.CURSE_OF_THE_SPONGE.get(),
             GreedEnchants.CURSE_OF_VOIDING.get(),
-            GreedEnchants.CURSE_OF_SCARCITY.get()
+            GreedEnchants.CURSE_OF_SCARCITY.get(),
+            GreedEnchants.CURSE_OF_HEAVYWEIGHT.get()
         };
 
         if (state == EnchantmentTableState.DEFAULT) {
