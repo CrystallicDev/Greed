@@ -1,5 +1,7 @@
 package com.natsu.greed.common.brewing.blockentity;
 
+import com.natsu.greed.common.registry.GreedBlockEntities;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
@@ -16,7 +18,7 @@ public class GreedCauldonBlockEntity extends BlockEntity {
 	private static final int MAX_LEVEL = 3;
 	
 	public GreedCauldonBlockEntity(BlockPos p_155229_, BlockState p_155230_) {
-		super(GreedBlockEntities.CAULDRON, p_155229_, p_155230_);
+		super(GreedBlockEntities.CAULDRON.get(), p_155229_, p_155230_);
 	}
 	
 	public Potion getPotion() { return potion; }

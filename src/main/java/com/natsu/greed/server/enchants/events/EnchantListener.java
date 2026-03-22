@@ -114,7 +114,7 @@ public class EnchantListener {
 		else state = EnchantmentTableState.DEFAULT;
         
 		if (event.getItem().getItem() == Items.BOOK && state == EnchantmentTableState.DEFAULT) {
-			event.setLevel(-1);
+			event.setLevel(0);
 		}
 	}
 	

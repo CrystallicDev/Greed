@@ -2,6 +2,7 @@ package com.natsu.greed;
 
 
 import com.llamalad7.mixinextras.MixinExtrasBootstrap;
+import com.natsu.greed.common.registry.GreedBlockEntities;
 import com.natsu.greed.common.registry.GreedEnchants;
 import com.natsu.greed.common.registry.GreedLootModifiers;
 
@@ -19,6 +20,7 @@ public class Greed {
     	IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
     	GreedEnchants.ENCHANTMENTS.register(modEventBus);
     	GreedLootModifiers.SERIALIZERS.register(modEventBus);
+    	GreedBlockEntities.BLOCK_ENTITIES.register(modEventBus);
     	MixinExtrasBootstrap.init();
     }
     
