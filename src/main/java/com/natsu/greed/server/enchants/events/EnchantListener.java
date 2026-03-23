@@ -1,6 +1,7 @@
 package com.natsu.greed.server.enchants.events;
 
 import java.lang.System.Logger.Level;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -36,6 +37,9 @@ import net.minecraftforge.fml.common.Mod;
 @Mod.EventBusSubscriber(modid = Greed.MODID)
 public class EnchantListener {
 
+	// Our issue is, that if we reduce the PotionAddedEvent's mob instance duration, it re triggers, creating a call loop
+	private static List<MobEffectInstance> instancesToSkip = new ArrayList<>();
+	
 	@SubscribeEvent
 	public static void onPickupXP(PlayerXpEvent.PickupXp event) {
 	    Player player = event.getPlayer();
@@ -53,6 +57,10 @@ public class EnchantListener {
 
 	    if (!(event.getEntity() instanceof Player player))
 	        return;
+	    if (instancesToSkip.contains(event.getPotionEffect())) {
+	    	instancesToSkip.remove(event.getPotionEffect());
+	    	return;
+	    }
 
 	    boolean hasCurse = false;
 
@@ -71,8 +79,10 @@ public class EnchantListener {
 	        player.getLevel().getServer().tell(new TickTask(0, 
 	        		() -> {
 	        			player.removeEffect(original.getEffect());
-	        			player.addEffect(new MobEffectInstance(original.getEffect(), newDura, original.getAmplifier(),
-	        					original.isAmbient(), original.isVisible(), original.showIcon()));
+	        			MobEffectInstance instance = new MobEffectInstance(original.getEffect(), newDura, original.getAmplifier(),
+	        					original.isAmbient(), original.isVisible(), original.showIcon());
+	        			instancesToSkip.add(instance);
+	        			player.addEffect(instance);
 	        			
 	        		}));
 	    }

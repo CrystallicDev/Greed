@@ -13,6 +13,11 @@ public class CurseOfVoiding extends Enchantment {
 	}
 	
 	@Override
+	public int getMaxLevel() {
+		return 3;
+	}
+	
+	@Override
 	public boolean isCurse() {
 		return true;
 	}

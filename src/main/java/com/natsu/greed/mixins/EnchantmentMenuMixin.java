@@ -30,36 +30,6 @@ import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(EnchantmentMenu.class)
 public abstract class EnchantmentMenuMixin {
-
-    //@Shadow @Final
-    //private ContainerLevelAccess access;
-
-	/*@Inject(
-			method = "getEnchantmentList",
-	        at = @At("RETURN")
-	)
-	private void onEnchant(ItemStack item, int index, int cost, CallbackInfoReturnable<List<EnchantmentInstance>> cb) {
-		ContainerLevelAccess access = ((EnchantmentMenuAccessor)(Object)this).getAccess();
-		EnchantmentMenu self = (EnchantmentMenu)(Object)this;
-		Optional<EnchantmentTableState> c = access.evaluate((level, block) -> {
-            try {
-                Block below = level.getBlockState(block.below()).getBlock();
-                if (below == Blocks.LAPIS_BLOCK) return EnchantmentTableState.LAPIS_STATE;
-                if (below == Blocks.AMETHYST_CLUSTER) return EnchantmentTableState.AMETHYST_STATE;
-                return EnchantmentTableState.DEFAULT;
-            } catch (Exception err) {
-                return EnchantmentTableState.DEFAULT;
-            }
-        });
-		
-		if (c.isPresent()) {
-			EnchantmentTableState state = c.get();
-			if (state == EnchantmentTableState.DEFAULT && item.getItem() == Items.BOOK) {
-				self.costs[index] = -1;		// Disabling the current enchant list item
-			}
-		}
-		
-	}*/
 	
     @ModifyReturnValue(
         method = "getEnchantmentList",
@@ -69,6 +39,7 @@ public abstract class EnchantmentMenuMixin {
         if (original == null || original.isEmpty()) return original;
 
         ContainerLevelAccess access = ((EnchantmentMenuAccessor)(Object)this).getAccess();
+        Random rng = ((EnchantmentMenuAccessor)(Object)this).getRandom();
         
         ItemStack item = ((EnchantmentMenu)(Object)this).slots.get(0).getItem();
         if (item.isEmpty()) return original;
@@ -84,15 +55,11 @@ public abstract class EnchantmentMenuMixin {
             }
         });
 
-        // Si l'Optional est vide pour une raison quelconque
         if (!c.isPresent()) return original;
         EnchantmentTableState state = c.get();
-
-        // Amethyst : on retourne tout sans modification
         if (state == EnchantmentTableState.AMETHYST_STATE) return original;
 
         List<EnchantmentInstance> modified = new ArrayList<>();
-        Random rng = new Random();
 
         Enchantment[] curses = {
             Enchantments.BINDING_CURSE,
@@ -106,10 +73,7 @@ public abstract class EnchantmentMenuMixin {
         };
 
         if (state == EnchantmentTableState.DEFAULT) {
-            // Books : aucun enchantement
             if (item.getItem() == Items.BOOK) return new ArrayList<>();
-
-            // 10% de chance d'avoir une malédiction, sinon le premier enchantement au niveau 1
             if (rng.nextFloat() <= 0.10f) {
                 modified.add(new EnchantmentInstance(curses[rng.nextInt(curses.length)], 1));
             } else {

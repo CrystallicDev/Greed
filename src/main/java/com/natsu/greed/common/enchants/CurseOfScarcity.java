@@ -9,7 +9,12 @@ import net.minecraft.world.item.enchantment.Enchantment.Rarity;
 public class CurseOfScarcity extends Enchantment {
 
 	public CurseOfScarcity() {
-		super(Rarity.RARE, EnchantmentCategory.ARMOR, new EquipmentSlot[]{EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET});
+		super(Rarity.RARE, EnchantmentCategory.WEAPON, new EquipmentSlot[]{EquipmentSlot.MAINHAND});
+	}
+	
+	@Override
+	public int getMaxLevel() {
+		return 3;
 	}
 	
 	@Override
