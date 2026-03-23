@@ -75,11 +75,14 @@ public class GreedCauldronBlockEntity extends BlockEntity {
 	
 	
 	public boolean onAddingPotion(Potion incoming) {
+		System.out.println("onAddingPotion");
 		if (isFull()) return false;
 		List<MobEffectInstance> finalEffects = new ArrayList<>();
 		if (isEmpty()) {
+			System.out.println("onAddingPotion - Cauldron is Empty");
 			finalEffects = incoming.getEffects();
 		} else {
+			System.out.println("onAddingPotion - Cauldron is not Empty");
 			for (MobEffectInstance effect : incoming.getEffects()) {
 				for (MobEffectInstance existing : potion.getEffects()) {
 					if (effect.getEffect().equals(existing.getEffect()) && 
@@ -90,6 +93,7 @@ public class GreedCauldronBlockEntity extends BlockEntity {
 			}
 		}
 		if (finalEffects.size() >= potion.getEffects().size()) {
+			System.out.println("onAddingPotion - Cauldron is now updated !");
 			setPotion(new Potion((MobEffectInstance[]) finalEffects.toArray()));
 			this.level++;
 			return true;
@@ -98,8 +102,10 @@ public class GreedCauldronBlockEntity extends BlockEntity {
 	}
 	
 	public boolean onTakingPotion(Player player) {
+		System.out.println("onTakingPotion");
 		Potion outgoing = getPotion();
 		if (outgoing != null) {
+			System.out.println("onTakingPotion - Cauldron has a potion");
 			ItemStack potionBottle = PotionUtils.setPotion(
 			        new ItemStack(Items.POTION), outgoing);
 			empty();
