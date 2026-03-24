@@ -1,7 +1,8 @@
-package com.natsu.greed.common.brewing.events;
+package com.natsu.greed.server.brewing.events;
 
 import com.natsu.greed.Greed;
-import com.natsu.greed.common.brewing.blockentity.GreedCauldronBlockEntity;
+import com.natsu.greed.config.ServerConfig;
+import com.natsu.greed.server.brewing.blockentity.GreedCauldronBlockEntity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
@@ -30,6 +31,8 @@ public class ForgeCauldronListener {
 
 	@SubscribeEvent
 	public static void onPlayerInteract(PlayerInteractEvent e) {
+		if (!ServerConfig.USE_CUSTOM_CAULDRONS.get()) return;
+		
 		Level level = e.getWorld();
 		BlockPos pos = e.getPos();
 		BlockState state = level.getBlockState(pos);

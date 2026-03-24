@@ -8,6 +8,10 @@ import com.natsu.greed.common.enchants.CurseOfHeavyweight;
 import com.natsu.greed.common.enchants.CurseOfScarcity;
 import com.natsu.greed.common.enchants.CurseOfTheSponge;
 import com.natsu.greed.common.enchants.CurseOfVoiding;
+import com.natsu.greed.common.enchants.Grappling;
+import com.natsu.greed.common.enchants.Light;
+import com.natsu.greed.common.enchants.Reeling;
+import com.natsu.greed.common.enchants.Stretched;
 
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraftforge.registries.DeferredRegister;
@@ -32,4 +36,12 @@ public class GreedEnchants {
 			() -> new CurseOfScarcity());
 	public static final RegistryObject<Enchantment> CURSE_OF_HEAVYWEIGHT = ENCHANTMENTS.register("curse_of_heavyweight", 
 			() -> new CurseOfHeavyweight());
+	public static final RegistryObject<Enchantment> LIGHT = ENCHANTMENTS.register("light", 
+			() -> new Light());
+	public static final RegistryObject<Enchantment> REELING = ENCHANTMENTS.register("reeling", 
+			() -> new Reeling());
+	public static final RegistryObject<Enchantment> GRAPPLING = ENCHANTMENTS.register("grappling", 
+			() -> new Grappling());
+	public static final RegistryObject<Enchantment> STRETCHED = ENCHANTMENTS.register("stretched", 
+			() -> new Stretched());
 }

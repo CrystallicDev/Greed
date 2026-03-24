@@ -13,6 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.natsu.greed.common.registry.GreedEnchants;
+import com.natsu.greed.config.ServerConfig;
 import com.natsu.greed.server.enchants.EnchantmentTableState;
 
 import net.minecraft.world.entity.player.Player;
@@ -57,38 +58,53 @@ public abstract class EnchantmentMenuMixin {
 
         if (!c.isPresent()) return original;
         EnchantmentTableState state = c.get();
-        if (state == EnchantmentTableState.AMETHYST_STATE) return original;
+        if (state == EnchantmentTableState.DEFAULT && item.getItem() == Items.BOOK) return new ArrayList<>();
 
         List<EnchantmentInstance> modified = new ArrayList<>();
-
-        Enchantment[] curses = {
-            Enchantments.BINDING_CURSE,
-            Enchantments.VANISHING_CURSE,
-            GreedEnchants.CURSE_OF_ABSORPTION.get(),
-            GreedEnchants.CURSE_OF_CREEPING.get(),
-            GreedEnchants.CURSE_OF_THE_SPONGE.get(),
-            GreedEnchants.CURSE_OF_VOIDING.get(),
-            GreedEnchants.CURSE_OF_SCARCITY.get(),
-            GreedEnchants.CURSE_OF_HEAVYWEIGHT.get()
-        };
-
+        Enchantment[] curses = (Enchantment[]) ServerConfig.getCurseList(state).toArray();
+        List<EnchantmentInstance> allowedEnchants = filterEnchants(state, original);
+        
         if (state == EnchantmentTableState.DEFAULT) {
-            if (item.getItem() == Items.BOOK) return new ArrayList<>();
-            if (rng.nextFloat() <= 0.10f) {
+            if (rng.nextFloat() <= ServerConfig.getCurseProbability(state)) {
                 modified.add(new EnchantmentInstance(curses[rng.nextInt(curses.length)], 1));
             } else {
-                modified.add(new EnchantmentInstance(original.get(0).enchantment, 1));
+                modified.add(new EnchantmentInstance(allowedEnchants.get(0).enchantment, 1));
             }
 
         } else if (state == EnchantmentTableState.LAPIS_STATE) {
-            for (EnchantmentInstance ench : original) {
+            for (EnchantmentInstance ench : allowedEnchants) {
                 modified.add(new EnchantmentInstance(ench.enchantment, 1));
             }
-            if (rng.nextFloat() <= 0.10f) {
+            if (rng.nextFloat() <= ServerConfig.getCurseProbability(state)) {
+                modified.add(new EnchantmentInstance(curses[rng.nextInt(curses.length)], 1));
+            }
+        } else if (state == EnchantmentTableState.AMETHYST_STATE) {
+            modified.addAll(allowedEnchants);
+        	if (rng.nextFloat() <= ServerConfig.getCurseProbability(state)) {
                 modified.add(new EnchantmentInstance(curses[rng.nextInt(curses.length)], 1));
             }
         }
 
         return modified;
     }
+
+	private List<EnchantmentInstance> filterEnchants(EnchantmentTableState state, List<EnchantmentInstance> original) {
+		List<EnchantmentInstance> allowedEnchants = new ArrayList<>();
+		boolean isWhiteList = ServerConfig.isWhiteList(state);
+		List<Enchantment> stageEnchants = ServerConfig.getEnchantmentList(state);
+		if (isWhiteList) {
+			for (EnchantmentInstance instance : original) {
+				if (stageEnchants.contains(instance.enchantment)) {
+					allowedEnchants.add(instance);
+				}
+			}
+		} else {
+			for (EnchantmentInstance instance : original) {
+				if (!stageEnchants.contains(instance.enchantment)) {
+					allowedEnchants.add(instance);
+				}
+			}
+		}
+		return allowedEnchants;
+	}
 }

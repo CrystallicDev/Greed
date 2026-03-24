@@ -1,7 +1,7 @@
 package com.natsu.greed.common.registry;
 
 import com.natsu.greed.Greed;
-import com.natsu.greed.common.brewing.blockentity.GreedCauldronBlockEntity;
+import com.natsu.greed.server.brewing.blockentity.GreedCauldronBlockEntity;
 
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;

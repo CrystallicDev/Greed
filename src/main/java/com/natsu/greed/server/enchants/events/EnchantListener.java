@@ -16,6 +16,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -29,6 +30,7 @@ import net.minecraftforge.event.enchanting.EnchantmentLevelSetEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.PotionEvent;
+import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.event.entity.player.PlayerXpEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -137,6 +139,19 @@ public class EnchantListener {
 	        event.setCost(40); 
 	        if (event.isCancelable()) { event.setCanceled(true); }
 	    }
+	}
+	
+	@SubscribeEvent
+	public static void onArrow(ArrowLooseEvent event) {
+		Player player = event.getPlayer();
+		ItemStack bow = event.getBow();	
+		
+		int level = EnchantmentHelper.getEnchantmentLevel(GreedEnchants.STRETCHED.get(), player);
+		if (level > 0) {
+			float newCharge = event.getCharge() * (1.0f + (0.1f * level));
+			event.setCharge((int)Math.min(newCharge, 3));
+		}
+		
 	}
 	
 	public static boolean hasCurse(ItemStack stack) {

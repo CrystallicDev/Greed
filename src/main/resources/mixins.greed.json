@@ -6,7 +6,11 @@
     "compatibilityLevel": "JAVA_17",
     "mixins": [
         "EnchantmentMenuMixin",
-        "EnchantmentMenuAccessor"
+        "EnchantmentMenuAccessor",
+		"EnchantmentAccessor",
+		"EnchantmentMixin",
+		"FishHookMixin",
+		"FishHookAccessor"
     ],
     "client": [],
     "server": [],

@@ -1,30 +1,29 @@
-package com.natsu.greed.common.brewing.events;
+package com.natsu.greed.server.brewing.events;
 
-import javax.annotation.Nullable;
+import com.google.common.base.Preconditions;
+import com.natsu.greed.server.brewing.blockentity.GreedCauldronBlockEntity;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.alchemy.Potion;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.eventbus.api.Event;
 
-import com.google.common.base.Preconditions;
-import com.natsu.greed.common.brewing.blockentity.GreedCauldronBlockEntity;
-
-public class CauldronTakingPotionEvent extends PlayerEvent {
+public class CauldronAddingPotionEvent extends PlayerEvent {
 
 	private final InteractionHand hand;
     private final BlockPos cauldronPos;
     private final GreedCauldronBlockEntity blockEntity;
     private InteractionResult cancellationResult = InteractionResult.PASS;
+    private final Potion incomingPotion;
     
-    public CauldronTakingPotionEvent(Player player, InteractionHand hand, BlockPos pos, GreedCauldronBlockEntity cauldron) {
-    	super(Preconditions.checkNotNull(player, "Null player in CauldronTakingPotionEvent!"));
-        this.hand = Preconditions.checkNotNull(hand, "Null hand in CauldronTakingPotionEvent!");
-        this.blockEntity = Preconditions.checkNotNull(cauldron, "Null blockEntity in CauldronTakingPotionEvent!");
+    public CauldronAddingPotionEvent(Player player, InteractionHand hand, BlockPos pos, GreedCauldronBlockEntity cauldron, Potion potion) {
+    	super(Preconditions.checkNotNull(player, "Null player in CauldronAddingPotionEvent!"));
+        this.hand = Preconditions.checkNotNull(hand, "Null hand in CauldronAddingPotionEvent!");
+        this.blockEntity = Preconditions.checkNotNull(cauldron, "Null blockEntity in CauldronAddingPotionEvent!");
         this.cauldronPos = pos;
+        this.incomingPotion = Preconditions.checkNotNull(potion, "Null Potion in CauldronAddingPotionEvent!");;
     }
 
 	public InteractionResult getCancellationResult() {
@@ -46,11 +45,15 @@ public class CauldronTakingPotionEvent extends PlayerEvent {
 	public GreedCauldronBlockEntity getBlockEntity() {
 		return blockEntity;
 	}
+
+
+	public Potion getIncomingPotion() {
+		return incomingPotion;
+	}
     
 	@Override
 	public boolean isCancelable() {
 		return true;
 	}
-    
 	
 }

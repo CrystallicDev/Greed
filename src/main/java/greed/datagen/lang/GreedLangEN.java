@@ -21,6 +21,9 @@ public class GreedLangEN extends LanguageProvider {
 		add(GreedEnchants.CURSE_OF_THE_SPONGE.get(), "Curse of The Sponge");
 		add(GreedEnchants.CURSE_OF_VOIDING.get(), "Curse of Voiding");
 		add(GreedEnchants.CURSE_OF_HEAVYWEIGHT.get(), "Curse of Heavyweight");
+		add(GreedEnchants.LIGHT.get(), "Light");
+		add(GreedEnchants.REELING.get(), "Reeling");
+		add(GreedEnchants.GRAPPLING.get(), "Grappling");
 	}
 
 }

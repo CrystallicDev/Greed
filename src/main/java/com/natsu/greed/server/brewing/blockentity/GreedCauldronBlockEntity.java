@@ -1,4 +1,4 @@
-package com.natsu.greed.common.brewing.blockentity;
+package com.natsu.greed.server.brewing.blockentity;
 
 import java.util.ArrayList;
 import java.util.List;

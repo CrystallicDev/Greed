@@ -21,6 +21,9 @@ public class GreedLangFR extends LanguageProvider {
 		add(GreedEnchants.CURSE_OF_THE_SPONGE.get(), "Malédiction de l'Éponge");
 		add(GreedEnchants.CURSE_OF_VOIDING.get(), "Malédiction d'annulation");
 		add(GreedEnchants.CURSE_OF_HEAVYWEIGHT.get(), "Malédiction de lourdeur");
+		add(GreedEnchants.LIGHT.get(), "Légèreté");
+		add(GreedEnchants.REELING.get(), "Repêchage");
+		add(GreedEnchants.GRAPPLING.get(), "Grappin");
 	}
 
 }
