@@ -14,7 +14,7 @@ import net.minecraft.world.item.enchantment.Enchantments;
 public class GreedEnchantModifiers {
 
 	public static void init() {
-		Map<String, Integer> rarityMap = ServerConfig.ENCHANTMENTS_RARITY.get();
+		Map<String, Integer> rarityMap = ServerConfig.getMap(ServerConfig.ENCHANTMENTS_RARITY.get());
 
 	    for (Map.Entry<String, Integer> entry : rarityMap.entrySet()) {
 	        ResourceLocation id = new ResourceLocation(entry.getKey());

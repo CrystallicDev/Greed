@@ -12,8 +12,7 @@ public class GrappleHandler {
         double dx = hook.getX() - player.getX();
         double dy = hook.getY() - player.getY();
         double dz = hook.getZ() - player.getZ();
-        HookState state = HookState.fromHook(hook);
-        if (state != HookState.BOBBING || !hook.isOnGround()) {
+        if (!hook.isOnGround()) {
         	return;
         }
         int level = EnchantmentHelper.getEnchantmentLevel(GreedEnchants.GRAPPLING.get(), player);

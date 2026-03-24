@@ -8,7 +8,7 @@ public enum HookState {
 	FLYING, BOBBING, HOOKED_IN_ENTITY;
 	
 	public static HookState fromHook(FishingHook hook) {
-		Enum<?> state = ((FishHookAccessor)hook).getCurrentState();
-		return HookState.values()[state.ordinal()];
+		//Enum<?> state = ((FishHookAccessor)hook).getCurrentState();
+		return HookState.values()[0];
 	}
 }

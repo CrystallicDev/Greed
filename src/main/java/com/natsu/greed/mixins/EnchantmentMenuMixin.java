@@ -61,7 +61,7 @@ public abstract class EnchantmentMenuMixin {
         if (state == EnchantmentTableState.DEFAULT && item.getItem() == Items.BOOK) return new ArrayList<>();
 
         List<EnchantmentInstance> modified = new ArrayList<>();
-        Enchantment[] curses = (Enchantment[]) ServerConfig.getCurseList(state).toArray();
+        Enchantment[] curses = ServerConfig.getCurseList(state).toArray(new Enchantment[0]);
         List<EnchantmentInstance> allowedEnchants = filterEnchants(state, original);
         
         if (state == EnchantmentTableState.DEFAULT) {

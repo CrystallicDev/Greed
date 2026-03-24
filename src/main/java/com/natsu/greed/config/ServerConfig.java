@@ -41,9 +41,9 @@ public class ServerConfig {
 	
 	// # Custom Enchants Values
 	public static final ForgeConfigSpec.BooleanValue USE_CUSTOM_RARITY;
-	public static final ForgeConfigSpec.ConfigValue<Map<String, Integer>> ENCHANTMENTS_RARITY;
+	public static final ForgeConfigSpec.ConfigValue<List<? extends String>> ENCHANTMENTS_RARITY;
 	public static final ForgeConfigSpec.BooleanValue USE_CUSTOM_MAX_LEVELS;
-	public static final ForgeConfigSpec.ConfigValue<Map<String, Integer>> ENCHANTMENTS_MAX_LEVELS;
+	public static final ForgeConfigSpec.ConfigValue<List<? extends String>> ENCHANTMENTS_MAX_LEVELS;
 	
 	// # Custom Book Trades
 	public static final ForgeConfigSpec.BooleanValue USE_CUSTOM_BOOK_TRADES;
@@ -286,7 +286,7 @@ public class ServerConfig {
 	    };
 	}
 	
-	private static Map<String, Integer> getDefaultRarities() {
+	private static List<String> getDefaultRarities() {
 		Map<String, Integer> defaults = new HashMap<>();
 		defaults.put("minecraft:protection", 2); // RARE
 		defaults.put("minecraft:fire_protection", 0); // COMMON
@@ -323,10 +323,10 @@ public class ServerConfig {
 		defaults.put("minecraft:multishot", 2); // RARE (untouched)
 		defaults.put("minecraft:quick_charge", 1); // UNCOMMON (untouched)
 		defaults.put("minecraft:piercing", 0); // COMMON (untouched)
-		return defaults;
+		return mapToList(defaults);
 	}
 	
-	private static Map<String, Integer> getDefaultMaxLevels() {
+	private static List<String> getDefaultMaxLevels() {
 		Map<String, Integer> defaults = new HashMap<>();
 		defaults.put("minecraft:respiration", 5); // +2
 		defaults.put("minecraft:depth_strider", 5); // +2
@@ -334,7 +334,32 @@ public class ServerConfig {
 		defaults.put("minecraft:lure", 5); // +2
 		defaults.put("minecraft:quick_charge", 5); // +2
 		defaults.put("minecraft:piercing", 5); // +1
-		return defaults;
+		return mapToList(defaults);
+	}
+	
+	private static List<String> mapToList(Map<String, Integer> map) {
+	    return map.entrySet().stream()
+	            .map(e -> e.getKey() + "=" + e.getValue())
+	            .toList();
+	}
+	
+	public static Map<String, Integer> getMap(List<? extends String> targetValue) {
+	    Map<String, Integer> map = new HashMap<>();
+
+	    for (String entry : targetValue) {
+	        String[] parts = entry.split("=");
+
+	        if (parts.length == 2) {
+	            try {
+	                String key = parts[0].trim();
+	                int value = Integer.parseInt(parts[1].trim());
+	                map.put(key, value);
+	            } catch (NumberFormatException ignored) {
+	            }
+	        }
+	    }
+
+	    return map;
 	}
 
 }

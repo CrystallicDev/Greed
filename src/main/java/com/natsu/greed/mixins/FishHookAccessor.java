@@ -7,6 +7,6 @@ import net.minecraft.world.entity.projectile.FishingHook;
 
 @Mixin(FishingHook.class)
 public interface FishHookAccessor {
-	@Accessor
-	Enum<?> getCurrentState();
+	/*@Accessor("currentState")
+	Enum<?> getCurrentState();*/
 }

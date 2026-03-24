@@ -148,7 +148,7 @@ public class EnchantListener {
 		
 		int level = EnchantmentHelper.getEnchantmentLevel(GreedEnchants.STRETCHED.get(), player);
 		if (level > 0) {
-			float newCharge = event.getCharge() * (1.0f + (0.1f * level));
+			float newCharge = event.getCharge() * (1.5f * level);
 			event.setCharge((int)Math.min(newCharge, 3));
 		}
 		
