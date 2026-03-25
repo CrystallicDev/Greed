@@ -12,6 +12,7 @@ import com.natsu.greed.server.enchants.EnchantmentTableState;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ArmorMaterials;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantment.Rarity;
@@ -107,7 +108,7 @@ public class ServerConfig {
 				).define("defaultStage_useBanListAsWhitelist", false);
 		
 		
-		
+		builder.pop();
 		builder.push("# Lapis Stage (Lapis Lazuli block)");
 		LAPIS_CURSE_LIST = builder.defineList("lapisStage_curseList",
 			    List.of("minecraft:curse_of_vanishing",
@@ -154,7 +155,8 @@ public class ServerConfig {
 				).define("lapisStage_useBanListAsWhitelist", false);
 		
 		
-		
+
+		builder.pop();
 		builder.push("# Amethyst Stage (Amethyst Cluster block)");
 		AMETHYST_CURSE_LIST = builder.defineList("amethystStage_curseList",
 			    new ArrayList<>(),
@@ -187,6 +189,8 @@ public class ServerConfig {
 		
 
 
+		builder.pop();
+		builder.pop();
 		builder.push("# Enchantment Rarity");
 		USE_CUSTOM_RARITY = builder.comment("Use a custom rarity for each enchantment. Disable this to use vanilla.").define("useCustomEnchantmentRarity", true);
 		ENCHANTMENTS_RARITY = builder.comment(
@@ -200,14 +204,17 @@ public class ServerConfig {
 	                "Map each enchantment to a max level."
 	        ).define("maxLevels", getDefaultMaxLevels());
 		
-		
+
+		builder.pop();
+		builder.pop();
 		builder.push("# Librarian Villager Trades");
 		USE_CUSTOM_BOOK_TRADES = builder
 				.comment("Make the Librarian villagers trade really simple books (Sharpness I, Knockback I, etc) at first, but trade\n"
 						+ " higher books, with multiple enchantments at higher levels.")
 				.define("useCustomBooksTrades", true);
 		ALLOW_CURSED_BOOKS = builder.define("allowCursedBooksTrading", true);
-		
+
+		builder.pop();
 		builder.push("# Custom Cauldrons");
 		USE_CUSTOM_CAULDRONS = builder
 				.comment("Make the cauldrons able to hold potions, and able to merge multiple potions in one.\n")
@@ -223,16 +230,16 @@ public class ServerConfig {
 	}
 	
 	
-	public static List<Enchantment> getCurseList(EnchantmentTableState tableState) {
+	public static List<Enchantment> getCurseList(EnchantmentTableState tableState, ItemStack applicableItem) {
 		switch (tableState) {
 		case AMETHYST_STATE:
-			return AMETHYST_CURSE_LIST.get().stream().map(ResourceLocation::new).map(rl -> ForgeRegistries.ENCHANTMENTS.getValue(rl)).filter(Objects::nonNull).toList();
+			return AMETHYST_CURSE_LIST.get().stream().map(ResourceLocation::new).map(rl -> ForgeRegistries.ENCHANTMENTS.getValue(rl)).filter(Objects::nonNull).filter(rl -> rl.canEnchant(applicableItem)).toList();
 		case DEFAULT:
-			return DEFAULTSTAGE_CURSE_LIST.get().stream().map(ResourceLocation::new).map(rl -> ForgeRegistries.ENCHANTMENTS.getValue(rl)).filter(Objects::nonNull).toList();
+			return DEFAULTSTAGE_CURSE_LIST.get().stream().map(ResourceLocation::new).map(rl -> ForgeRegistries.ENCHANTMENTS.getValue(rl)).filter(Objects::nonNull).filter(rl -> rl.canEnchant(applicableItem)).toList();
 		case LAPIS_STATE:
-			return LAPIS_CURSE_LIST.get().stream().map(ResourceLocation::new).map(rl -> ForgeRegistries.ENCHANTMENTS.getValue(rl)).filter(Objects::nonNull).toList();
+			return LAPIS_CURSE_LIST.get().stream().map(ResourceLocation::new).map(rl -> ForgeRegistries.ENCHANTMENTS.getValue(rl)).filter(Objects::nonNull).filter(rl -> rl.canEnchant(applicableItem)).toList();
 		default:
-			return DEFAULTSTAGE_CURSE_LIST.get().stream().map(ResourceLocation::new).map(rl -> ForgeRegistries.ENCHANTMENTS.getValue(rl)).filter(Objects::nonNull).toList();
+			return DEFAULTSTAGE_CURSE_LIST.get().stream().map(ResourceLocation::new).map(rl -> ForgeRegistries.ENCHANTMENTS.getValue(rl)).filter(Objects::nonNull).filter(rl -> rl.canEnchant(applicableItem)).toList();
 		}
 	}
 	
@@ -294,7 +301,7 @@ public class ServerConfig {
 		defaults.put("minecraft:blast_protection", 1); // UNCOMMON
 		defaults.put("minecraft:projectile_protection", 0); // COMMON, may be stupid, we'll see
 		defaults.put("minecraft:respiration", 1); // UNCOMMON (why was it even rare)
-		defaults.put("minecraft:aqua_affinity", 2); // RARE (Kinda usefull)
+		defaults.put("minecraft:aqua_affinity", 2); // RARE (Kinda useful)
 		defaults.put("minecraft:thorns", 3); // VERY_RARE (untouched)
 		defaults.put("minecraft:depth_strider", 2); // RARE (untouched)
 		defaults.put("minecraft:frost_walker", 3); // VERY_RARE

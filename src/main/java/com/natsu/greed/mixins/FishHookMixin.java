@@ -30,23 +30,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
 @Mixin(value = FishingHook.class, priority = -9999)		// We want to be called last, especially if Pride is loaded
 public class FishHookMixin {
 
-	
-	
-	/*@Inject(method = "<init>(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/level/Level;II)V", at = @At("TAIL"), )
-	private void onInit(Player p_37106_, Level p_37107_, int p_37108_, int p_37109_, CallbackInfo ci) {
-		FishingHook hook = (FishingHook)(Object)this;
-		Player player = hook.getOwner() instanceof Player p ? p : null;
-		if (player == null) {
-			return;
-		}
-		if (Greed.isPridePresent) { return; }		// We will let Pride handle it from here, to avoid 1.8.9 fishing rod logic breaking, and mixin concurrence
-		
-		int lightLevel = EnchantmentHelper.getEnchantmentLevel(GreedEnchants.LIGHT.get(), player); // Not a really good idea, but should work fine ?
-		hook.setDeltaMovement(hook.getDeltaMovement().multiply(1 + (0.2 * lightLevel), 1 + (0.07 * lightLevel), 1 + (0.2 * lightLevel)));
-	}*/
 
     @Inject(method = "retrieve", at = @At("HEAD"), cancellable = true)
     private void onRetrieve(ItemStack rod, CallbackInfoReturnable<Integer> cir) {
@@ -57,8 +44,6 @@ public class FishHookMixin {
         int grapplingLevel = EnchantmentHelper.getItemEnchantmentLevel(
         		GreedEnchants.GRAPPLING.get(), rodStack
         );
-
-        System.out.println("GRAPPLING : "+grapplingLevel);
         if (grapplingLevel > 0 && self.getHookedIn() == null) {
             GrappleHandler.handleGrapple(self, player);
             cir.setReturnValue(0);

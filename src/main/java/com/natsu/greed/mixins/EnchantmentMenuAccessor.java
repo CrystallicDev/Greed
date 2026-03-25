@@ -15,4 +15,6 @@ public interface EnchantmentMenuAccessor {
     ContainerLevelAccess getAccess();
 	@Accessor
     Random getRandom();
+	@Accessor
+    int[] getCosts();
 }

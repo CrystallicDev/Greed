@@ -32,10 +32,7 @@ public class Greed {
     	//isPridePresent = isClassPresent("com.natsu.pride.Pride");
     }
     
-    @SubscribeEvent
-    public static void onCommonSetup(FMLCommonSetupEvent event) {
-    	
-    }
+    
     
     /*private static boolean isClassPresent(String path) {
     	try {

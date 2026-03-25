@@ -9,8 +9,7 @@
         "EnchantmentMenuAccessor",
 		"EnchantmentAccessor",
 		"EnchantmentMixin",
-		"FishHookMixin",
-		"FishHookAccessor"
+		"FishHookMixin"
     ],
     "client": [],
     "server": [],

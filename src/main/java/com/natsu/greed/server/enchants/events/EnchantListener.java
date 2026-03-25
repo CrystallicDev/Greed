@@ -8,6 +8,8 @@ import java.util.Random;
 
 import com.natsu.greed.Greed;
 import com.natsu.greed.common.registry.GreedEnchants;
+import com.natsu.greed.config.ServerConfig;
+import com.natsu.greed.server.enchants.EnchantMenuHandler;
 import com.natsu.greed.server.enchants.EnchantmentTableState;
 
 import net.minecraft.core.BlockPos;
@@ -21,6 +23,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -116,15 +119,16 @@ public class EnchantListener {
 	        }
 	    }
 	}
-	
+
 	@SubscribeEvent
 	public static void onEnchantLevelSet(EnchantmentLevelSetEvent event) {
+		if (!ServerConfig.USE_ENCHANTING_SYSTEM.get()) { return; }
 		Block below = event.getWorld().getBlockState(event.getPos().below()).getBlock();
 		EnchantmentTableState state;
 		if (below == Blocks.LAPIS_BLOCK) state = EnchantmentTableState.LAPIS_STATE;
 		else if (below == Blocks.AMETHYST_CLUSTER) state = EnchantmentTableState.AMETHYST_STATE;
 		else state = EnchantmentTableState.DEFAULT;
-        
+		
 		if (event.getItem().getItem() == Items.BOOK && state == EnchantmentTableState.DEFAULT) {
 			event.setLevel(0);
 		}
@@ -148,8 +152,9 @@ public class EnchantListener {
 		
 		int level = EnchantmentHelper.getEnchantmentLevel(GreedEnchants.STRETCHED.get(), player);
 		if (level > 0) {
-			float newCharge = event.getCharge() * (1.5f * level);
-			event.setCharge((int)Math.min(newCharge, 3));
+			float newCharge = event.getCharge() * (1f  + (0.5f * level));
+			event.setCharge((int)Math.round(newCharge));
+			//event.setCharge((int)Math.min(newCharge, 3));
 		}
 		
 	}
