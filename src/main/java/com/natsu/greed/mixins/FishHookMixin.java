@@ -10,7 +10,6 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.natsu.greed.Greed;
 import com.natsu.greed.common.registry.GreedEnchants;
 import com.natsu.greed.server.fishing.GrappleHandler;
-import com.natsu.greed.server.fishing.HookState;
 
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;

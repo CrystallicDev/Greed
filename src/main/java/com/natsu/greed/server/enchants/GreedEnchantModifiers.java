@@ -20,7 +20,6 @@ public class GreedEnchantModifiers {
 	    for (Map.Entry<String, Integer> entry : rarityMap.entrySet()) {
 	        ResourceLocation id = new ResourceLocation(entry.getKey());
 	        Enchantment enchantment = ForgeRegistries.ENCHANTMENTS.getValue(id);
-	        System.out.println("Setting custom rarity for : "+entry.getKey()+", Enchantment: "+id);
 	        if (enchantment == null) continue;
 	        
 	        Enchantment.Rarity rarity = ServerConfig.intToRarity(entry.getValue());

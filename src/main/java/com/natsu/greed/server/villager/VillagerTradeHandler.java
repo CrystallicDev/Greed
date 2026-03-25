@@ -202,8 +202,7 @@ public class VillagerTradeHandler {
 		}
 
 		public MerchantOffer getOffer(Entity p_35685_, Random p_35686_) {
-			List<Enchantment> list = StreamSupport.stream(ForgeRegistries.ENCHANTMENTS.spliterator(), false).filter(Enchantment::isTradeable).filter(enchant -> !enchant.isCurse())
-					.filter(enchant -> !enchant.isAllowedOnBooks())
+			List<Enchantment> list = StreamSupport.stream(ForgeRegistries.ENCHANTMENTS.spliterator(), false).filter(Enchantment::isTradeable)
 					.filter(enchant -> enchant.getRarity() == Rarity.COMMON || enchant.getRarity() == Rarity.UNCOMMON)
 					.collect(Collectors.toList());
 			Enchantment enchantment = list.get(p_35686_.nextInt(list.size()));

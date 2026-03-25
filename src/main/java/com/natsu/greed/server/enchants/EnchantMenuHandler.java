@@ -24,6 +24,7 @@ public class EnchantMenuHandler {
         List<EnchantmentInstance> modified = new ArrayList<>();
         Enchantment[] curses = ServerConfig.getCurseList(state, item).toArray(new Enchantment[0]);
         List<EnchantmentInstance> allowedEnchants = filterEnchants(state, original);
+        if (allowedEnchants.isEmpty()) { return allowedEnchants; }
         
         if (state == EnchantmentTableState.DEFAULT) {
             if (rng.nextFloat() <= ServerConfig.getCurseProbability(state)) {

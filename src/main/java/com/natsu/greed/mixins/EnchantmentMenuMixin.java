@@ -34,7 +34,7 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(EnchantmentMenu.class)
 public abstract class EnchantmentMenuMixin {
 	
-	@Inject(method = "getEnchantmentList", at = @At("HEAD"))
+	@Inject(method = "getEnchantmentList", at = @At("HEAD"), cancellable = true)
 	private void onGetEnchantList(ItemStack p_39472_, int index, int cost, CallbackInfoReturnable<List<EnchantmentInstance>> ci) {
 		if (!ServerConfig.USE_ENCHANTING_SYSTEM.get()) { return; }
 		

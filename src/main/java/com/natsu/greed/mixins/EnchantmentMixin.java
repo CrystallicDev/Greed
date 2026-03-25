@@ -28,7 +28,7 @@ public abstract class EnchantmentMixin {
 	    System.out.println("Current Targeted Enchantment: "+id.getNamespace()+":"+id.getPath()+", searching for : "+id.toString());
 	    Map<String, Integer> maxLevelMap = ServerConfig.getMap(ServerConfig.ENCHANTMENTS_MAX_LEVELS.get());
 	    Integer override = maxLevelMap.get(id.toString());
-
+	    
 	    return override != null ? override : original;
 	}
 	
