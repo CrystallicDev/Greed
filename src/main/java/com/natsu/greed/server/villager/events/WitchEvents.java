@@ -36,30 +36,30 @@ public class WitchEvents {
 	public static ItemStack convertPotion(ItemStack potion) {
 		List<MobEffectInstance> effects = PotionUtils.getMobEffects(potion);
 		if (effects.isEmpty()) return potion;
-		MobEffectInstance current = effects.getFirst();
+		MobEffectInstance current = effects.get(0);
 		
 		if (current.getEffect() == MobEffects.POISON) {
 			if (new Random().nextInt(0, 100) <= 30) {
 				ItemStack newPotion = new ItemStack(Items.SPLASH_POTION);
 				Potion pot = new Potion(new MobEffectInstance(MobEffects.POISON, 10*20, 1));
-				PotionUtils.setPotion(newPotion, pot);
+				return PotionUtils.setPotion(newPotion, pot);
 			} else { return potion; }
 		} else if (current.getEffect() == MobEffects.WEAKNESS) {
 			if (new Random().nextInt(0, 100) <= 30) {
 				ItemStack newPotion = new ItemStack(Items.LINGERING_POTION);
 				Potion pot = new Potion(new MobEffectInstance(MobEffects.WEAKNESS, 60*20, 0));
-				PotionUtils.setPotion(newPotion, pot);
+				return PotionUtils.setPotion(newPotion, pot);
 			} else { return potion; }
 		} else if (current.getEffect() == MobEffects.MOVEMENT_SLOWDOWN) {
 			if (new Random().nextInt(0, 100) <= 30) {
 				ItemStack newPotion = new ItemStack(Items.LINGERING_POTION);
 				Potion pot = new Potion(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 90*20, 1));
-				PotionUtils.setPotion(newPotion, pot);
+				return PotionUtils.setPotion(newPotion, pot);
 			} else { return potion; }
 		}
 		
 		
-		return null;
+		return potion;
 	}
 	
 }

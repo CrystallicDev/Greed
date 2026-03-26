@@ -65,7 +65,7 @@ public class VillagerTradeHandler {
 		
 		VillagerTrades.TRADES.get(VillagerProfession.LIBRARIAN).put(1,
 				new VillagerTrades.ItemListing[] {
-						new ItemsForEmeralds(Items.NAME_TAG, 7, 1, 12, 2),
+						new ItemsForEmeralds(Items.NAME_TAG, 7, 1, 12, 30),
 						new EmeraldForItems(Items.PAPER, 24, 16, 2),
 						new ItemsForEmeralds(Blocks.BOOKSHELF, 9, 1, 12, 1)
 				});
@@ -88,7 +88,7 @@ public class VillagerTradeHandler {
 				});
 		VillagerTrades.TRADES.get(VillagerProfession.LIBRARIAN).put(5,
 				new VillagerTrades.ItemListing[] {
-					new MultiEnchantBookForEmeralds(15, 2, 4)
+					new MultiEnchantBookForEmeralds(15, 2, 5)
 				});
 		
 		/*VillagerTrades.TRADES.get(VillagerProfession.FARMER).put(1,
@@ -239,8 +239,7 @@ public class VillagerTradeHandler {
 		}
 
 		public MerchantOffer getOffer(Entity p_35685_, Random p_35686_) {
-			List<Enchantment> list = StreamSupport.stream(ForgeRegistries.ENCHANTMENTS.spliterator(), false).filter(Enchantment::isTradeable).filter(enchant -> !enchant.isCurse())
-					.filter(enchant -> !enchant.isAllowedOnBooks())
+			List<Enchantment> list = StreamSupport.stream(ForgeRegistries.ENCHANTMENTS.spliterator(), false).filter(Enchantment::isTradeable)
 					.filter(enchant -> enchant.getRarity() == Rarity.COMMON || enchant.getRarity() == Rarity.UNCOMMON)
 					.collect(Collectors.toList());
 			Enchantment enchantment = list.get(p_35686_.nextInt(list.size()));
@@ -304,7 +303,7 @@ public class VillagerTradeHandler {
 			List<Enchantment> enchantList = StreamSupport.stream(ForgeRegistries.ENCHANTMENTS.spliterator(), false).filter(Enchantment::isTradeable)
 					.collect(Collectors.toList());
 			Collections.shuffle(enchantList);		// Shuffling
-			int randomEnchantAmount = random.nextInt(this.minEnchant, this.maxEnchant);
+			int randomEnchantAmount = Mth.nextInt(random, this.minEnchant, this.maxEnchant);
 			int emeraldCost = 0;
 			ItemStack itemStack = new ItemStack(Items.ENCHANTED_BOOK);
 			for (int i = 0; i < randomEnchantAmount; i++) {
