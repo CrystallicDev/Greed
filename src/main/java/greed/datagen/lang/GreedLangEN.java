@@ -24,6 +24,7 @@ public class GreedLangEN extends LanguageProvider {
 		add(GreedEnchants.LIGHT.get(), "Light");
 		add(GreedEnchants.REELING.get(), "Reeling");
 		add(GreedEnchants.GRAPPLING.get(), "Grappling");
+		add(GreedEnchants.STRETCHED.get(), "Stretched");
 	}
 
 }

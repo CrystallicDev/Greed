@@ -24,6 +24,7 @@ public class GreedLangFR extends LanguageProvider {
 		add(GreedEnchants.LIGHT.get(), "Légèreté");
 		add(GreedEnchants.REELING.get(), "Repêchage");
 		add(GreedEnchants.GRAPPLING.get(), "Grappin");
+		add(GreedEnchants.STRETCHED.get(), "Corde Tendue");
 	}
 
 }

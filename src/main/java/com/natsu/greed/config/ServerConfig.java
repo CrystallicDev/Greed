@@ -48,12 +48,13 @@ public class ServerConfig {
 	
 	// # Custom Book Trades
 	public static final ForgeConfigSpec.BooleanValue USE_CUSTOM_BOOK_TRADES;
-	public static final ForgeConfigSpec.BooleanValue ALLOW_CURSED_BOOKS;
 	
 	// # Custom Cauldrons
 	public static final ForgeConfigSpec.BooleanValue USE_CUSTOM_CAULDRONS;
 	public static final ForgeConfigSpec.DoubleValue CAULDRONS_POTION_DURATION_MERGE_FACTOR;
 	
+	// # Custom Witches Thrown potions
+	public static final ForgeConfigSpec.BooleanValue USE_CUSTOM_WITCHES_POTION;
 	
 	static {
 		ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
@@ -212,7 +213,6 @@ public class ServerConfig {
 				.comment("Make the Librarian villagers trade really simple books (Sharpness I, Knockback I, etc) at first, but trade\n"
 						+ " higher books, with multiple enchantments at higher levels.")
 				.define("useCustomBooksTrades", true);
-		ALLOW_CURSED_BOOKS = builder.define("allowCursedBooksTrading", true);
 
 		builder.pop();
 		builder.push("# Custom Cauldrons");
@@ -224,6 +224,12 @@ public class ServerConfig {
 						+ "increase the duration. For example : potion1.duration + (0.5 * potion2.duration)")
 				.defineInRange("cauldronPotionDurationMergeFactor", 0.5d, 0.1d, 1d);
 		
+		
+		builder.pop();
+		builder.push("# Witches thrown potions");
+		USE_CUSTOM_WITCHES_POTION = builder
+				.comment("Make the witches throw more aggressive potions, and sometime even throw lingering potions")
+				.define("useCustomWitchesPotions", true);
 		
 		builder.pop();
 		SPEC = builder.build();
