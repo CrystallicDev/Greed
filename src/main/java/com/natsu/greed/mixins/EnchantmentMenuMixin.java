@@ -20,6 +20,7 @@ import com.natsu.greed.server.enchants.EnchantmentTableState;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.EnchantmentMenu;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -69,6 +70,8 @@ public abstract class EnchantmentMenuMixin {
 		}
 		ci.setReturnValue(modified);
 	}
+	
+	
 	
     /*@ModifyReturnValue(
         method = "getEnchantmentList",

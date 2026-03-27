@@ -41,13 +41,13 @@ public class WitchEvents {
 		if (current.getEffect() == MobEffects.POISON) {
 			if (new Random().nextInt(0, 100) <= 30) {
 				ItemStack newPotion = new ItemStack(Items.SPLASH_POTION);
-				Potion pot = new Potion(new MobEffectInstance(MobEffects.POISON, 10*20, 1));
+				Potion pot = new Potion(new MobEffectInstance(MobEffects.POISON, 15*20, 1));
 				return PotionUtils.setPotion(newPotion, pot);
 			} else { return potion; }
 		} else if (current.getEffect() == MobEffects.WEAKNESS) {
 			if (new Random().nextInt(0, 100) <= 30) {
 				ItemStack newPotion = new ItemStack(Items.LINGERING_POTION);
-				Potion pot = new Potion(new MobEffectInstance(MobEffects.WEAKNESS, 60*20, 0));
+				Potion pot = new Potion(new MobEffectInstance(MobEffects.WEAKNESS, 90*20, 0));
 				return PotionUtils.setPotion(newPotion, pot);
 			} else { return potion; }
 		} else if (current.getEffect() == MobEffects.MOVEMENT_SLOWDOWN) {

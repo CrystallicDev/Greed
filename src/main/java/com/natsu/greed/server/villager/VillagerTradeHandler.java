@@ -1,7 +1,9 @@
 package com.natsu.greed.server.villager;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -13,7 +15,9 @@ import javax.annotation.Nullable;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.natsu.greed.config.ServerConfig;
+import com.natsu.greed.server.villager.events.GreedFillingTradesEvent;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -28,6 +32,7 @@ import net.minecraft.world.entity.monster.Witch;
 import net.minecraft.world.entity.npc.VillagerDataHolder;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerTrades;
+import net.minecraft.world.entity.npc.VillagerTrades.ItemListing;
 import net.minecraft.world.entity.npc.VillagerType;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.DyeItem;
@@ -54,6 +59,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
 import net.minecraft.world.level.saveddata.maps.MapDecoration;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class VillagerTradeHandler {
@@ -61,73 +67,38 @@ public class VillagerTradeHandler {
 	public static void init() {
 		if (!ServerConfig.USE_CUSTOM_BOOK_TRADES.get()) return;
 		
-		VillagerTrades.TRADES.get(VillagerProfession.LIBRARIAN).clear();
+		VillagerProfession[] profList = {VillagerProfession.ARMORER, VillagerProfession.BUTCHER, VillagerProfession.CARTOGRAPHER, VillagerProfession.CLERIC, VillagerProfession.FARMER,
+				VillagerProfession.FISHERMAN, VillagerProfession.FLETCHER, VillagerProfession.LEATHERWORKER, VillagerProfession.LIBRARIAN, VillagerProfession.MASON, VillagerProfession.NITWIT,
+				VillagerProfession.SHEPHERD, VillagerProfession.TOOLSMITH, VillagerProfession.WEAPONSMITH};
+		for (VillagerProfession profession : profList) {
+			HashMap<Integer, List<ItemListing>> TradeMap = toMap(VillagerTrades.TRADES.get(profession));
+			GreedFillingTradesEvent event = new GreedFillingTradesEvent(profession, TradeMap);
+			MinecraftForge.EVENT_BUS.post(event);
+			HashMap<Integer, List<ItemListing>> newTrades = event.getTrades();
+			for (int i = 1; i <= 5; i++) {
+				VillagerTrades.TRADES.get(profession).put(i, newTrades.get(i).toArray(new VillagerTrades.ItemListing[0]));
+			}
+		}
 		
-		VillagerTrades.TRADES.get(VillagerProfession.LIBRARIAN).put(1,
-				new VillagerTrades.ItemListing[] {
-						new ItemsForEmeralds(Items.NAME_TAG, 7, 1, 12, 30),
-						new EmeraldForItems(Items.PAPER, 24, 16, 2),
-						new ItemsForEmeralds(Blocks.BOOKSHELF, 9, 1, 12, 1)
-				});
-		VillagerTrades.TRADES.get(VillagerProfession.LIBRARIAN).put(2, 
-				new VillagerTrades.ItemListing[] {
-					new SimpleEnchantBookForEmeralds(1),
-					new ItemsForEmeralds(Items.ENCHANTING_TABLE, 20, 1, 1, 7),
-					new ItemsForEmeralds(Items.LANTERN, 1, 1, 5)
-				});
-		VillagerTrades.TRADES.get(VillagerProfession.LIBRARIAN).put(3,
-				new VillagerTrades.ItemListing[] {
-					new EmeraldForItems(Items.LAPIS_LAZULI, 5, 12, 10),
-					new EnchantBookForEmeralds(5)
-				});
-		VillagerTrades.TRADES.get(VillagerProfession.LIBRARIAN).put(4,
-				new VillagerTrades.ItemListing[] {
-					new MultiEnchantBookForEmeralds(10, 1, 3),
-					new EmeraldForItems(Items.WRITABLE_BOOK, 2, 12, 30),
-					new ItemsForEmeralds(Items.CLOCK, 5, 1, 15)
-				});
-		VillagerTrades.TRADES.get(VillagerProfession.LIBRARIAN).put(5,
-				new VillagerTrades.ItemListing[] {
-					new MultiEnchantBookForEmeralds(15, 2, 5)
-				});
-		
-		/*VillagerTrades.TRADES.get(VillagerProfession.FARMER).put(1,
-				new VillagerTrades.ItemListing[] {
-					new EmeraldForItems(Items.WHEAT, 20, 16, 2),
-					new EmeraldForItems(Items.POTATO, 26, 16, 2),
-					new EmeraldForItems(Items.CARROT, 22, 16, 2),
-					new EmeraldForItems(Items.BEETROOT, 15, 16, 2),
-					new ItemsForEmeralds(Items.BREAD, 1, 6, 16, 1)
-				});
-		VillagerTrades.TRADES.get(VillagerProfession.FARMER).put(2,
-				new VillagerTrades.ItemListing[] {
-						new ItemsForEmeralds(Items.PUMPKIN_PIE, 1, 4, 5),
-						new ItemsForEmeralds(Items.APPLE, 1, 4, 16, 5)
-				});
-		VillagerTrades.TRADES.get(VillagerProfession.FARMER).put(3,
-				new VillagerTrades.ItemListing[] {
-						new EmeraldForItems(Blocks.MELON, 4, 12, 20)
-				});
-		VillagerTrades.TRADES.get(VillagerProfession.FARMER).put(4,
-				new VillagerTrades.ItemListing[] {
-						new SuspiciousStewForEmerald(MobEffects.NIGHT_VISION, 100, 15),
-						new SuspiciousStewForEmerald(MobEffects.JUMP, 160, 15),
-						new SuspiciousStewForEmerald(MobEffects.WEAKNESS, 140, 15),
-						new SuspiciousStewForEmerald(MobEffects.BLINDNESS, 120, 15),
-						new SuspiciousStewForEmerald(MobEffects.POISON, 280, 15),
-						new SuspiciousStewForEmerald(MobEffects.SATURATION, 7, 15)
-				});
-		VillagerTrades.TRADES.get(VillagerProfession.FARMER).put(5,
-				new VillagerTrades.ItemListing[] {
-						new ItemsForEmeralds(Items.GLISTERING_MELON_SLICE, 4, 3, 30)
-				});*/
-		
-		
+		 /*
+		p_35633_.put(VillagerProfession.CLERIC, toIntMap(ImmutableMap.of(1, new VillagerTrades.ItemListing[]{new VillagerTrades.EmeraldForItems(Items.ROTTEN_FLESH, 32, 16, 2), new VillagerTrades.ItemsForEmeralds(Items.REDSTONE, 1, 2, 1)}, 2, new VillagerTrades.ItemListing[]{new VillagerTrades.EmeraldForItems(Items.GOLD_INGOT, 3, 12, 10), new VillagerTrades.ItemsForEmeralds(Items.LAPIS_LAZULI, 1, 1, 5)}, 3, new VillagerTrades.ItemListing[]{new VillagerTrades.EmeraldForItems(Items.RABBIT_FOOT, 2, 12, 20), new VillagerTrades.ItemsForEmeralds(Blocks.GLOWSTONE, 4, 1, 12, 10)}, 4, new VillagerTrades.ItemListing[]{new VillagerTrades.EmeraldForItems(Items.SCUTE, 4, 12, 30), new VillagerTrades.EmeraldForItems(Items.GLASS_BOTTLE, 9, 12, 30), new VillagerTrades.ItemsForEmeralds(Items.ENDER_PEARL, 5, 1, 15)}, 5, new VillagerTrades.ItemListing[]{new VillagerTrades.EmeraldForItems(Items.NETHER_WART, 22, 12, 30), new VillagerTrades.ItemsForEmeralds(Items.EXPERIENCE_BOTTLE, 3, 1, 30)})));
+	      p_35633_.put(VillagerProfession.ARMORER, toIntMap(ImmutableMap.of(1, new VillagerTrades.ItemListing[]{new VillagerTrades.EmeraldForItems(Items.COAL, 15, 16, 2), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.IRON_LEGGINGS), 7, 1, 12, 1, 0.2F), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.IRON_BOOTS), 4, 1, 12, 1, 0.2F), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.IRON_HELMET), 5, 1, 12, 1, 0.2F), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.IRON_CHESTPLATE), 9, 1, 12, 1, 0.2F)}, 2, new VillagerTrades.ItemListing[]{new VillagerTrades.EmeraldForItems(Items.IRON_INGOT, 4, 12, 10), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.BELL), 36, 1, 12, 5, 0.2F), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.CHAINMAIL_BOOTS), 1, 1, 12, 5, 0.2F), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.CHAINMAIL_LEGGINGS), 3, 1, 12, 5, 0.2F)}, 3, new VillagerTrades.ItemListing[]{new VillagerTrades.EmeraldForItems(Items.LAVA_BUCKET, 1, 12, 20), new VillagerTrades.EmeraldForItems(Items.DIAMOND, 1, 12, 20), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.CHAINMAIL_HELMET), 1, 1, 12, 10, 0.2F), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.CHAINMAIL_CHESTPLATE), 4, 1, 12, 10, 0.2F), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.SHIELD), 5, 1, 12, 10, 0.2F)}, 4, new VillagerTrades.ItemListing[]{new VillagerTrades.EnchantedItemForEmeralds(Items.DIAMOND_LEGGINGS, 14, 3, 15, 0.2F), new VillagerTrades.EnchantedItemForEmeralds(Items.DIAMOND_BOOTS, 8, 3, 15, 0.2F)}, 5, new VillagerTrades.ItemListing[]{new VillagerTrades.EnchantedItemForEmeralds(Items.DIAMOND_HELMET, 8, 3, 30, 0.2F), new VillagerTrades.EnchantedItemForEmeralds(Items.DIAMOND_CHESTPLATE, 16, 3, 30, 0.2F)})));
+	      p_35633_.put(VillagerProfession.WEAPONSMITH, toIntMap(ImmutableMap.of(1, new VillagerTrades.ItemListing[]{new VillagerTrades.EmeraldForItems(Items.COAL, 15, 16, 2), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.IRON_AXE), 3, 1, 12, 1, 0.2F), new VillagerTrades.EnchantedItemForEmeralds(Items.IRON_SWORD, 2, 3, 1)}, 2, new VillagerTrades.ItemListing[]{new VillagerTrades.EmeraldForItems(Items.IRON_INGOT, 4, 12, 10), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.BELL), 36, 1, 12, 5, 0.2F)}, 3, new VillagerTrades.ItemListing[]{new VillagerTrades.EmeraldForItems(Items.FLINT, 24, 12, 20)}, 4, new VillagerTrades.ItemListing[]{new VillagerTrades.EmeraldForItems(Items.DIAMOND, 1, 12, 30), new VillagerTrades.EnchantedItemForEmeralds(Items.DIAMOND_AXE, 12, 3, 15, 0.2F)}, 5, new VillagerTrades.ItemListing[]{new VillagerTrades.EnchantedItemForEmeralds(Items.DIAMOND_SWORD, 8, 3, 30, 0.2F)})));
+	      p_35633_.put(VillagerProfession.TOOLSMITH, toIntMap(ImmutableMap.of(1, new VillagerTrades.ItemListing[]{new VillagerTrades.EmeraldForItems(Items.COAL, 15, 16, 2), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.STONE_AXE), 1, 1, 12, 1, 0.2F), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.STONE_SHOVEL), 1, 1, 12, 1, 0.2F), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.STONE_PICKAXE), 1, 1, 12, 1, 0.2F), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.STONE_HOE), 1, 1, 12, 1, 0.2F)}, 2, new VillagerTrades.ItemListing[]{new VillagerTrades.EmeraldForItems(Items.IRON_INGOT, 4, 12, 10), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.BELL), 36, 1, 12, 5, 0.2F)}, 3, new VillagerTrades.ItemListing[]{new VillagerTrades.EmeraldForItems(Items.FLINT, 30, 12, 20), new VillagerTrades.EnchantedItemForEmeralds(Items.IRON_AXE, 1, 3, 10, 0.2F), new VillagerTrades.EnchantedItemForEmeralds(Items.IRON_SHOVEL, 2, 3, 10, 0.2F), new VillagerTrades.EnchantedItemForEmeralds(Items.IRON_PICKAXE, 3, 3, 10, 0.2F), new VillagerTrades.ItemsForEmeralds(new ItemStack(Items.DIAMOND_HOE), 4, 1, 3, 10, 0.2F)}, 4, new VillagerTrades.ItemListing[]{new VillagerTrades.EmeraldForItems(Items.DIAMOND, 1, 12, 30), new VillagerTrades.EnchantedItemForEmeralds(Items.DIAMOND_AXE, 12, 3, 15, 0.2F), new VillagerTrades.EnchantedItemForEmeralds(Items.DIAMOND_SHOVEL, 5, 3, 15, 0.2F)}, 5, new VillagerTrades.ItemListing[]{new VillagerTrades.EnchantedItemForEmeralds(Items.DIAMOND_PICKAXE, 13, 3, 30, 0.2F)})));
+	      
+		*/
 
 		
 	}
 	
-	
+	private static HashMap<Integer, List<VillagerTrades.ItemListing>> toMap(Int2ObjectMap<VillagerTrades.ItemListing[]> intMap){
+		HashMap<Integer, List<VillagerTrades.ItemListing>> map = new HashMap<>();
+		for (int i = 1; i <= 5; i++) {
+			List<VillagerTrades.ItemListing> list = Arrays.asList(intMap.get(i));
+			map.put(i, list);
+		}
+		return map;
+	}
 
 	
 	
@@ -136,7 +107,7 @@ public class VillagerTradeHandler {
 	 * code THAT FUCKING EXIST but is private for some reason
 	 * */
 	
-	static class DyedArmorForEmeralds implements VillagerTrades.ItemListing {
+	public static class DyedArmorForEmeralds implements VillagerTrades.ItemListing {
 		private final Item item;
 		private final int value;
 		private final int maxUses;
@@ -178,7 +149,7 @@ public class VillagerTradeHandler {
 		}
 	}
 
-	static class EmeraldForItems implements VillagerTrades.ItemListing {
+	public static class EmeraldForItems implements VillagerTrades.ItemListing {
 		private final Item item;
 		private final int cost;
 		private final int maxUses;
@@ -200,7 +171,7 @@ public class VillagerTradeHandler {
 		}
 	}
 
-	static class EmeraldsForVillagerTypeItem implements VillagerTrades.ItemListing {
+	public static class EmeraldsForVillagerTypeItem implements VillagerTrades.ItemListing {
 		private final Map<VillagerType, Item> trades;
 		private final int cost;
 		private final int maxUses;
@@ -231,95 +202,9 @@ public class VillagerTradeHandler {
 		}
 	}
 
-	static class SimpleEnchantBookForEmeralds implements VillagerTrades.ItemListing {
-		private final int villagerXp;
-
-		public SimpleEnchantBookForEmeralds(int p_35683_) {
-			this.villagerXp = p_35683_;
-		}
-
-		public MerchantOffer getOffer(Entity p_35685_, Random p_35686_) {
-			List<Enchantment> list = StreamSupport.stream(ForgeRegistries.ENCHANTMENTS.spliterator(), false).filter(Enchantment::isTradeable)
-					.filter(enchant -> enchant.getRarity() == Rarity.COMMON || enchant.getRarity() == Rarity.UNCOMMON)
-					.collect(Collectors.toList());
-			Enchantment enchantment = list.get(p_35686_.nextInt(list.size()));
-			int i = Mth.nextInt(p_35686_, enchantment.getMinLevel(), enchantment.getMaxLevel());
-			ItemStack itemstack = EnchantedBookItem.createForEnchantment(new EnchantmentInstance(enchantment, i));
-			int j = 2 + p_35686_.nextInt(5 + i * 10) + 3 * i;
-			if (enchantment.isTreasureOnly()) {
-				j *= 2;
-			}
-
-			if (j > 64) {
-				j = 64;
-			}
-
-			return new MerchantOffer(new ItemStack(Items.EMERALD, j), new ItemStack(Items.BOOK), itemstack, 12,
-					this.villagerXp, 0.2F);
-		}
-	}
 	
-	static class EnchantBookForEmeralds implements VillagerTrades.ItemListing {
-		private final int villagerXp;
 
-		public EnchantBookForEmeralds(int p_35683_) {
-			this.villagerXp = p_35683_;
-		}
-
-		public MerchantOffer getOffer(Entity p_35685_, Random p_35686_) {
-			List<Enchantment> list = StreamSupport.stream(ForgeRegistries.ENCHANTMENTS.spliterator(), false).filter(Enchantment::isTradeable)
-					.collect(Collectors.toList());
-			Enchantment enchantment = list.get(p_35686_.nextInt(list.size()));
-			int i = Mth.nextInt(p_35686_, enchantment.getMinLevel(), enchantment.getMaxLevel());
-			ItemStack itemstack = EnchantedBookItem.createForEnchantment(new EnchantmentInstance(enchantment, i));
-			int j = 2 + p_35686_.nextInt(5 + i * 10) + 3 * i;
-			if (enchantment.isTreasureOnly()) {
-				j *= 2;
-			}
-
-			if (j > 64) {
-				j = 64;
-			}
-
-			return new MerchantOffer(new ItemStack(Items.EMERALD, j), new ItemStack(Items.BOOK), itemstack, 12,
-					this.villagerXp, 0.2F);
-		}
-	}
-	// Protection III -> 11 / 46 
-	// Sharpness V -> 17 / 72
-	// Protection III + Sharpness V -> 28 / 66
-	static class MultiEnchantBookForEmeralds implements VillagerTrades.ItemListing {
-		private final int villagerXp;
-		private final int minEnchant;
-		private final int maxEnchant;
-
-		public MultiEnchantBookForEmeralds(int p_35683_, int minEnchantCount, int maxEnchantCount) {
-			this.villagerXp = p_35683_;
-			this.minEnchant = minEnchantCount;
-			this.maxEnchant = maxEnchantCount;
-		}
-
-		public MerchantOffer getOffer(Entity entity, Random random) {
-			List<Enchantment> enchantList = StreamSupport.stream(ForgeRegistries.ENCHANTMENTS.spliterator(), false).filter(Enchantment::isTradeable)
-					.collect(Collectors.toList());
-			Collections.shuffle(enchantList);		// Shuffling
-			int randomEnchantAmount = Mth.nextInt(random, this.minEnchant, this.maxEnchant);
-			int emeraldCost = 0;
-			ItemStack itemStack = new ItemStack(Items.ENCHANTED_BOOK);
-			for (int i = 0; i < randomEnchantAmount; i++) {
-				Enchantment enchantment = enchantList.get(i);
-				int enchantLevel = Mth.nextInt(random, enchantment.getMinLevel(), enchantment.getMaxLevel());
-				emeraldCost += 2 + random.nextInt(3 + enchantLevel * (enchantment.isTreasureOnly() ? 7 : 5)) + 3 * enchantLevel;
-				EnchantedBookItem.addEnchantment(itemStack, new EnchantmentInstance(enchantment, enchantLevel));
-			}
-			if (emeraldCost >= 64) { emeraldCost = 64; }
-
-			return new MerchantOffer(new ItemStack(Items.EMERALD, emeraldCost), new ItemStack(Items.BOOK), itemStack, 12,
-					this.villagerXp, 0.2F);
-		}
-	}
-
-	static class EnchantedItemForEmeralds implements VillagerTrades.ItemListing {
+	public static class EnchantedItemForEmeralds implements VillagerTrades.ItemListing {
 		private final ItemStack itemStack;
 		private final int baseEmeraldCost;
 		private final int maxUses;
@@ -348,12 +233,7 @@ public class VillagerTradeHandler {
 		}
 	}
 
-	public interface ItemListing {
-		@Nullable
-		MerchantOffer getOffer(Entity p_35706_, Random p_35707_);
-	}
-
-	static class ItemsAndEmeraldsToItems implements VillagerTrades.ItemListing {
+	public static class ItemsAndEmeraldsToItems implements VillagerTrades.ItemListing {
 		private final ItemStack fromItem;
 		private final int fromCount;
 		private final int emeraldCost;
@@ -389,7 +269,7 @@ public class VillagerTradeHandler {
 		}
 	}
 
-	static class ItemsForEmeralds implements VillagerTrades.ItemListing {
+	public static class ItemsForEmeralds implements VillagerTrades.ItemListing {
 		private final ItemStack itemStack;
 		private final int emeraldCost;
 		private final int numberOfItems;
@@ -430,7 +310,7 @@ public class VillagerTradeHandler {
 		}
 	}
 
-	static class SuspiciousStewForEmerald implements VillagerTrades.ItemListing {
+	public static class SuspiciousStewForEmerald implements VillagerTrades.ItemListing {
 		final MobEffect effect;
 		final int duration;
 		final int xp;
@@ -451,7 +331,7 @@ public class VillagerTradeHandler {
 		}
 	}
 
-	static class TippedArrowForItemsAndEmeralds implements VillagerTrades.ItemListing {
+	public static class TippedArrowForItemsAndEmeralds implements VillagerTrades.ItemListing {
 		private final ItemStack toItem;
 		private final int toCount;
 		private final int emeraldCost;
@@ -485,7 +365,7 @@ public class VillagerTradeHandler {
 		}
 	}
 
-	static class TreasureMapForEmeralds implements VillagerTrades.ItemListing {
+	public static class TreasureMapForEmeralds implements VillagerTrades.ItemListing {
 		private final int emeraldCost;
 		private final TagKey<ConfiguredStructureFeature<?, ?>> destination;
 		private final String displayName;

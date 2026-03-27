@@ -27,6 +27,7 @@ public class ServerConfig {
 	
 	// # Custom Enchant system
 	public static final ForgeConfigSpec.BooleanValue USE_ENCHANTING_SYSTEM;
+	public static final ForgeConfigSpec.BooleanValue DISABLE_BOOKSHELVES_CAP;
 	public static final ForgeConfigSpec.ConfigValue<List<? extends String>> DEFAULTSTAGE_CURSE_LIST;
 	public static final ForgeConfigSpec.DoubleValue DEFAULTSTAGE_CURSE_PROBA;
 	public static final ForgeConfigSpec.ConfigValue<List<? extends String>> DEFAULTSTAGE_ENCHANTMENT_BAN_LIST;
@@ -60,6 +61,7 @@ public class ServerConfig {
 		ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
 		builder.push("# Enchanting Table Stages");
 		USE_ENCHANTING_SYSTEM = builder.define("useEnchantingTableStages", true);
+		DISABLE_BOOKSHELVES_CAP = builder.define("disableBookshelvesCap", true);
 		
 		builder.push("# Default Stage (Any block)");
 		DEFAULTSTAGE_CURSE_LIST = builder.defineList("defaultStage_curseList",
@@ -301,7 +303,7 @@ public class ServerConfig {
 	
 	private static List<String> getDefaultRarities() {
 		Map<String, Integer> defaults = new HashMap<>();
-		defaults.put("minecraft:protection", 2); // RARE
+		defaults.put("minecraft:protection", 1); // UNCOMMON
 		defaults.put("minecraft:fire_protection", 0); // COMMON
 		defaults.put("minecraft:feather_falling", 0); // COMMON
 		defaults.put("minecraft:blast_protection", 1); // UNCOMMON
@@ -319,7 +321,7 @@ public class ServerConfig {
 		defaults.put("minecraft:fire_aspect", 3); // VERY_RARE
 		defaults.put("minecraft:looting", 2); // RARE
 		defaults.put("minecraft:sweeping", 2); // RARE
-		defaults.put("minecraft:efficiency", 1); // RARE
+		defaults.put("minecraft:efficiency", 1); // UNCOMMON
 		defaults.put("minecraft:silk_touch", 3); // VERY_RARE (untouched)
 		defaults.put("minecraft:unbreaking", 2); // RARE
 		defaults.put("minecraft:fortune", 3); // VERY_RARE 
