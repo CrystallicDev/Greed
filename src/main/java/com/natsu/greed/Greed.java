@@ -8,6 +8,7 @@ import com.natsu.greed.common.registry.GreedLootModifiers;
 import com.natsu.greed.config.ServerConfig;
 import com.natsu.greed.server.enchants.GreedEnchantModifiers;
 import com.natsu.greed.server.villager.VillagerTradeHandler;
+import com.natsu.greed.server.villager.events.CartographerTradesInitEvent;
 
 import net.minecraftforge.data.loading.DatagenModLoader;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -21,7 +22,6 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 @Mod(Greed.MODID)
 public class Greed {
 	public static final String MODID = "greed";
-	//public static boolean isPridePresent = false;		// Required for Fishing Hook handling
 
     public Greed() {
     	IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -32,20 +32,9 @@ public class Greed {
     	MixinExtrasBootstrap.init();
     	if (!DatagenModLoader.isRunningDataGen()) {
         	GreedEnchantModifiers.init();
-        	VillagerTradeHandler.init();
+        	CartographerTradesInitEvent.class.getName();
     	}
-    	//isPridePresent = isClassPresent("com.natsu.pride.Pride");
     }
-    
-    
-    
-    /*private static boolean isClassPresent(String path) {
-    	try {
-    		Class.forName(path);
-    		return true;
-    	} catch (Exception e) {
-    		return false;
-    	}
-    }*/
+
 
 }

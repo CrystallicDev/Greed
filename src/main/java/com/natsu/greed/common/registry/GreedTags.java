@@ -12,7 +12,7 @@ public class GreedTags {
 
 	public static final TagKey<ConfiguredStructureFeature<?, ?>> CARTOGRAPHER_STRUCTURE_SIMPLE_DUNGEONS = TagKey.create(Registry.CONFIGURED_STRUCTURE_FEATURE_REGISTRY, 
 			new ResourceLocation(Greed.MODID, "cartographer_structure_simple_dungeons"));
-	public static final TagKey<Biome> CARTOGRAPHER_BIOMES_LEVEL_1 = TagKey.create(Registry.BIOME_REGISTRY, 
+	/*public static final TagKey<Biome> CARTOGRAPHER_BIOMES_LEVEL_1 = TagKey.create(Registry.BIOME_REGISTRY, 
 			new ResourceLocation(Greed.MODID, "cartographer_biome_base"));
 	
 	public static final TagKey<ConfiguredStructureFeature<?, ?>> CARTOGRAPHER_STRUCTURE_LEVEL_2 = TagKey.create(Registry.CONFIGURED_STRUCTURE_FEATURE_REGISTRY, 
@@ -23,5 +23,5 @@ public class GreedTags {
 	public static final TagKey<ConfiguredStructureFeature<?, ?>> CARTOGRAPHER_STRUCTURE_LEVEL_3 = TagKey.create(Registry.CONFIGURED_STRUCTURE_FEATURE_REGISTRY, 
 			new ResourceLocation(Greed.MODID, "cartographer_structure_level_3"));
 	public static final TagKey<Biome> CARTOGRAPHER_BIOMES_LEVEL_3 = TagKey.create(Registry.BIOME_REGISTRY, 
-			new ResourceLocation(Greed.MODID, "cartographer_biome_level_3"));
+			new ResourceLocation(Greed.MODID, "cartographer_biome_level_3"));*/
 }

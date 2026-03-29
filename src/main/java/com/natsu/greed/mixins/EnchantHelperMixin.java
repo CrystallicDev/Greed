@@ -16,8 +16,8 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 @Mixin(EnchantmentHelper.class)
 public class EnchantHelperMixin {
 
-	@Inject(method = "getEnchantmentcost", at = @At("HEAD"), cancellable = true)
-	private void getEnchantmentCost(Random random, int slot, int enchantPowerBonus, ItemStack itemstack, CallbackInfoReturnable<Integer> ci) {
+	@Inject(method = "getEnchantmentCost", at = @At("HEAD"), cancellable = true)
+	private static void getEnchantmentCost(Random random, int slot, int enchantPowerBonus, ItemStack itemstack, CallbackInfoReturnable<Integer> ci) {
 		if (ServerConfig.DISABLE_BOOKSHELVES_CAP.get()) {
 			Item item = itemstack.getItem();
 			int i = itemstack.getItemEnchantability();

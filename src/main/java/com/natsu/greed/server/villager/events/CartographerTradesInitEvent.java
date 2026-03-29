@@ -15,11 +15,7 @@ import com.natsu.greed.server.villager.VillagerTradeHandler;
 import com.natsu.greed.server.villager.VillagerTradeHandler.EmeraldForItems;
 import com.natsu.greed.server.villager.VillagerTradeHandler.ItemsForEmeralds;
 import com.natsu.greed.server.villager.VillagerTradeHandler.TreasureMapForEmeralds;
-import com.natsu.greed.server.villager.events.CartographerTradesHandler.BiomeMapListing.StructureMapListing;
 import com.natsu.greed.server.villager.events.GreedFillingTradesEvent.ProfessionLevel;
-import com.natsu.greed.server.villager.events.LibrarianTradesHandler.EnchantBookForEmeralds;
-import com.natsu.greed.server.villager.events.LibrarianTradesHandler.MultiEnchantBookForEmeralds;
-import com.natsu.greed.server.villager.events.LibrarianTradesHandler.SimpleEnchantBookForEmeralds;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -46,25 +42,23 @@ import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(modid = Greed.MODID)
+@Mod.EventBusSubscriber(modid = Greed.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class CartographerTradesInitEvent {
 
 	@SubscribeEvent
 	public static void onTradeSetup(GreedFillingTradesEvent event) {
 		if (event.getProfession() != VillagerProfession.CARTOGRAPHER) return;
 		event.clearTradeOf(ProfessionLevel.NOVICE);
-		event.clearTradeOf(ProfessionLevel.APPRENTICE);
-		event.clearTradeOf(ProfessionLevel.JOURNEYMAN);
-		event.clearTradeOf(ProfessionLevel.EXPERT);
-		event.clearTradeOf(ProfessionLevel.MASTER);
+		//event.clearTradeOf(ProfessionLevel.APPRENTICE);
+		//event.clearTradeOf(ProfessionLevel.JOURNEYMAN);
+		//event.clearTradeOf(ProfessionLevel.EXPERT);
+		//event.clearTradeOf(ProfessionLevel.MASTER);
 		
-		VillagerTrades.TRADES.get(VillagerProfession.CARTOGRAPHER).put(1,
-				new VillagerTrades.ItemListing[] {
-						new ItemsForEmeralds(Items.MAP, 7, 1, 1),
-						new StructureMapListing(5, GreedTags.CARTOGRAPHER_STRUCTURE_SIMPLE_DUNGEON, "map.greed.simple_dungeon", MapDecoration.Type.TARGET_X, 1, 15),
-						new BiomeMapListing(5, BiomeTags.IS_FOREST, "map.greed.cold_forest", MapDecoration.Type.TARGET_X, 1, 15),
-				});
-		VillagerTrades.TRADES.get(VillagerProfession.CARTOGRAPHER).put(2, 
+		event.addTradeTo(ProfessionLevel.NOVICE, new ItemsForEmeralds(Items.MAP, 7, 1, 1));
+		event.addTradeTo(ProfessionLevel.NOVICE, new StructureMapListing(5, GreedTags.CARTOGRAPHER_STRUCTURE_SIMPLE_DUNGEONS, "map.greed.simple_dungeon", MapDecoration.Type.TARGET_X, 1, 15));
+		event.addTradeTo(ProfessionLevel.NOVICE, new BiomeMapListing(5, BiomeTags.HAS_JUNGLE_TEMPLE, "map.greed.cold_forest", MapDecoration.Type.TARGET_X, 1, 15));
+		
+		/*event.addTradeTo(ProfessionLevel.APPRENTICE,
 				new VillagerTrades.ItemListing[] {
 						new ItemsForEmeralds(Items.WHITE_BANNER, 3, 1, 15),
 						new ItemsForEmeralds(Items.BLUE_BANNER, 3, 1, 15),
@@ -82,8 +76,8 @@ public class CartographerTradesInitEvent {
 						new ItemsForEmeralds(Items.YELLOW_BANNER, 3, 1, 15),
 						new ItemsForEmeralds(Items.ORANGE_BANNER, 3, 1, 15),
 						new ItemsForEmeralds(Items.LIGHT_GRAY_BANNER, 3, 1, 15)
-				});
-		VillagerTrades.TRADES.get(VillagerProfession.CARTOGRAPHER).put(3,
+				});*/
+		/*VillagerTrades.TRADES.get(VillagerProfession.CARTOGRAPHER).put(3,
 				new VillagerTrades.ItemListing[] {
 					new EmeraldForItems(Items.LAPIS_LAZULI, 5, 12, 10),
 					new EnchantBookForEmeralds(5)
@@ -97,11 +91,11 @@ public class CartographerTradesInitEvent {
 		VillagerTrades.TRADES.get(VillagerProfession.CARTOGRAPHER).put(5,
 				new VillagerTrades.ItemListing[] {
 					new MultiEnchantBookForEmeralds(15, 2, 5)
-				});
+				});*/
 		
 		
 		
-		p_35633_.put(VillagerProfession.CARTOGRAPHER, toIntMap(ImmutableMap.of(1,
+		/*p_35633_.put(VillagerProfession.CARTOGRAPHER, toIntMap(ImmutableMap.of(1,
 				new VillagerTrades.ItemListing[] { new VillagerTrades.EmeraldForItems(Items.PAPER, 24, 16, 2),
 						new VillagerTrades.ItemsForEmeralds(Items.MAP, 7, 1, 1) },
 				2,
@@ -131,79 +125,61 @@ public class CartographerTradesInitEvent {
 						new VillagerTrades.ItemsForEmeralds(Items.ORANGE_BANNER, 3, 1, 15),
 						new VillagerTrades.ItemsForEmeralds(Items.LIGHT_GRAY_BANNER, 3, 1, 15) },
 				5, new VillagerTrades.ItemListing[] {
-						new VillagerTrades.ItemsForEmeralds(Items.GLOBE_BANNER_PATTERN, 8, 1, 30) })));
+						new VillagerTrades.ItemsForEmeralds(Items.GLOBE_BANNER_PATTERN, 8, 1, 30) })));*/
 		
 	}
 	
 	
 	public static class BiomeMapListing implements VillagerTrades.ItemListing {
 		private final int emeraldCost;
-	    private final TagKey<Biome> biomeTag;
-	    private final String displayName;
-	    private final MapDecoration.Type destinationType;
-	    private final int maxUses;
-	    private final int villagerXp;
+		private final TagKey<Biome> biomeTag;
+		private final String displayName;
+		private final MapDecoration.Type destinationType;
+		private final int maxUses;
+		private final int villagerXp;
 
-	    public BiomeMapListing(int emeraldCost, TagKey<Biome> biomeTag,
-	                           String displayName, MapDecoration.Type destinationType,
-	                           int maxUses, int villagerXp) {
-	        this.emeraldCost = emeraldCost;
-	        this.biomeTag = biomeTag;
-	        this.displayName = displayName;
-	        this.destinationType = destinationType;
-	        this.maxUses = maxUses;
-	        this.villagerXp = villagerXp;
-	    }
-	    
-	    public MerchantOffer getOffer(Entity entity, Random random) {
-	        if (!(entity.level instanceof ServerLevel serverLevel)) return null;
-	        List<Holder<Biome>> biomesInTag = new ArrayList<>();
-	        serverLevel.registryAccess()
-	            .registryOrThrow(Registry.BIOME_REGISTRY)
-	            .getTagOrEmpty(biomeTag)
-	            .forEach(biomesInTag::add);
+		public BiomeMapListing(int emeraldCost, TagKey<Biome> biomeTag, String displayName,
+				MapDecoration.Type destinationType, int maxUses, int villagerXp) {
+			this.emeraldCost = emeraldCost;
+			this.biomeTag = biomeTag;
+			this.displayName = displayName;
+			this.destinationType = destinationType;
+			this.maxUses = maxUses;
+			this.villagerXp = villagerXp;
+		}
 
-	        if (biomesInTag.isEmpty()) return null;
-	        Holder<Biome> randomBiome = biomesInTag.get(random.nextInt(biomesInTag.size()));
-	        Pair<BlockPos, Holder<Biome>> foundBiome = serverLevel.getChunkSource()
-	            .getGenerator()
-	            .getBiomeSource()
-	            .findBiomeHorizontal(
-	                entity.blockPosition().getX(),
-	                entity.blockPosition().getY(),
-	                entity.blockPosition().getZ(),
-	                3200, 8,
-	                holder -> holder.is(randomBiome.unwrapKey().orElseThrow()),
-	                random,
-	                true,
-	                serverLevel.getChunkSource().getGenerator().climateSampler()
-	            );
-	        BlockPos biomePos = foundBiome.getFirst();
+		public MerchantOffer getOffer(Entity entity, Random random) {
+			if (!(entity.level instanceof ServerLevel serverLevel))
+				return null;
+			List<Holder<Biome>> biomesInTag = new ArrayList<>();
+			serverLevel.registryAccess().registryOrThrow(Registry.BIOME_REGISTRY).getTagOrEmpty(biomeTag)
+					.forEach(biomesInTag::add);
 
-	        if (biomePos == null) {
-	            return new MerchantOffer(
-	                new ItemStack(Items.EMERALD, 3),
-	                new ItemStack(Items.MAP),
-	                5, villagerXp, 0.2f
-	            );
-	        }
+			if (biomesInTag.isEmpty())
+				return null;
+			Holder<Biome> randomBiome = biomesInTag.get(random.nextInt(biomesInTag.size()));
+			Pair<BlockPos, Holder<Biome>> foundBiome = serverLevel.getChunkSource().getGenerator().getBiomeSource()
+					.findBiomeHorizontal(entity.blockPosition().getX(), entity.blockPosition().getY(),
+							entity.blockPosition().getZ(), 3200, 8,
+							holder -> holder.is(randomBiome.unwrapKey().orElseThrow()), random, true,
+							serverLevel.getChunkSource().getGenerator().climateSampler());
+			BlockPos biomePos = foundBiome.getFirst();
 
-	        ItemStack map = MapItem.create(serverLevel,
-	            biomePos.getX(), biomePos.getZ(),
-	            (byte) 2, true, true
-	        );
-	        MapItem.renderBiomePreviewMap(serverLevel, map);
-	        MapItemSavedData.addTargetDecoration(map, biomePos, "+", destinationType);
-	        map.setHoverName(new TranslatableComponent(displayName));
+			if (biomePos == null) {
+				return new MerchantOffer(new ItemStack(Items.EMERALD, 3), new ItemStack(Items.MAP), 5, villagerXp,
+						0.2f);
+			}
 
-	        return new MerchantOffer(
-	            new ItemStack(Items.EMERALD, emeraldCost),
-	            new ItemStack(Items.COMPASS),
-	            map,
-	            maxUses, villagerXp, 0.2f
-	        );
+			ItemStack map = MapItem.create(serverLevel, biomePos.getX(), biomePos.getZ(), (byte) 2, true, true);
+			MapItem.renderBiomePreviewMap(serverLevel, map);
+			MapItemSavedData.addTargetDecoration(map, biomePos, "+", destinationType);
+			map.setHoverName(new TranslatableComponent(displayName));
+
+			return new MerchantOffer(new ItemStack(Items.EMERALD, emeraldCost), new ItemStack(Items.COMPASS), map,
+					maxUses, villagerXp, 0.2f);
+		}
 	}
-	    
+	
 	public static class StructureMapListing implements VillagerTrades.ItemListing {
 		private final int emeraldCost;
 		private final TagKey<ConfiguredStructureFeature<?, ?>> destination;
@@ -250,7 +226,6 @@ public class CartographerTradesInitEvent {
 			return new MerchantOffer(new ItemStack(Items.EMERALD, emeraldCost), new ItemStack(Items.COMPASS), map,
 					maxUses, villagerXp, 0.2f);
 		}
-	}
 	}
 	
 	public static class TreasureMapForEmeralds implements VillagerTrades.ItemListing {

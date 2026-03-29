@@ -14,9 +14,9 @@ import javax.annotation.Nullable;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
+import com.natsu.greed.Greed;
 import com.natsu.greed.config.ServerConfig;
 import com.natsu.greed.server.villager.events.GreedFillingTradesEvent;
-
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
@@ -60,23 +60,32 @@ import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
 import net.minecraft.world.level.saveddata.maps.MapDecoration;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.server.ServerAboutToStartEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
+@Mod.EventBusSubscriber(modid = Greed.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class VillagerTradeHandler {
 
-	public static void init() {
-		if (!ServerConfig.USE_CUSTOM_BOOK_TRADES.get()) return;
+    @SubscribeEvent
+    public static void onServerAboutToStart(ServerAboutToStartEvent e) {
+    	if (!ServerConfig.USE_CUSTOM_BOOK_TRADES.get()) return;
 		
 		VillagerProfession[] profList = {VillagerProfession.ARMORER, VillagerProfession.BUTCHER, VillagerProfession.CARTOGRAPHER, VillagerProfession.CLERIC, VillagerProfession.FARMER,
 				VillagerProfession.FISHERMAN, VillagerProfession.FLETCHER, VillagerProfession.LEATHERWORKER, VillagerProfession.LIBRARIAN, VillagerProfession.MASON, VillagerProfession.NITWIT,
 				VillagerProfession.SHEPHERD, VillagerProfession.TOOLSMITH, VillagerProfession.WEAPONSMITH};
+		
 		for (VillagerProfession profession : profList) {
 			HashMap<Integer, List<ItemListing>> TradeMap = toMap(VillagerTrades.TRADES.get(profession));
 			GreedFillingTradesEvent event = new GreedFillingTradesEvent(profession, TradeMap);
 			MinecraftForge.EVENT_BUS.post(event);
 			HashMap<Integer, List<ItemListing>> newTrades = event.getTrades();
 			for (int i = 1; i <= 5; i++) {
-				VillagerTrades.TRADES.get(profession).put(i, newTrades.get(i).toArray(new VillagerTrades.ItemListing[0]));
+				if (newTrades.get(i) != null) {
+					VillagerTrades.TRADES.get(profession).put(i, newTrades.get(i).toArray(new VillagerTrades.ItemListing[0]));
+				}
 			}
 		}
 		
@@ -92,12 +101,16 @@ public class VillagerTradeHandler {
 	}
 	
 	private static HashMap<Integer, List<VillagerTrades.ItemListing>> toMap(Int2ObjectMap<VillagerTrades.ItemListing[]> intMap){
-		HashMap<Integer, List<VillagerTrades.ItemListing>> map = new HashMap<>();
-		for (int i = 1; i <= 5; i++) {
-			List<VillagerTrades.ItemListing> list = Arrays.asList(intMap.get(i));
-			map.put(i, list);
-		}
-		return map;
+	    HashMap<Integer, List<VillagerTrades.ItemListing>> map = new HashMap<>();
+	    if (intMap != null) {
+	        for (int i = 1; i <= 5; i++) {
+	            if (intMap.get(i) != null) {
+	                List<VillagerTrades.ItemListing> list = new ArrayList<>(Arrays.asList(intMap.get(i))); // <--
+	                map.put(i, list);
+	            }
+	        }
+	    }
+	    return map;
 	}
 
 	
