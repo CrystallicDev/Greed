@@ -61,6 +61,7 @@ import net.minecraft.world.level.saveddata.maps.MapDecoration;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.server.ServerAboutToStartEvent;
+import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -70,7 +71,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class VillagerTradeHandler {
 
     @SubscribeEvent
-    public static void onServerAboutToStart(ServerAboutToStartEvent e) {
+    public static void onServerAboutToStart(ServerStartingEvent e) {
     	if (!ServerConfig.USE_CUSTOM_BOOK_TRADES.get()) return;
 		
 		VillagerProfession[] profList = {VillagerProfession.ARMORER, VillagerProfession.BUTCHER, VillagerProfession.CARTOGRAPHER, VillagerProfession.CLERIC, VillagerProfession.FARMER,

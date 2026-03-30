@@ -3,6 +3,7 @@ package com.natsu.greed;
 
 import com.llamalad7.mixinextras.MixinExtrasBootstrap;
 import com.natsu.greed.common.registry.GreedBlockEntities;
+import com.natsu.greed.common.registry.GreedBlocks;
 import com.natsu.greed.common.registry.GreedEnchants;
 import com.natsu.greed.common.registry.GreedLootModifiers;
 import com.natsu.greed.config.ServerConfig;
@@ -28,6 +29,7 @@ public class Greed {
     	GreedEnchants.ENCHANTMENTS.register(modEventBus);
     	GreedLootModifiers.SERIALIZERS.register(modEventBus);
     	GreedBlockEntities.BLOCK_ENTITIES.register(modEventBus);
+    	GreedBlocks.BLOCKS.register(modEventBus);
     	ModLoadingContext.get().registerConfig(Type.SERVER, ServerConfig.SPEC);
     	MixinExtrasBootstrap.init();
     	if (!DatagenModLoader.isRunningDataGen()) {

@@ -1,4 +1,5 @@
 {
+  "block.greed.greed_cauldron": "Cauldron",
   "enchantment.greed.curse_of_absorption": "Curse of Absorption",
   "enchantment.greed.curse_of_combination": "Curse of Combination",
   "enchantment.greed.curse_of_creeping": "Curse of Creeping",
@@ -8,5 +9,12 @@
   "enchantment.greed.curse_of_voiding": "Curse of Voiding",
   "enchantment.greed.grappling": "Grappling",
   "enchantment.greed.light": "Light",
-  "enchantment.greed.reeling": "Reeling"
+  "enchantment.greed.reeling": "Reeling",
+  "enchantment.greed.stretched": "Stretched",
+  "map.greed.bastion": "Bastion Explorer Map",
+  "map.greed.end_city": "End City Explorer Map",
+  "map.greed.jungle": "Jungle Explorer Map",
+  "map.greed.mesa": "Mesa Explorer Map",
+  "map.greed.nether_fortress": "Nether Fortress Explorer Map",
+  "map.greed.taiga": "Taiga Explorer Map"
 }

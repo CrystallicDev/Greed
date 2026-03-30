@@ -1,4 +1,5 @@
 {
+  "block.greed.greed_cauldron": "Chaudron",
   "enchantment.greed.curse_of_absorption": "Mal\u00E9diction d'absorption",
   "enchantment.greed.curse_of_combination": "Mal\u00E9diction de fusion",
   "enchantment.greed.curse_of_creeping": "Mal\u00E9diction d'accroupissement",
@@ -8,5 +9,12 @@
   "enchantment.greed.curse_of_voiding": "Mal\u00E9diction d'annulation",
   "enchantment.greed.grappling": "Grappin",
   "enchantment.greed.light": "L\u00E9g\u00E8ret\u00E9",
-  "enchantment.greed.reeling": "Rep\u00EAchage"
+  "enchantment.greed.reeling": "Rep\u00EAchage",
+  "enchantment.greed.stretched": "Corde Tendue",
+  "map.greed.bastion": "Carte d'exploration de bastion",
+  "map.greed.end_city": "Carte d'exploration de cit\u00E9e de l'end",
+  "map.greed.jungle": "Carte d'exploration de la jungle",
+  "map.greed.mesa": "Carte d'exploration de m\u00E9sa",
+  "map.greed.nether_fortress": "Carte d'exploration de forteresse",
+  "map.greed.taiga": "Carte d'exploration de la taiga"
 }

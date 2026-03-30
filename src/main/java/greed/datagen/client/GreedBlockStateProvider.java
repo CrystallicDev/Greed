@@ -21,10 +21,6 @@ public class GreedBlockStateProvider extends BlockStateProvider {
         IntegerProperty LEVEL = LayeredCauldronBlock.LEVEL;
 
         getVariantBuilder(GreedBlocks.CAULDRON.get())
-            .partialState().with(LEVEL, 0)
-                .modelForState().modelFile(
-                    new ModelFile.UncheckedModelFile("minecraft:block/cauldron")
-                ).addModel()
             .partialState().with(LEVEL, 1)
                 .modelForState().modelFile(
                     new ModelFile.UncheckedModelFile("minecraft:block/cauldron_level1")
