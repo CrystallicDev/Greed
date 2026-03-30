@@ -6,18 +6,21 @@ import java.util.List;
 
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraftforge.eventbus.api.Event;
 
 public class GreedFillingTradesEvent extends Event {
 
+	private final MinecraftServer server;
 	private final VillagerProfession profession;
 	private HashMap<Integer, List<VillagerTrades.ItemListing>> map;
 	
-	public GreedFillingTradesEvent(VillagerProfession profession, HashMap<Integer, List<VillagerTrades.ItemListing>> map) {
+	public GreedFillingTradesEvent(VillagerProfession profession, MinecraftServer server, HashMap<Integer, List<VillagerTrades.ItemListing>> map) {
 		this.profession = profession;
 		this.map = map;
+		this.server = server;
 	}
 	
 	public void addTradeTo(ProfessionLevel level, VillagerTrades.ItemListing trade) {
@@ -35,6 +38,10 @@ public class GreedFillingTradesEvent extends Event {
 		}
 	}
 	
+	public MinecraftServer getServer() {
+		return server;
+	}
+
 	public VillagerProfession getProfession() {
 		return this.profession;
 	}

@@ -32,7 +32,6 @@ public class Greed {
     	MixinExtrasBootstrap.init();
     	if (!DatagenModLoader.isRunningDataGen()) {
         	GreedEnchantModifiers.init();
-        	CartographerTradesInitEvent.class.getName();
     	}
     }
 

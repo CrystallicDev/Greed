@@ -11,6 +11,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
@@ -20,6 +21,8 @@ import net.minecraft.world.item.PotionItem;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.LayeredCauldronBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -92,34 +95,56 @@ public class GreedCauldronBlockEntity extends BlockEntity {
 		return saveWithFullMetadata();
 	}
 	
+	private static void updateCauldronAppearance(Level level, BlockPos pos, BlockState state, int potionLevel) {
+		if (state.hasProperty(LayeredCauldronBlock.LEVEL)) {
+			level.setBlock(pos, state.setValue(LayeredCauldronBlock.LEVEL, potionLevel), 3);
+		}
+	}
 	
 	public boolean onAddingPotion(Potion incoming) {
 		System.out.println("onAddingPotion");
-		if (isFull()) return false;
+		if (isFull()) return false;		// No potion can be added
+		
+		boolean hasMadeUpdate = false;
 		List<MobEffectInstance> finalEffects = new ArrayList<>();
 		if (isEmpty()) {
 			System.out.println("onAddingPotion - Cauldron is Empty");
 			finalEffects = incoming.getEffects();
+			hasMadeUpdate = true;
 		} else {
 			System.out.println("onAddingPotion - Cauldron is not Empty");
 			for (MobEffectInstance effect : incoming.getEffects()) {
+				boolean hasFoundMatch = false;
+				boolean isAllowed = true;
 				for (MobEffectInstance existing : potions) {
-					if (effect.getEffect().equals(existing.getEffect()) && 
-							effect.getAmplifier() == existing.getAmplifier()) {
+					if (!isEffectCompatible(existing, effect)) { isAllowed = false; continue; }		// Avoid effect with different amplifier
+					if (effect.getEffect().equals(existing.getEffect()) && effect.getAmplifier() == existing.getAmplifier()) {
 						finalEffects.add(new MobEffectInstance(existing.getEffect(), (int)Math.round(existing.getDuration() + (ServerConfig.CAULDRONS_POTION_DURATION_MERGE_FACTOR.get() * effect.getDuration())), existing.getAmplifier()));
+						hasFoundMatch = true;
+						hasMadeUpdate = true;
 					}
+				}
+				if (!hasFoundMatch && isAllowed) {
+					// This effect is not already present, adding
+					finalEffects.add(effect);
+					hasMadeUpdate = true;
 				}
 			}
 		}
-		if (finalEffects.size() >= potions.size()) {
+		if (hasMadeUpdate) {
 			System.out.println("onAddingPotion - Cauldron is now updated !");
 			setPotion(finalEffects);
 			this.level++;
-			return true;
+			return hasMadeUpdate;
 		}
-		return false;
+		return hasMadeUpdate;
 	}
 	
+	private boolean isEffectCompatible(MobEffectInstance effect, MobEffectInstance effect2) {
+		if (effect.getEffect() == effect2.getEffect() && effect.getAmplifier() != effect2.getAmplifier()) return false;
+		return true;
+	}
+
 	public boolean onTakingPotion(Player player) {
 		System.out.println("onTakingPotion");
 		List<MobEffectInstance> outgoing = getPotion();

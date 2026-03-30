@@ -1,6 +1,7 @@
 package greed.datagen.lang;
 
 import com.natsu.greed.Greed;
+import com.natsu.greed.common.registry.GreedBlocks;
 import com.natsu.greed.common.registry.GreedEnchants;
 
 import net.minecraft.data.DataGenerator;
@@ -25,6 +26,15 @@ public class GreedLangEN extends LanguageProvider {
 		add(GreedEnchants.REELING.get(), "Reeling");
 		add(GreedEnchants.GRAPPLING.get(), "Grappling");
 		add(GreedEnchants.STRETCHED.get(), "Stretched");
+		
+		add("map.greed.mesa", "Mesa Explorer Map");
+		add("map.greed.jungle", "Jungle Explorer Map");
+		add("map.greed.taiga", "Taiga Explorer Map");
+		add("map.greed.nether_fortress", "Nether Fortress Explorer Map");
+		add("map.greed.bastion", "Bastion Explorer Map");
+		add("map.greed.end_city", "End City Explorer Map");
+		
+		add(GreedBlocks.CAULDRON.get(), "Cauldron");
 	}
 
 }

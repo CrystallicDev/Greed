@@ -134,7 +134,7 @@ public class LibrarianTradesInitEvent {
 			int randomEnchantAmount = Mth.nextInt(random, this.minEnchant, this.maxEnchant);
 			int emeraldCost = 0;
 			ItemStack itemStack = new ItemStack(Items.ENCHANTED_BOOK);
-			for (int i = 0; i < randomEnchantAmount; i++) {
+			for (int i = 0; i < Math.min(randomEnchantAmount, enchantList.size()); i++) {
 				Enchantment enchantment = enchantList.get(i);
 				int enchantLevel = Mth.nextInt(random, enchantment.getMinLevel(), enchantment.getMaxLevel());
 				emeraldCost += 2 + random.nextInt(3 + enchantLevel * (enchantment.isTreasureOnly() ? 7 : 5)) + 3 * enchantLevel;

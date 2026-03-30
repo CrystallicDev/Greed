@@ -47,8 +47,13 @@ public class ServerConfig {
 	public static final ForgeConfigSpec.BooleanValue USE_CUSTOM_MAX_LEVELS;
 	public static final ForgeConfigSpec.ConfigValue<List<? extends String>> ENCHANTMENTS_MAX_LEVELS;
 	
-	// # Custom Book Trades
+	// # Custom Trades
 	public static final ForgeConfigSpec.BooleanValue USE_CUSTOM_BOOK_TRADES;
+	public static final ForgeConfigSpec.BooleanValue USE_CUSTOM_MAP_TRADES;
+	public static final ForgeConfigSpec.BooleanValue USE_CUSTOM_CLERIC_TRADES;
+	public static final ForgeConfigSpec.BooleanValue USE_CUSTOM_ARMOR_TRADES;
+	public static final ForgeConfigSpec.BooleanValue USE_CUSTOM_TOOL_TRADES;
+	public static final ForgeConfigSpec.BooleanValue USE_CUSTOM_WEAPON_TRADES;
 	
 	// # Custom Cauldrons
 	public static final ForgeConfigSpec.BooleanValue USE_CUSTOM_CAULDRONS;
@@ -210,11 +215,31 @@ public class ServerConfig {
 
 		builder.pop();
 		builder.pop();
-		builder.push("# Librarian Villager Trades");
+		builder.push("# Custom Villager Trades");
 		USE_CUSTOM_BOOK_TRADES = builder
 				.comment("Make the Librarian villagers trade really simple books (Sharpness I, Knockback I, etc) at first, but trade\n"
 						+ " higher books, with multiple enchantments at higher levels.")
 				.define("useCustomBooksTrades", true);
+		USE_CUSTOM_MAP_TRADES = builder
+				.comment("Make the Cartographer villager trades biome maps, and simple structures maps at first,\n"
+						+ " and bastion, end cities of nether fortress maps at higher levels.")
+				.define("useCustomMapTrades", true);
+		USE_CUSTOM_CLERIC_TRADES = builder
+				.comment("Make the Cleric villagers trade really simple books (Sharpness I, Knockback I, etc) at first, but trade\n"
+						+ " higher books, with multiple enchantments at higher levels.")
+				.define("useCustomClericTrades", true);
+		USE_CUSTOM_ARMOR_TRADES = builder
+				.comment("Make the weaponsmith villagers trade really simple armors at first, but trade\n"
+						+ " better armor, with multiple enchantments at higher levels.")
+				.define("useCustomArmorTrades", true);
+		USE_CUSTOM_TOOL_TRADES = builder
+				.comment("Make the weaponsmith villagers trade really simple tools at first, but trade\n"
+						+ " better tools, with multiple enchantments at higher levels.")
+				.define("useCustomToolTrades", true);
+		USE_CUSTOM_WEAPON_TRADES = builder
+				.comment("Make the weaponsmith villagers trade really simple weapons at first, but trade\n"
+						+ " better weapon, with multiple enchantments at higher levels.")
+				.define("useCustomWeaponTrades", true);
 
 		builder.pop();
 		builder.push("# Custom Cauldrons");

@@ -2,6 +2,8 @@ package greed.datagen;
 
 import com.natsu.greed.Greed;
 
+import greed.datagen.client.GreedBlockStateProvider;
+import greed.datagen.client.GreedItemModelProvider;
 import greed.datagen.lang.GreedLangEN;
 import greed.datagen.lang.GreedLangFR;
 import net.minecraft.data.DataGenerator;
@@ -22,6 +24,8 @@ public class GreedDataGenerators {
         if (event.includeClient()) {
             gen.addProvider(new GreedLangEN(gen));
             gen.addProvider(new GreedLangFR(gen));
+            gen.addProvider(new GreedBlockStateProvider(gen, helper));
+            gen.addProvider(new GreedItemModelProvider(gen, helper));
         }
     }
 }
