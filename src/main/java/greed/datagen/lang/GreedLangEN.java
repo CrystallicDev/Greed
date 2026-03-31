@@ -30,9 +30,16 @@ public class GreedLangEN extends LanguageProvider {
 		add("map.greed.mesa", "Mesa Explorer Map");
 		add("map.greed.jungle", "Jungle Explorer Map");
 		add("map.greed.taiga", "Taiga Explorer Map");
+		add("map.greed.jungle_temple", "Lost Temple Explorer Map");
 		add("map.greed.nether_fortress", "Nether Fortress Explorer Map");
 		add("map.greed.bastion", "Bastion Explorer Map");
 		add("map.greed.end_city", "End City Explorer Map");
+
+		add("map.greed.trade.1_random_potion", "Mysterious Potion");
+		add("map.greed.trade.1_random_splash_potion", "Mysterious Splash Potion");
+		add("map.greed.trade.2_random_potion", "Mysterious Potion");
+		add("map.greed.trade.2_random_splash_potion", "Mysterious Splash Potion");
+		add("map.greed.trade.splash_weakness", "Vaccine Potion");
 		
 		add(GreedBlocks.CAULDRON.get(), "Cauldron");
 	}

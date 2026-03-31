@@ -46,6 +46,8 @@ public class ServerConfig {
 	public static final ForgeConfigSpec.ConfigValue<List<? extends String>> ENCHANTMENTS_RARITY;
 	public static final ForgeConfigSpec.BooleanValue USE_CUSTOM_MAX_LEVELS;
 	public static final ForgeConfigSpec.ConfigValue<List<? extends String>> ENCHANTMENTS_MAX_LEVELS;
+	public static final ForgeConfigSpec.BooleanValue USE_CUSTOM_MAX_COST;
+	public static final ForgeConfigSpec.ConfigValue<List<? extends String>> ENCHANTMENTS_MAX_COST;
 	
 	// # Custom Trades
 	public static final ForgeConfigSpec.BooleanValue USE_CUSTOM_BOOK_TRADES;
@@ -211,6 +213,12 @@ public class ServerConfig {
 		ENCHANTMENTS_MAX_LEVELS = builder.comment(
 	                "Map each enchantment to a max level."
 	        ).define("maxLevels", getDefaultMaxLevels());
+
+		builder.push("# Enchantment Max Costs");
+		USE_CUSTOM_MAX_COST = builder.comment("Use a custom max cost for each enchantment. This is recommended to be put at 999, otherwise, some enchants become unavailable at higher bookshelves level. Disable this to use vanilla.").define("useCustomEnchantmentMaxCosts", true);
+		ENCHANTMENTS_MAX_COST = builder.comment(
+	                "Map each enchantment to a max cost."
+	        ).define("maxCosts", getDefaultMaxCosts());
 		
 
 		builder.pop();
@@ -363,6 +371,46 @@ public class ServerConfig {
 		defaults.put("minecraft:multishot", 2); // RARE (untouched)
 		defaults.put("minecraft:quick_charge", 1); // UNCOMMON (untouched)
 		defaults.put("minecraft:piercing", 0); // COMMON (untouched)
+		return mapToList(defaults);
+	}
+	
+	private static List<String> getDefaultMaxCosts() {
+		Map<String, Integer> defaults = new HashMap<>();
+		defaults.put("minecraft:protection", 999); // Always Available
+		defaults.put("minecraft:fire_protection", 999); // i wont write it every time but you got the idea
+		defaults.put("minecraft:feather_falling", 999);
+		defaults.put("minecraft:blast_protection", 999); 
+		defaults.put("minecraft:projectile_protection", 999); 
+		defaults.put("minecraft:respiration", 999);
+		defaults.put("minecraft:aqua_affinity", 999); 
+		defaults.put("minecraft:thorns", 999); 
+		defaults.put("minecraft:depth_strider", 999); 
+		defaults.put("minecraft:frost_walker", 999); 
+		defaults.put("minecraft:soul_speed", 999);
+		defaults.put("minecraft:sharpness", 999); 
+		defaults.put("minecraft:smite", 999); 
+		defaults.put("minecraft:bane_of_arthropods", 999); 
+		defaults.put("minecraft:knockback", 999); 
+		defaults.put("minecraft:fire_aspect", 999);
+		defaults.put("minecraft:looting", 999); 
+		defaults.put("minecraft:sweeping", 999); 
+		defaults.put("minecraft:efficiency", 999); 
+		defaults.put("minecraft:silk_touch", 999); 
+		defaults.put("minecraft:unbreaking", 999);
+		defaults.put("minecraft:fortune", 999);
+		defaults.put("minecraft:power", 999); 
+		defaults.put("minecraft:punch", 999); 
+		defaults.put("minecraft:flame", 999); 
+		defaults.put("minecraft:infinity", 999);
+		defaults.put("minecraft:luck_of_the_sea", 999);
+		defaults.put("minecraft:lure", 999); 
+		defaults.put("minecraft:loyalty", 999); 
+		defaults.put("minecraft:impaling", 999); 
+		defaults.put("minecraft:riptide", 999);
+		defaults.put("minecraft:channeling", 999); 
+		defaults.put("minecraft:multishot", 999);
+		defaults.put("minecraft:quick_charge", 999); 
+		defaults.put("minecraft:piercing", 999);
 		return mapToList(defaults);
 	}
 	

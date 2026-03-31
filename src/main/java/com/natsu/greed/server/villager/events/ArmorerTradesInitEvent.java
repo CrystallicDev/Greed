@@ -23,6 +23,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -44,30 +45,29 @@ public class ArmorerTradesInitEvent {
 		event.addTradeTo(ProfessionLevel.NOVICE, new VillagerTradeHandler.ItemsForEmeralds(new ItemStack(Items.CHAINMAIL_LEGGINGS), 7, 1, 12, 1, 0.2F));
 		event.addTradeTo(ProfessionLevel.NOVICE, new VillagerTradeHandler.ItemsForEmeralds(new ItemStack(Items.CHAINMAIL_BOOTS), 4, 1, 12, 1, 0.2F));
 		event.addTradeTo(ProfessionLevel.NOVICE, new VillagerTradeHandler.ItemsForEmeralds(new ItemStack(Items.CHAINMAIL_HELMET), 5, 1, 12, 1, 0.2F));
-		event.addTradeTo(ProfessionLevel.NOVICE, new VillagerTradeHandler.ItemsForEmeralds(new ItemStack(Items.CHAINMAIL_CHESTPLATE), 9, 1, 12, 1, 0.2F));
+		event.addTradeTo(ProfessionLevel.NOVICE, new VillagerTradeHandler.ItemsForEmeralds(new ItemStack(Items.CHAINMAIL_CHESTPLATE), 9, 1, 12, 2, 0.2F));
 		event.addTradeTo(ProfessionLevel.NOVICE, new VillagerTradeHandler.EmeraldForItems(Items.COAL, 16, 32, 1));
 		
-		event.addTradeTo(ProfessionLevel.APPRENTICE, new VillagerTradeHandler.ItemsForEmeralds(new ItemStack(Items.IRON_LEGGINGS), 10, 1, 12, 3, 0.2F));
+		event.addTradeTo(ProfessionLevel.APPRENTICE, new VillagerTradeHandler.ItemsForEmeralds(new ItemStack(Items.IRON_LEGGINGS), 10, 1, 12, 4, 0.2F));
 		event.addTradeTo(ProfessionLevel.APPRENTICE, new VillagerTradeHandler.ItemsForEmeralds(new ItemStack(Items.IRON_BOOTS), 7, 1, 12, 3, 0.2F));
 		event.addTradeTo(ProfessionLevel.APPRENTICE, new VillagerTradeHandler.ItemsForEmeralds(new ItemStack(Items.IRON_HELMET), 8, 1, 12, 3, 0.2F));
-		event.addTradeTo(ProfessionLevel.APPRENTICE, new VillagerTradeHandler.ItemsForEmeralds(new ItemStack(Items.IRON_CHESTPLATE), 14, 1, 12, 3, 0.2F));
+		event.addTradeTo(ProfessionLevel.APPRENTICE, new VillagerTradeHandler.ItemsForEmeralds(new ItemStack(Items.IRON_CHESTPLATE), 14, 1, 12, 4, 0.2F));
 		event.addTradeTo(ProfessionLevel.APPRENTICE, new VillagerTradeHandler.EmeraldForItems(Items.IRON_INGOT, 8, 32, 1));
 		
-		event.addTradeTo(ProfessionLevel.JOURNEYMAN, new EnchantedItemForEmeralds(Items.IRON_LEGGINGS, 17, 3, 7, 0.2F));
-		event.addTradeTo(ProfessionLevel.JOURNEYMAN, new EnchantedItemForEmeralds(Items.IRON_BOOTS, 15, 3, 7, 0.2F));
-		event.addTradeTo(ProfessionLevel.JOURNEYMAN, new EnchantedItemForEmeralds(Items.IRON_HELMET, 16, 3, 7, 0.2F));
-		event.addTradeTo(ProfessionLevel.JOURNEYMAN, new EnchantedItemForEmeralds(Items.IRON_CHESTPLATE, 20, 3, 7, 0.2F));
+		event.addTradeTo(ProfessionLevel.JOURNEYMAN, new EnchantedItemForEmeralds(Items.IRON_LEGGINGS, 25, 3, 7, 0.2F));
+		event.addTradeTo(ProfessionLevel.JOURNEYMAN, new EnchantedItemForEmeralds(Items.IRON_BOOTS, 21, 3, 7, 0.2F));
+		event.addTradeTo(ProfessionLevel.JOURNEYMAN, new EnchantedItemForEmeralds(Items.IRON_HELMET, 21, 3, 7, 0.2F));
+		event.addTradeTo(ProfessionLevel.JOURNEYMAN, new EnchantedItemForEmeralds(Items.IRON_CHESTPLATE, 27, 3, 7, 0.2F));
 		
-		event.addTradeTo(ProfessionLevel.EXPERT, new MultiEnchantedItemForEmeralds(Items.IRON_LEGGINGS,  3, 10, 2, 4, 0.2F));
-		event.addTradeTo(ProfessionLevel.EXPERT, new MultiEnchantedItemForEmeralds(Items.IRON_BOOTS, 3, 7, 10, 4, 0.2F));
-		event.addTradeTo(ProfessionLevel.EXPERT, new MultiEnchantedItemForEmeralds(Items.IRON_HELMET, 3, 7, 10, 4, 0.2F));
+		event.addTradeTo(ProfessionLevel.EXPERT, new MultiEnchantedItemForEmeralds(Items.IRON_LEGGINGS, 3, 10, 2, 4, 0.2F));
+		event.addTradeTo(ProfessionLevel.EXPERT, new MultiEnchantedItemForEmeralds(Items.IRON_BOOTS, 3, 7, 2, 4, 0.2F));
+		event.addTradeTo(ProfessionLevel.EXPERT, new MultiEnchantedItemForEmeralds(Items.IRON_HELMET, 3, 7, 2, 4, 0.2F));
 		event.addTradeTo(ProfessionLevel.EXPERT, new MultiEnchantedItemForEmeralds(Items.IRON_CHESTPLATE, 3, 10, 2, 4, 0.2F));
 		
-		event.addTradeTo(ProfessionLevel.MASTER, new EnchantedItemForEmeralds(Items.DIAMOND_LEGGINGS, 28, 3, 30, 0.2F));
-		event.addTradeTo(ProfessionLevel.MASTER, new EnchantedItemForEmeralds(Items.DIAMOND_BOOTS, 25, 3, 30, 0.2F));
-		event.addTradeTo(ProfessionLevel.MASTER, new EnchantedItemForEmeralds(Items.DIAMOND_HELMET, 25, 3, 30, 0.2F));
-		event.addTradeTo(ProfessionLevel.MASTER, new EnchantedItemForEmeralds(Items.DIAMOND_CHESTPLATE, 30, 30, 7, 0.2F));
-
+		event.addTradeTo(ProfessionLevel.MASTER, new EnchantedItemForEmeralds(Items.DIAMOND_LEGGINGS, 40, 3, 30, 0.2F));
+		event.addTradeTo(ProfessionLevel.MASTER, new EnchantedItemForEmeralds(Items.DIAMOND_BOOTS, 35, 3, 30, 0.2F));
+		event.addTradeTo(ProfessionLevel.MASTER, new EnchantedItemForEmeralds(Items.DIAMOND_HELMET, 35, 3, 30, 0.2F));
+		event.addTradeTo(ProfessionLevel.MASTER, new EnchantedItemForEmeralds(Items.DIAMOND_CHESTPLATE, 45, 30, 7, 0.2F));
 	}
 	
 	

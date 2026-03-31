@@ -48,26 +48,26 @@ public class ToolSmithTradesInitEvent {
 		event.addTradeTo(ProfessionLevel.NOVICE, new VillagerTradeHandler.ItemsForEmeralds(new ItemStack(Items.IRON_AXE), 4, 1, 12, 1, 0.2F));
 		event.addTradeTo(ProfessionLevel.APPRENTICE, new VillagerTradeHandler.EmeraldForItems(Items.COAL, 16, 32, 1));
 		
-		event.addTradeTo(ProfessionLevel.APPRENTICE, new SimpleEnchantedItemForEmeralds(Items.IRON_PICKAXE, 6, 4, 3, Enchantments.BLOCK_EFFICIENCY, 0.2F));
-		event.addTradeTo(ProfessionLevel.APPRENTICE, new SimpleEnchantedItemForEmeralds(Items.IRON_HOE, 6, 4, 3, Enchantments.BLOCK_EFFICIENCY, 0.2F));
-		event.addTradeTo(ProfessionLevel.APPRENTICE, new SimpleEnchantedItemForEmeralds(Items.IRON_SHOVEL, 6, 4, 3, Enchantments.BLOCK_EFFICIENCY, 0.2F));
-		event.addTradeTo(ProfessionLevel.APPRENTICE, new SimpleEnchantedItemForEmeralds(Items.IRON_AXE, 6, 4, 3, Enchantments.BLOCK_EFFICIENCY, 0.2F));
+		event.addTradeTo(ProfessionLevel.APPRENTICE, new SimpleEnchantedItemForEmeralds(Items.IRON_PICKAXE, 12, 4, 3, Enchantments.BLOCK_EFFICIENCY, 0.2F));
+		event.addTradeTo(ProfessionLevel.APPRENTICE, new SimpleEnchantedItemForEmeralds(Items.IRON_HOE, 12, 4, 3, Enchantments.BLOCK_EFFICIENCY, 0.2F));
+		event.addTradeTo(ProfessionLevel.APPRENTICE, new SimpleEnchantedItemForEmeralds(Items.IRON_SHOVEL, 12, 4, 3, Enchantments.BLOCK_EFFICIENCY, 0.2F));
+		event.addTradeTo(ProfessionLevel.APPRENTICE, new SimpleEnchantedItemForEmeralds(Items.IRON_AXE, 12, 4, 3, Enchantments.BLOCK_EFFICIENCY, 0.2F));
 		event.addTradeTo(ProfessionLevel.APPRENTICE, new VillagerTradeHandler.EmeraldForItems(Items.IRON_INGOT, 8, 32, 1));
 		
-		event.addTradeTo(ProfessionLevel.JOURNEYMAN, new EnchantedItemForEmeralds(Items.IRON_PICKAXE, 17, 3, 7, 0.2F));
-		event.addTradeTo(ProfessionLevel.JOURNEYMAN, new EnchantedItemForEmeralds(Items.IRON_HOE, 15, 3, 7, 0.2F));
-		event.addTradeTo(ProfessionLevel.JOURNEYMAN, new EnchantedItemForEmeralds(Items.IRON_SHOVEL, 16, 3, 7, 0.2F));
-		event.addTradeTo(ProfessionLevel.JOURNEYMAN, new EnchantedItemForEmeralds(Items.IRON_AXE, 20, 3, 7, 0.2F));
+		event.addTradeTo(ProfessionLevel.JOURNEYMAN, new EnchantedItemForEmeralds(Items.IRON_PICKAXE, 27, 4, 7, 0.2F));
+		event.addTradeTo(ProfessionLevel.JOURNEYMAN, new EnchantedItemForEmeralds(Items.IRON_HOE, 15, 4, 7, 0.2F));
+		event.addTradeTo(ProfessionLevel.JOURNEYMAN, new EnchantedItemForEmeralds(Items.IRON_SHOVEL, 26, 4, 7, 0.2F));
+		event.addTradeTo(ProfessionLevel.JOURNEYMAN, new EnchantedItemForEmeralds(Items.IRON_AXE, 20, 4, 7, 0.2F));
 		
-		event.addTradeTo(ProfessionLevel.EXPERT, new MultiEnchantedItemForEmeralds(Items.IRON_PICKAXE,  3, 10, 2, 4, 0.2F));
-		event.addTradeTo(ProfessionLevel.EXPERT, new MultiEnchantedItemForEmeralds(Items.IRON_HOE, 3, 7, 10, 4, 0.2F));
-		event.addTradeTo(ProfessionLevel.EXPERT, new MultiEnchantedItemForEmeralds(Items.IRON_SHOVEL, 3, 7, 10, 4, 0.2F));
-		event.addTradeTo(ProfessionLevel.EXPERT, new MultiEnchantedItemForEmeralds(Items.IRON_AXE, 3, 10, 2, 4, 0.2F));
+		event.addTradeTo(ProfessionLevel.EXPERT, new MultiEnchantedItemForEmeralds(Items.IRON_PICKAXE, 4, 10, 2, 4, 0.2F));
+		event.addTradeTo(ProfessionLevel.EXPERT, new MultiEnchantedItemForEmeralds(Items.IRON_HOE, 4, 7, 10, 4, 0.2F));
+		event.addTradeTo(ProfessionLevel.EXPERT, new MultiEnchantedItemForEmeralds(Items.IRON_SHOVEL, 4, 7, 10, 4, 0.2F));
+		event.addTradeTo(ProfessionLevel.EXPERT, new MultiEnchantedItemForEmeralds(Items.IRON_AXE, 4, 10, 2, 4, 0.2F));
 		
-		event.addTradeTo(ProfessionLevel.MASTER, new EnchantedItemForEmeralds(Items.DIAMOND_PICKAXE, 28, 3, 30, 0.2F));
+		event.addTradeTo(ProfessionLevel.MASTER, new EnchantedItemForEmeralds(Items.DIAMOND_PICKAXE, 45, 3, 30, 0.2F));
 		event.addTradeTo(ProfessionLevel.MASTER, new EnchantedItemForEmeralds(Items.DIAMOND_HOE, 25, 3, 30, 0.2F));
-		event.addTradeTo(ProfessionLevel.MASTER, new EnchantedItemForEmeralds(Items.DIAMOND_SHOVEL, 25, 3, 30, 0.2F));
-		event.addTradeTo(ProfessionLevel.MASTER, new EnchantedItemForEmeralds(Items.DIAMOND_AXE, 30, 30, 7, 0.2F));
+		event.addTradeTo(ProfessionLevel.MASTER, new EnchantedItemForEmeralds(Items.DIAMOND_SHOVEL, 32, 3, 30, 0.2F));
+		event.addTradeTo(ProfessionLevel.MASTER, new EnchantedItemForEmeralds(Items.DIAMOND_AXE, 45, 30, 7, 0.2F));
 	}
 	
 	
