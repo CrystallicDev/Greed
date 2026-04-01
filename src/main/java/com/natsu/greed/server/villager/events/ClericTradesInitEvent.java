@@ -12,6 +12,7 @@ import com.natsu.greed.Greed;
 import com.natsu.greed.config.ServerConfig;
 import com.natsu.greed.server.villager.VillagerTradeHandler;
 import com.natsu.greed.server.villager.events.GreedFillingTradesEvent.ProfessionLevel;
+import com.natsu.greed.utils.PotionCreatorUtils;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -94,9 +95,7 @@ public class ClericTradesInitEvent {
 		public MerchantOffer getOffer(Entity entity, Random random) {
 			if (!(entity.level instanceof ServerLevel serverLevel))
 				return null;
-			ItemStack potion = new ItemStack(Items.POTION);
-			
-			potion = PotionUtils.setPotion(potion, new Potion(effects.toArray(new MobEffectInstance[0])));
+			ItemStack potion = PotionCreatorUtils.makeIntoPotion(Items.POTION, effects);
 			potion.setHoverName(new TranslatableComponent(displayName));
 
 			return new MerchantOffer(new ItemStack(Items.EMERALD, emeraldCost), new ItemStack(Items.GLASS_BOTTLE), potion,
@@ -127,7 +126,6 @@ public class ClericTradesInitEvent {
 		public MerchantOffer getOffer(Entity entity, Random random) {
 			if (!(entity.level instanceof ServerLevel serverLevel))
 				return null;
-			ItemStack potion = new ItemStack(Items.POTION);
 			List<MobEffect> possibleEffects = StreamSupport.stream(ForgeRegistries.MOB_EFFECTS.spliterator(), false).collect(Collectors.toList());
 			List<MobEffectInstance> effects = new ArrayList<>();
 			Collections.shuffle(possibleEffects);
@@ -135,7 +133,8 @@ public class ClericTradesInitEvent {
 				effects.add(new MobEffectInstance(possibleEffects.get(i), this.duration, this.amplifier));
 			}
 			
-			potion = PotionUtils.setPotion(potion, new Potion(effects.toArray(new MobEffectInstance[0])));
+
+			ItemStack potion = PotionCreatorUtils.makeIntoPotion(Items.POTION, effects);
 			potion.setHoverName(new TranslatableComponent(displayName));
 
 			return new MerchantOffer(new ItemStack(Items.EMERALD, emeraldCost), new ItemStack(Items.GLASS_BOTTLE), potion,
@@ -162,9 +161,7 @@ public class ClericTradesInitEvent {
 		public MerchantOffer getOffer(Entity entity, Random random) {
 			if (!(entity.level instanceof ServerLevel serverLevel))
 				return null;
-			ItemStack potion = new ItemStack(Items.SPLASH_POTION);
-			
-			potion = PotionUtils.setPotion(potion, new Potion(effects.toArray(new MobEffectInstance[0])));
+			ItemStack potion = PotionCreatorUtils.makeIntoPotion(Items.SPLASH_POTION, effects);
 			potion.setHoverName(new TranslatableComponent(displayName));
 
 			return new MerchantOffer(new ItemStack(Items.EMERALD, emeraldCost), new ItemStack(Items.GLASS_BOTTLE), potion,
@@ -195,15 +192,13 @@ public class ClericTradesInitEvent {
 		public MerchantOffer getOffer(Entity entity, Random random) {
 			if (!(entity.level instanceof ServerLevel serverLevel))
 				return null;
-			ItemStack potion = new ItemStack(Items.SPLASH_POTION);
 			List<MobEffect> possibleEffects = StreamSupport.stream(ForgeRegistries.MOB_EFFECTS.spliterator(), false).collect(Collectors.toList());
 			List<MobEffectInstance> effects = new ArrayList<>();
 			Collections.shuffle(possibleEffects);
 			for (int i = 0; i < Math.min(this.effectCount, possibleEffects.size()); i++) {
 				effects.add(new MobEffectInstance(possibleEffects.get(i), this.duration, this.amplifier));
 			}
-			
-			potion = PotionUtils.setPotion(potion, new Potion(effects.toArray(new MobEffectInstance[0])));
+			ItemStack potion = PotionCreatorUtils.makeIntoPotion(Items.SPLASH_POTION, effects);
 			potion.setHoverName(new TranslatableComponent(displayName));
 
 			return new MerchantOffer(new ItemStack(Items.EMERALD, emeraldCost), new ItemStack(Items.GLASS_BOTTLE), potion,
