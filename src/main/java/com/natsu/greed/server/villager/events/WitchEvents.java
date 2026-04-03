@@ -43,18 +43,28 @@ public class WitchEvents {
 		if (effects.isEmpty()) return potion;
 		MobEffectInstance current = effects.get(0);
 		
+		// Poison I (45s) -> Poison II (21s) | Poison I (30s) + Blindness I (10s) | Lingering Poison (60s)
+		// Slowness I (90s) -> Slowness II (90s) + Mining Fatigue II (30s) | Lingering Slowness IV (10s)
+		// Weakness I (90s) -> Weakness II (90s) | Lingering Weakness IV (30s)
+		// Damage I -> Lingering Damage I
+		
+		int rnd = new Random().nextInt(0, 101);
 		if (current.getEffect() == MobEffects.POISON) {
-			if (new Random().nextInt(0, 100) <= 30) {
-				return PotionCreatorUtils.makeIntoPotion(Items.SPLASH_POTION, List.of(new MobEffectInstance(MobEffects.POISON, 15*20, 1)));
-			} else { return potion; }
-		} else if (current.getEffect() == MobEffects.WEAKNESS) {
-			if (new Random().nextInt(0, 100) <= 30) {
-				return PotionCreatorUtils.makeIntoPotion(Items.LINGERING_POTION, List.of(new MobEffectInstance(MobEffects.WEAKNESS, 120*20, 0), new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 120*20, 1)));
-			} else { return potion; }
+			if (rnd <= 25) { return PotionCreatorUtils.makeIntoPotion(Items.SPLASH_POTION, List.of(new MobEffectInstance(MobEffects.POISON, 30*20, 0), new MobEffectInstance(MobEffects.BLINDNESS, 10*20, 0))); }
+			else if (rnd <= 50) { return PotionCreatorUtils.makeIntoPotion(Items.SPLASH_POTION, List.of(new MobEffectInstance(MobEffects.POISON, 21*20, 1))); }
+			else if (rnd <= 75) { return PotionCreatorUtils.makeIntoPotion(Items.LINGERING_POTION, List.of(new MobEffectInstance(MobEffects.POISON, 60*20, 0))); }
+			else { return potion; }
 		} else if (current.getEffect() == MobEffects.MOVEMENT_SLOWDOWN) {
-			if (new Random().nextInt(0, 100) <= 30) {
-				return PotionCreatorUtils.makeIntoPotion(Items.LINGERING_POTION, List.of(new MobEffectInstance(MobEffects.HUNGER, 90*20, 1), new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 180*20, 1)));
-			} else { return potion; }
+			if (rnd <= 33) { return PotionCreatorUtils.makeIntoPotion(Items.SPLASH_POTION, List.of(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 90*20, 1), new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 30*20, 1))); }
+			else if (rnd <= 66) { return PotionCreatorUtils.makeIntoPotion(Items.LINGERING_POTION, List.of(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 10*20, 3))); }
+			else { return potion; }
+		} else if (current.getEffect() == MobEffects.WEAKNESS) {
+			if (rnd <= 33) { return PotionCreatorUtils.makeIntoPotion(Items.SPLASH_POTION, List.of(new MobEffectInstance(MobEffects.WEAKNESS, 90*20, 1))); }
+			else if (rnd <= 66) { return PotionCreatorUtils.makeIntoPotion(Items.LINGERING_POTION, List.of(new MobEffectInstance(MobEffects.WEAKNESS, 30*20, 3))); }
+			else { return potion; }
+		} else if (current.getEffect() == MobEffects.HARM) {
+			if (rnd <= 50) { return PotionCreatorUtils.makeIntoPotion(Items.LINGERING_POTION, List.of(new MobEffectInstance(MobEffects.HARM, 15*20, 1))); }
+			else { return potion; }
 		}
 		
 		

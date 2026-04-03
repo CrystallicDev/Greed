@@ -72,8 +72,6 @@ public class ClericTradesInitEvent {
 		event.addTradeTo(ProfessionLevel.MASTER, new RandomPotionForEmeralds(28, 2, 3*20*60, 0, "item.greed.trade.2_random_potion", 10, 3));
 		event.addTradeTo(ProfessionLevel.MASTER, new RandomSplashPotionForEmeralds(28, 2, 3*20*60, 0, "item.greed.trade.2_random_splash_potion", 10, 3));
 		event.addTradeTo(ProfessionLevel.MASTER, new VillagerTradeHandler.ItemsForEmeralds(Items.ENCHANTED_GOLDEN_APPLE, 48, 1, 8, 1));
-		
-
 	}
 	
 	public static class PotionForEmeralds implements VillagerTrades.ItemListing {
