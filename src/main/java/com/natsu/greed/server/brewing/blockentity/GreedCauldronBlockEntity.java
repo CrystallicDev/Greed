@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.natsu.greed.common.registry.GreedBlockEntities;
 import com.natsu.greed.config.ServerConfig;
+import com.natsu.greed.utils.PotionCreatorUtils;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -150,9 +151,7 @@ public class GreedCauldronBlockEntity extends BlockEntity {
 		List<MobEffectInstance> outgoing = getPotion();
 		if (outgoing.isEmpty()) {
 			System.out.println("onTakingPotion - Cauldron has a potion");
-			Potion pot = new Potion(outgoing.toArray(new MobEffectInstance[0]));
-			ItemStack potionBottle = PotionUtils.setPotion(
-			        new ItemStack(Items.POTION), pot);
+			ItemStack potionBottle = PotionCreatorUtils.makeIntoPotion(Items.POTION, outgoing);
 			empty();
 			if (!player.getInventory().add(potionBottle)) {
 	            player.drop(potionBottle, false);
