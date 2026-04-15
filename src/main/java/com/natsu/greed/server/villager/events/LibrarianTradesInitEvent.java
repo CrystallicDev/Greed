@@ -140,6 +140,7 @@ public class LibrarianTradesInitEvent {
 				if (enchantment.isCurse()) {
 					emeraldCost += -2 + random.nextInt(1 + enchantLevel * 5) + enchantLevel;
 				} else { emeraldCost += 2 + random.nextInt(3 + enchantLevel * (enchantment.isTreasureOnly() ? 7 : 5)) + 3 * enchantLevel; }
+				emeraldCost = Math.max(emeraldCost, 1);
 				EnchantedBookItem.addEnchantment(itemStack, new EnchantmentInstance(enchantment, enchantLevel));
 			}
 			if (emeraldCost >= 64) { emeraldCost = 64; }

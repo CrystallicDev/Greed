@@ -133,6 +133,7 @@ public class ArmorerTradesInitEvent {
 				if (enchantment.isCurse()) {
 					emeraldCost += -2 + random.nextInt(1 + enchantLevel * 5) + enchantLevel;
 				} else { emeraldCost += 2 + random.nextInt(3 + enchantLevel * (enchantment.isTreasureOnly() ? 7 : 5)) + 3 * enchantLevel; }
+				emeraldCost = Math.max(emeraldCost, 1);
 				endItem.enchant(enchantment, enchantLevel);
 				applied.add(enchantment);
 			}
