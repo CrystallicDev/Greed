@@ -130,7 +130,9 @@ public class ToolSmithTradesInitEvent {
 				Enchantment enchantment = enchantList.get(i);
 				for (Enchantment appliedEnchant : applied) { if (!appliedEnchant.isCompatibleWith(enchantment)) { continue; } }
 				int enchantLevel = Mth.nextInt(random, enchantment.getMinLevel(), enchantment.getMaxLevel());
-				emeraldCost += 2 + random.nextInt(3 + enchantLevel * (enchantment.isTreasureOnly() ? 7 : 5)) + 3 * enchantLevel;
+				if (enchantment.isCurse()) {
+					emeraldCost += -2 + random.nextInt(1 + enchantLevel * 5) + enchantLevel;
+				} else { emeraldCost += 2 + random.nextInt(3 + enchantLevel * (enchantment.isTreasureOnly() ? 7 : 5)) + 3 * enchantLevel; }
 				endItem.enchant(enchantment, enchantLevel);
 				applied.add(enchantment);
 			}
