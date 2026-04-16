@@ -35,11 +35,11 @@ public class GreedLangFR extends LanguageProvider {
 		add("map.greed.bastion", "Carte d'exploration de bastion");
 		add("map.greed.end_city", "Carte d'exploration de citée de l'end");
 
-		add("map.greed.1_random_potion", "Potion mystérieuse");
-		add("map.greed.1_random_splash_potion", "Potion jetable mystérieuse");
-		add("map.greed.2_random_potion", "Potion mystérieuse");
-		add("map.greed.2_random_splash_potion", "Potion jetable mystérieuse");
-		add("map.greed.trade.splash_weakness", "Potion de dé-zombification");
+		add("item.greed.trade.1_random_potion", "Potion mystérieuse");
+		add("item.greed.trade.1_random_splash_potion", "Potion jetable mystérieuse");
+		add("item.greed.trade.2_random_potion", "Potion mystérieuse");
+		add("item.greed.trade.2_random_splash_potion", "Potion jetable mystérieuse");
+		add("item.greed.trade.trade.splash_weakness", "Potion de dé-zombification");
 		
 		add(GreedBlocks.CAULDRON.get(), "Chaudron");
 	}

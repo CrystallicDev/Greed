@@ -35,11 +35,11 @@ public class GreedLangEN extends LanguageProvider {
 		add("map.greed.bastion", "Bastion Explorer Map");
 		add("map.greed.end_city", "End City Explorer Map");
 
-		add("map.greed.trade.1_random_potion", "Mysterious Potion");
-		add("map.greed.trade.1_random_splash_potion", "Mysterious Splash Potion");
-		add("map.greed.trade.2_random_potion", "Mysterious Potion");
-		add("map.greed.trade.2_random_splash_potion", "Mysterious Splash Potion");
-		add("map.greed.trade.splash_weakness", "Vaccine Potion");
+		add("item.greed.trade.1_random_potion", "Mysterious Potion");
+		add("item.greed.trade.1_random_splash_potion", "Mysterious Splash Potion");
+		add("item.greed.trade.2_random_potion", "Mysterious Potion");
+		add("item.greed.trade.2_random_splash_potion", "Mysterious Splash Potion");
+		add("item.greed.trade.splash_weakness", "Vaccine Potion");
 		
 		add(GreedBlocks.CAULDRON.get(), "Cauldron");
 	}
