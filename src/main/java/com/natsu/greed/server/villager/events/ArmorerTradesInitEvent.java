@@ -59,10 +59,10 @@ public class ArmorerTradesInitEvent {
 		event.addTradeTo(ProfessionLevel.JOURNEYMAN, new EnchantedItemForEmeralds(Items.IRON_HELMET, 21, 3, 7, 0.2F));
 		event.addTradeTo(ProfessionLevel.JOURNEYMAN, new EnchantedItemForEmeralds(Items.IRON_CHESTPLATE, 27, 3, 7, 0.2F));
 		
-		event.addTradeTo(ProfessionLevel.EXPERT, new MultiEnchantedItemForEmeralds(Items.IRON_LEGGINGS, 3, 10, 2, 4, 0.2F));
-		event.addTradeTo(ProfessionLevel.EXPERT, new MultiEnchantedItemForEmeralds(Items.IRON_BOOTS, 3, 7, 2, 4, 0.2F));
-		event.addTradeTo(ProfessionLevel.EXPERT, new MultiEnchantedItemForEmeralds(Items.IRON_HELMET, 3, 7, 2, 4, 0.2F));
-		event.addTradeTo(ProfessionLevel.EXPERT, new MultiEnchantedItemForEmeralds(Items.IRON_CHESTPLATE, 3, 10, 2, 4, 0.2F));
+		event.addTradeTo(ProfessionLevel.EXPERT, new MultiEnchantedItemForEmeralds(Items.IRON_LEGGINGS, 3, 10, 2, 3, 0.2F));
+		event.addTradeTo(ProfessionLevel.EXPERT, new MultiEnchantedItemForEmeralds(Items.IRON_BOOTS, 3, 7, 2, 3, 0.2F));
+		event.addTradeTo(ProfessionLevel.EXPERT, new MultiEnchantedItemForEmeralds(Items.IRON_HELMET, 3, 7, 2, 3, 0.2F));
+		event.addTradeTo(ProfessionLevel.EXPERT, new MultiEnchantedItemForEmeralds(Items.IRON_CHESTPLATE, 3, 10, 2, 3, 0.2F));
 		
 		event.addTradeTo(ProfessionLevel.MASTER, new EnchantedItemForEmeralds(Items.DIAMOND_LEGGINGS, 40, 3, 30, 0.2F));
 		event.addTradeTo(ProfessionLevel.MASTER, new EnchantedItemForEmeralds(Items.DIAMOND_BOOTS, 35, 3, 30, 0.2F));

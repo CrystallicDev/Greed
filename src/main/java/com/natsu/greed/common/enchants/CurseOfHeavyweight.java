@@ -9,7 +9,7 @@ import net.minecraft.world.item.enchantment.Enchantment.Rarity;
 public class CurseOfHeavyweight extends Enchantment {
 
 	public CurseOfHeavyweight() {
-		super(Rarity.RARE, EnchantmentCategory.ARMOR, new EquipmentSlot[]{EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET});
+		super(Rarity.RARE, EnchantmentCategory.ARMOR_FEET, new EquipmentSlot[]{EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET});
 	}
 	
 	@Override
