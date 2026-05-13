@@ -41,7 +41,7 @@ public class GreedCauldronBlockEntity extends BlockEntity {
 	
 	public List<MobEffectInstance> getPotion() { return potions; }
 	public void setPotion(List<MobEffectInstance> potion) { this.potions = potion; }
-	public void empty() { this.level = 0; this.potions.isEmpty(); }
+	public void empty() { this.level = 0; this.potions.clear(); setChanged(); }
 	public int getPotLevel() { return level; }
 	public boolean isEmpty() { return level == 0 || this.potions.isEmpty(); }
 	public boolean isFull() { return level >= MAX_LEVEL; }
@@ -70,7 +70,7 @@ public class GreedCauldronBlockEntity extends BlockEntity {
 		potions.forEach(effect -> {
 			CompoundTag nt = new CompoundTag();
 			effect.save(nt);
-			effectsTag.add(effectsTag);
+			effectsTag.add(nt);
 		});
 		tag.put("effects", effectsTag);
 	}
@@ -78,6 +78,7 @@ public class GreedCauldronBlockEntity extends BlockEntity {
 	@Override
 	public void load(CompoundTag tag) {
 		super.load(tag);
+		this.level = tag.getInt("level");
 		potions.clear();
 		tag.getList("effects", Tag.TAG_COMPOUND)
 			.forEach(t -> {
@@ -103,42 +104,74 @@ public class GreedCauldronBlockEntity extends BlockEntity {
 	}
 	
 	public boolean onAddingPotion(Potion incoming) {
-		System.out.println("onAddingPotion");
-		if (isFull()) return false;		// No potion can be added
-		
-		boolean hasMadeUpdate = false;
-		List<MobEffectInstance> finalEffects = new ArrayList<>();
-		if (isEmpty()) {
-			System.out.println("onAddingPotion - Cauldron is Empty");
-			finalEffects = incoming.getEffects();
-			hasMadeUpdate = true;
-		} else {
-			System.out.println("onAddingPotion - Cauldron is not Empty");
-			for (MobEffectInstance effect : incoming.getEffects()) {
-				boolean hasFoundMatch = false;
-				boolean isAllowed = true;
-				for (MobEffectInstance existing : potions) {
-					if (!isEffectCompatible(existing, effect)) { isAllowed = false; continue; }		// Avoid effect with different amplifier
-					if (effect.getEffect().equals(existing.getEffect()) && effect.getAmplifier() == existing.getAmplifier()) {
-						finalEffects.add(new MobEffectInstance(existing.getEffect(), (int)Math.round(existing.getDuration() + (ServerConfig.CAULDRONS_POTION_DURATION_MERGE_FACTOR.get() * effect.getDuration())), existing.getAmplifier()));
-						hasFoundMatch = true;
-						hasMadeUpdate = true;
-					}
-				}
-				if (!hasFoundMatch && isAllowed) {
-					// This effect is not already present, adding
-					finalEffects.add(effect);
-					hasMadeUpdate = true;
-				}
-			}
-		}
-		if (hasMadeUpdate) {
-			System.out.println("onAddingPotion - Cauldron is now updated !");
-			setPotion(finalEffects);
-			this.level++;
-			return hasMadeUpdate;
-		}
-		return hasMadeUpdate;
+	    System.out.println("onAddingPotion");
+	    if (isFull()) return false;
+
+	    List<MobEffectInstance> finalEffects = new ArrayList<>();
+	    boolean hasMadeUpdate = false;
+
+	    if (isEmpty()) {
+	        System.out.println("onAddingPotion - Cauldron is Empty");
+	        finalEffects.addAll(incoming.getEffects());
+	        hasMadeUpdate = true;
+	    } else {
+	        System.out.println("onAddingPotion - Cauldron is not Empty");
+
+	        // 1. Copier les effets existants, en mergant ceux qui matchent avec incoming
+	        for (MobEffectInstance existing : potions) {
+	            boolean matchedByIncoming = false;
+	            for (MobEffectInstance effect : incoming.getEffects()) {
+	                if (!isEffectCompatible(existing, effect)) continue;
+	                if (effect.getEffect().equals(existing.getEffect()) 
+	                        && effect.getAmplifier() == existing.getAmplifier()) {
+	                    // Merger la durée
+	                    int mergedDuration = (int) Math.round(
+	                        existing.getDuration() + (ServerConfig.CAULDRONS_POTION_DURATION_MERGE_FACTOR.get() 
+	                        * effect.getDuration())
+	                    );
+	                    finalEffects.add(new MobEffectInstance(
+	                        existing.getEffect(), mergedDuration, existing.getAmplifier()
+	                    ));
+	                    matchedByIncoming = true;
+	                    hasMadeUpdate = true;
+	                    break;
+	                }
+	            }
+	            // Aucun effet de incoming ne correspond : on conserve l'effet existant tel quel
+	            if (!matchedByIncoming) {
+	                finalEffects.add(existing);
+	            }
+	        }
+
+	        // 2. Ajouter les effets de incoming qui ne sont pas déjà dans potions
+	        for (MobEffectInstance effect : incoming.getEffects()) {
+	            boolean alreadyHandled = false;
+	            for (MobEffectInstance existing : potions) {
+	                if (!isEffectCompatible(existing, effect)) {
+	                    alreadyHandled = true; // Incompatible, on ignore
+	                    break;
+	                }
+	                if (effect.getEffect().equals(existing.getEffect()) 
+	                        && effect.getAmplifier() == existing.getAmplifier()) {
+	                    alreadyHandled = true; // Déjà mergé à l'étape 1
+	                    break;
+	                }
+	            }
+	            if (!alreadyHandled) {
+	                finalEffects.add(effect);
+	                hasMadeUpdate = true;
+	            }
+	        }
+	    }
+
+	    if (hasMadeUpdate) {
+	        System.out.println("onAddingPotion - Cauldron is now updated !");
+	        setPotion(finalEffects);
+	        this.level++;
+	        setChanged();
+	        return true;
+	    }
+	    return false;
 	}
 	
 	private boolean isEffectCompatible(MobEffectInstance effect, MobEffectInstance effect2) {
@@ -149,7 +182,7 @@ public class GreedCauldronBlockEntity extends BlockEntity {
 	public boolean onTakingPotion(Player player) {
 		System.out.println("onTakingPotion");
 		List<MobEffectInstance> outgoing = getPotion();
-		if (outgoing.isEmpty()) {
+		if (!outgoing.isEmpty()) {
 			System.out.println("onTakingPotion - Cauldron has a potion");
 			ItemStack potionBottle = PotionCreatorUtils.makeIntoPotion(Items.POTION, outgoing);
 			empty();
@@ -160,5 +193,31 @@ public class GreedCauldronBlockEntity extends BlockEntity {
 		}
 		return false;
 	}
+	
+	/**
+	 * [22:36:05] [Render thread/INFO] [minecraft/ChatComponent]: [CHAT] Le bloc en 161, 81, 10 a été modifié
+interact on Cauldron with Potion !
+Cauldron is not Full ! pass
+onAddingPotion
+onAddingPotion - Cauldron is Empty
+onAddingPotion - Cauldron is now updated !
+Cauldron Adding : true
+[22:36:11] [Server thread/INFO] [minecraft/MinecraftServer]: <Natsu91> t
+[22:36:11] [Render thread/INFO] [minecraft/ChatComponent]: [CHAT] <Natsu91> t
+interact on Cauldron with Potion !
+Cauldron is not Full ! pass
+onAddingPotion
+onAddingPotion - Cauldron is not Empty
+onAddingPotion - Cauldron is now updated !
+Cauldron Adding : true
+[22:36:15] [Server thread/INFO] [minecraft/MinecraftServer]: <Natsu91> ttttt
+[22:36:15] [Render thread/INFO] [minecraft/ChatComponent]: [CHAT] <Natsu91> ttttt
+Cauldron is not Empty ! pass
+onTakingPotion
+Cauldron Taking : false
+[22:36:19] [Server thread/INFO] [minecraft/MinecraftServer]: <Natsu91> tttt
+[22:36:19] [Render thread/INFO] [minecraft/ChatComponent]: [CHAT] <Natsu91> tttt
+
+	 * */
 	
 }
