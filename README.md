@@ -11,6 +11,7 @@
 
 > This mod is a member of the **Cristallite Mod Collection**, see Greed and my other mods docs / wiki [here](https://google.com).
 
+</div>
 
 ## Description
 **Greed** is a mod that aim to rebalance some vanilla mechanics, without adding any, and without removing any. 
