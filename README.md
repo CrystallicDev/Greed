@@ -1,5 +1,6 @@
 <div align="center">
 
+![logo](https://cdn.modrinth.com/data/cached_images/40b28546df8312ef8669e948c350d1416bd3b795.png)
 # Greed
 
 [![Forge](https://img.shields.io/badge/Loader-Forge-darkgreen)](https://minecraftforge.net/)
