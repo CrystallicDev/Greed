@@ -1,6 +1,6 @@
 package com.natsu.greed.mixins;
 
-import java.util.Random;
+import net.minecraft.util.RandomSource;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -17,7 +17,7 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 public class EnchantHelperMixin {
 
 	@Inject(method = "getEnchantmentCost", at = @At("HEAD"), cancellable = true)
-	private static void getEnchantmentCost(Random random, int slot, int enchantPowerBonus, ItemStack itemstack, CallbackInfoReturnable<Integer> ci) {
+	private static void getEnchantmentCost(RandomSource random, int slot, int enchantPowerBonus, ItemStack itemstack, CallbackInfoReturnable<Integer> ci) {
 		if (ServerConfig.DISABLE_BOOKSHELVES_CAP.get()) {
 			Item item = itemstack.getItem();
 			int i = itemstack.getEnchantmentValue();
