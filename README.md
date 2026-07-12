@@ -6,7 +6,7 @@
 [![Forge](https://img.shields.io/badge/Loader-Forge-darkgreen)](https://minecraftforge.net/)
 [![Neoforge](https://img.shields.io/badge/Loader-Neoforge-purple)](https://neoforged.net/)
 [![Cristallite](https://img.shields.io/badge/Cristallite-Mod_Collection-darkgreen)](https://google.com)
-[![Modrinth](https://img.shields.io/modrinth/dt/greed)](https://modrinth.com/mod/greed)
+[![Modrinth](https://img.shields.io/modrinth/dt/greed)](https://img.shields.io/modrinth/dt/greed)
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/nqtsu91)
 
