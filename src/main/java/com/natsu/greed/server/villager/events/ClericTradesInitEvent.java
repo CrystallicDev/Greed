@@ -37,6 +37,7 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.saveddata.maps.MapDecoration;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
+import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -45,7 +46,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class ClericTradesInitEvent {
 
 	@SubscribeEvent
-	public static void onTradeSetup(GreedFillingTradesEvent event) {
+	public static void onTradeSetup(VillagerTradesEvent vte) {
+		GreedFillingTradesEvent event = new GreedFillingTradesEvent(vte);
 		if (event.getProfession() != VillagerProfession.CLERIC || !ServerConfig.USE_CUSTOM_MAP_TRADES.get()) return;
 		
 		event.clearTradeOf(ProfessionLevel.NOVICE);

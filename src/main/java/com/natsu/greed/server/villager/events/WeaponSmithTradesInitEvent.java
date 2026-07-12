@@ -25,6 +25,7 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.item.trading.MerchantOffer;
+import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -33,7 +34,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class WeaponSmithTradesInitEvent {
 
 	@SubscribeEvent
-	public static void onTradeSetup(GreedFillingTradesEvent event) {
+	public static void onTradeSetup(VillagerTradesEvent vte) {
+		GreedFillingTradesEvent event = new GreedFillingTradesEvent(vte);
 		if (event.getProfession() != VillagerProfession.WEAPONSMITH || !ServerConfig.USE_CUSTOM_WEAPON_TRADES.get()) return;
 		
 		event.clearTradeOf(ProfessionLevel.NOVICE);
