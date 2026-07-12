@@ -8,6 +8,7 @@ import java.util.Random;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -39,7 +40,31 @@ import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(EnchantmentMenu.class)
 public abstract class EnchantmentMenuMixin {
-	
+
+	@Unique
+	private int greed$displayedCost;
+
+	@Inject(method = "clickMenuButton", at = @At("HEAD"))
+	private void captureDisplayedCost(Player player, int id, CallbackInfoReturnable<Boolean> cir) {
+		// le coût affiché est recalculé après l'enchantement : on le capture avant
+		int[] costs = ((EnchantmentMenu) (Object) this).costs;
+		greed$displayedCost = (id >= 0 && id < costs.length) ? costs[id] : 0;
+	}
+
+	@Inject(method = "clickMenuButton", at = @At("RETURN"))
+	private void applyLegacyXpCost(Player player, int id, CallbackInfoReturnable<Boolean> cir) {
+		if (!ServerConfig.USE_LEGACY_XP_COST.get()) return;
+		if (!cir.getReturnValueZ()) return;					// l'enchantement n'a pas eu lieu
+		if (player.getAbilities().instabuild) return;
+
+		// vanilla a déjà retiré (id + 1) niveaux : on complète jusqu'au coût affiché,
+		// comme en 1.7 où enchanter à 30 coûtait 30 niveaux
+		int extra = greed$displayedCost - (id + 1);
+		if (extra > 0) {
+			player.giveExperienceLevels(-extra);
+		}
+	}
+
 	@Inject(method = "getEnchantmentList", at = @At("HEAD"), cancellable = true)
 	private void onGetEnchantList(ItemStack p_39472_, int index, int cost, CallbackInfoReturnable<List<EnchantmentInstance>> ci) {
 		if (!ServerConfig.USE_ENCHANTING_SYSTEM.get()) { return; }

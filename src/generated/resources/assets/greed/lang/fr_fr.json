@@ -11,10 +11,18 @@
   "enchantment.greed.light": "L\u00E9g\u00E8ret\u00E9",
   "enchantment.greed.reeling": "Rep\u00EAchage",
   "enchantment.greed.stretched": "Corde Tendue",
+  "item.greed.trade.1_random_potion": "Potion myst\u00E9rieuse",
+  "item.greed.trade.1_random_splash_potion": "Potion jetable myst\u00E9rieuse",
+  "item.greed.trade.2_random_potion": "Potion myst\u00E9rieuse",
+  "item.greed.trade.2_random_splash_potion": "Potion jetable myst\u00E9rieuse",
+  "item.greed.trade.splash_weakness": "Potion de d\u00E9-zombification",
   "map.greed.bastion": "Carte d'exploration de bastion",
   "map.greed.end_city": "Carte d'exploration de cit\u00E9e de l'end",
   "map.greed.jungle": "Carte d'exploration de la jungle",
+  "map.greed.jungle_temple": "Carte d'exploration du temple perdu",
   "map.greed.mesa": "Carte d'exploration de m\u00E9sa",
   "map.greed.nether_fortress": "Carte d'exploration de forteresse",
-  "map.greed.taiga": "Carte d'exploration de la taiga"
+  "map.greed.taiga": "Carte d'exploration de la taiga",
+  "message.greed.plain_bread": "Le pain ne se mange pas tel quel : utilisez-le dans un plat !",
+  "message.greed.raw_meat": "La viande crue doit \u00EAtre d\u00E9coup\u00E9e et cuite avant d'\u00EAtre mang\u00E9e !"
 }

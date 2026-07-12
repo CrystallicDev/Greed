@@ -30,6 +30,7 @@ public class WitchEvents {
 
 	@SubscribeEvent
 	public static void onThrown(EntityJoinWorldEvent event) {
+		if (event.getWorld().isClientSide()) return;
 		if (!ServerConfig.USE_CUSTOM_WITCHES_POTION.get()) return;
 		if (!(event.getEntity() instanceof ThrownPotion potion)) return;
 		if (!(potion.getOwner() instanceof Witch)) return;

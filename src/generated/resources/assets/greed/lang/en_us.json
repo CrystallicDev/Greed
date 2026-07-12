@@ -11,10 +11,18 @@
   "enchantment.greed.light": "Light",
   "enchantment.greed.reeling": "Reeling",
   "enchantment.greed.stretched": "Stretched",
+  "item.greed.trade.1_random_potion": "Mysterious Potion",
+  "item.greed.trade.1_random_splash_potion": "Mysterious Splash Potion",
+  "item.greed.trade.2_random_potion": "Mysterious Potion",
+  "item.greed.trade.2_random_splash_potion": "Mysterious Splash Potion",
+  "item.greed.trade.splash_weakness": "Vaccine Potion",
   "map.greed.bastion": "Bastion Explorer Map",
   "map.greed.end_city": "End City Explorer Map",
   "map.greed.jungle": "Jungle Explorer Map",
+  "map.greed.jungle_temple": "Lost Temple Explorer Map",
   "map.greed.mesa": "Mesa Explorer Map",
   "map.greed.nether_fortress": "Nether Fortress Explorer Map",
-  "map.greed.taiga": "Taiga Explorer Map"
+  "map.greed.taiga": "Taiga Explorer Map",
+  "message.greed.plain_bread": "Plain bread cannot be eaten as is: use it in a meal!",
+  "message.greed.raw_meat": "Raw meat must be cut and cooked before being eaten!"
 }

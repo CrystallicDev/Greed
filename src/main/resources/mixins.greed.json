@@ -10,7 +10,8 @@
 		"EnchantmentAccessor",
 		"EnchantmentMixin",
 		"FishHookMixin",
-		"EnchantHelperMixin"
+		"EnchantHelperMixin",
+		"ItemAccessor"
     ],
     "client": [],
     "server": [],

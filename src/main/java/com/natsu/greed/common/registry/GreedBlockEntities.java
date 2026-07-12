@@ -14,8 +14,8 @@ public class GreedBlockEntities {
 
 	public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, Greed.MODID);
 	
-	public static final RegistryObject<BlockEntityType<GreedCauldronBlockEntity>> CAULDRON = BLOCK_ENTITIES.register("potion_cauldron", 
-			() -> BlockEntityType.Builder.of(GreedCauldronBlockEntity::new, Blocks.CAULDRON).build(null)
+	public static final RegistryObject<BlockEntityType<GreedCauldronBlockEntity>> CAULDRON = BLOCK_ENTITIES.register("potion_cauldron",
+			() -> BlockEntityType.Builder.of(GreedCauldronBlockEntity::new, GreedBlocks.CAULDRON.get()).build(null)
 			);
 	
 }

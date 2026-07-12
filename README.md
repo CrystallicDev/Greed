@@ -1,16 +1,18 @@
-# Greed
-[![MIT License](https://img.shields.io/badge/Loader-Forge-yellow)](https://choosealicense.com/licenses/mit/)
-[![MIT License](https://img.shields.io/badge/Loader-Neoforge-yellow)](https://choosealicense.com/licenses/mit/)
+<div align="center">
 
-[![version](https://img.shields.io/badge/Cristallite-Mod_Collection-darkgreen)](https://google.com)
-[![version](https://img.shields.io/badge/1.18.2-lightgreen)](https://google.com)
-[![version](https://img.shields.io/badge/1.18.2-lightgreen)](https://google.com)
-[![version](https://img.shields.io/badge/1.19.2-lightblue)](https://google.com)
-[![version](https://img.shields.io/badge/1.20.x-pink)](https://google.com)
-[![version](https://img.shields.io/badge/1.21.1-purple)](https://google.com)
-[![Modrinth](https://img.shields.io/modrinth/dt/:projectId)](https://google.com)
+![logo](https://cdn.modrinth.com/data/cached_images/40b28546df8312ef8669e948c350d1416bd3b795.png)
+# Greed
+
+[![Forge](https://img.shields.io/badge/Loader-Forge-darkgreen)](https://minecraftforge.net/)
+[![Neoforge](https://img.shields.io/badge/Loader-Neoforge-purple)](https://neoforged.net/)
+[![Cristallite](https://img.shields.io/badge/Cristallite-Mod_Collection-darkgreen)](https://google.com)
+[![Modrinth](https://img.shields.io/modrinth/dt/greed)](https://modrinth.com/mod/greed)
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/nqtsu91)
 
 > This mod is a member of the **Cristallite Mod Collection**, see Greed and my other mods docs / wiki [here](https://google.com).
+
+</div>
 
 ## Description
 **Greed** is a mod that aim to rebalance some vanilla mechanics, without adding any, and without removing any. 
@@ -30,3 +32,12 @@ For example :
 To answer those questions, and more, **Greed** changes the way the **Enchanting Table** behave, the way **Cauldrons** and **Brewing Stands** works, the way **food** and **crops** works, to make gathering food an actual activity, and even reworks the vanilla progression !
 
 > **Greed** can be used on its own, but is intended to be used alongside Cristallite, Natsu's Mobs, Jewels and Rings, and Elixirs.
+
+## Availability 
+|Loader|Version|
+|--------|--------|
+| Forge | 1.18.2, 1.19.2, 1.20.1 |
+| Neoforge | 1.21.11, 26.1.2, 26.2 |
+
+## Usage 
+Feel free to integrate Elixirs in any of your modpacks, or create new versions of this mod. However, any redistributed version, modified or not, must stay fully free, and keep a link to the original.

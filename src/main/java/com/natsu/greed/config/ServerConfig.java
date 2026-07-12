@@ -18,16 +18,23 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantment.Rarity;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import net.minecraft.world.item.enchantment.Enchantments;
+import org.slf4j.Logger;
+
+import com.mojang.logging.LogUtils;
+
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class ServerConfig {
+
+	private static final Logger LOGGER = LogUtils.getLogger();
 
 	public static final ForgeConfigSpec SPEC;
 	
 	// # Custom Enchant system
 	public static final ForgeConfigSpec.BooleanValue USE_ENCHANTING_SYSTEM;
 	public static final ForgeConfigSpec.BooleanValue DISABLE_BOOKSHELVES_CAP;
+	public static final ForgeConfigSpec.BooleanValue USE_LEGACY_XP_COST;
 	public static final ForgeConfigSpec.ConfigValue<List<? extends String>> DEFAULTSTAGE_CURSE_LIST;
 	public static final ForgeConfigSpec.DoubleValue DEFAULTSTAGE_CURSE_PROBA;
 	public static final ForgeConfigSpec.ConfigValue<List<? extends String>> DEFAULTSTAGE_ENCHANTMENT_BAN_LIST;
@@ -60,17 +67,29 @@ public class ServerConfig {
 	// # Custom Cauldrons
 	public static final ForgeConfigSpec.BooleanValue USE_CUSTOM_CAULDRONS;
 	public static final ForgeConfigSpec.DoubleValue CAULDRONS_POTION_DURATION_MERGE_FACTOR;
+	public static final ForgeConfigSpec.IntValue CAULDRONS_EFFECT_ON_ENTER_SECONDS;
+	public static final ForgeConfigSpec.BooleanValue PREVENT_WATER_BOTTLE_FILLING;
 	
 	// # Custom Witches Thrown potions
 	public static final ForgeConfigSpec.BooleanValue USE_CUSTOM_WITCHES_POTION;
+
+	// # Farmer's Delight integration
+	public static final ForgeConfigSpec.BooleanValue USE_FD_RAW_MEAT_REBALANCE;
+	public static final ForgeConfigSpec.BooleanValue USE_FD_BREAD_REBALANCE;
+	public static final ForgeConfigSpec.BooleanValue USE_FD_COOKED_MEAT_REBALANCE;
+	public static final ForgeConfigSpec.DoubleValue FD_COOKED_MEAT_NUTRITION_FACTOR;
 	
 	static {
 		ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
-		builder.push("# Enchanting Table Stages");
+		builder.push("enchantingTableStages");
 		USE_ENCHANTING_SYSTEM = builder.define("useEnchantingTableStages", true);
 		DISABLE_BOOKSHELVES_CAP = builder.define("disableBookshelvesCap", true);
-		
-		builder.push("# Default Stage (Any block)");
+		USE_LEGACY_XP_COST = builder
+				.comment("1.7-style enchanting cost : enchanting consumes the full amount of levels\n"
+						+ "displayed in the table (ex : a 30-level enchant costs 30 levels).")
+				.define("useLegacyEnchantXpCost", false);
+
+		builder.push("defaultStage");
 		DEFAULTSTAGE_CURSE_LIST = builder.defineList("defaultStage_curseList",
 			    List.of("minecraft:curse_of_vanishing",
 			    		"minecraft:curse_of_binding",
@@ -84,7 +103,7 @@ public class ServerConfig {
 			    obj -> {
 			    	if (!(obj instanceof String s)) return false;
 			        ResourceLocation rl = ResourceLocation.tryParse(s);
-			        if (rl == null) { System.out.println("Cannot find curse : "+s); }
+			        if (rl == null) { LOGGER.warn("Cannot find curse: {}", s); }
 			        return rl != null && ForgeRegistries.ENCHANTMENTS.containsKey(rl);
 			    });
 		
@@ -109,7 +128,7 @@ public class ServerConfig {
 			    obj -> {
 			    	if (!(obj instanceof String s)) return false;
 			        ResourceLocation rl = ResourceLocation.tryParse(s);
-			        if (rl == null) { System.out.println("Cannot find enchant : "+s); }
+			        if (rl == null) { LOGGER.warn("Cannot find enchant: {}", s); }
 			        return rl != null && ForgeRegistries.ENCHANTMENTS.containsKey(rl);
 			    });
 		DEFAULTSTAGE_ENCHANT_ISWHITELIST = builder
@@ -119,7 +138,7 @@ public class ServerConfig {
 		
 		
 		builder.pop();
-		builder.push("# Lapis Stage (Lapis Lazuli block)");
+		builder.push("lapisStage");
 		LAPIS_CURSE_LIST = builder.defineList("lapisStage_curseList",
 			    List.of("minecraft:curse_of_vanishing",
 			    		"minecraft:curse_of_binding",
@@ -133,7 +152,7 @@ public class ServerConfig {
 			    obj -> {
 			    	if (!(obj instanceof String s)) return false;
 			        ResourceLocation rl = ResourceLocation.tryParse(s);
-			        if (rl == null) { System.out.println("Cannot find curse : "+s); }
+			        if (rl == null) { LOGGER.warn("Cannot find curse: {}", s); }
 			        return rl != null && ForgeRegistries.ENCHANTMENTS.containsKey(rl);
 			    });
 		
@@ -156,7 +175,7 @@ public class ServerConfig {
 			    obj -> {
 			    	if (!(obj instanceof String s)) return false;
 			        ResourceLocation rl = ResourceLocation.tryParse(s);
-			        if (rl == null) { System.out.println("Cannot find enchant : "+s); }
+			        if (rl == null) { LOGGER.warn("Cannot find enchant: {}", s); }
 			        return rl != null && ForgeRegistries.ENCHANTMENTS.containsKey(rl);
 			    });
 		LAPIS_ENCHANT_ISWHITELIST = builder
@@ -167,13 +186,13 @@ public class ServerConfig {
 		
 
 		builder.pop();
-		builder.push("# Amethyst Stage (Amethyst Cluster block)");
+		builder.push("amethystStage");
 		AMETHYST_CURSE_LIST = builder.defineList("amethystStage_curseList",
 			    new ArrayList<>(),
 			    obj -> {
 			    	if (!(obj instanceof String s)) return false;
 			        ResourceLocation rl = ResourceLocation.tryParse(s);
-			        if (rl == null) { System.out.println("Cannot find curse : "+s); }
+			        if (rl == null) { LOGGER.warn("Cannot find curse: {}", s); }
 			        return rl != null && ForgeRegistries.ENCHANTMENTS.containsKey(rl);
 			    });
 		
@@ -189,7 +208,7 @@ public class ServerConfig {
 			    obj -> {
 			    	if (!(obj instanceof String s)) return false;
 			        ResourceLocation rl = ResourceLocation.tryParse(s);
-			        if (rl == null) { System.out.println("Cannot find enchant : "+s); }
+			        if (rl == null) { LOGGER.warn("Cannot find enchant: {}", s); }
 			        return rl != null && ForgeRegistries.ENCHANTMENTS.containsKey(rl);
 			    });
 		AMETHYST_ENCHANT_ISWHITELIST = builder
@@ -201,29 +220,29 @@ public class ServerConfig {
 
 		builder.pop();
 		builder.pop();
-		builder.push("# Enchantment Rarity");
+		builder.push("enchantmentRarity");
 		USE_CUSTOM_RARITY = builder.comment("Use a custom rarity for each enchantment. Disable this to use vanilla.").define("useCustomEnchantmentRarity", true);
 		ENCHANTMENTS_RARITY = builder.comment(
 	                "Map each enchantment to a rarity value:\n" +
 	                "  0 = COMMON, 1 = UNCOMMON, 2 = RARE, 3 = VERY_RARE"
 	        ).define("rarities", getDefaultRarities());
+		builder.pop();
 
-		builder.push("# Enchantment Max Levels");
+		builder.push("enchantmentMaxLevels");
 		USE_CUSTOM_MAX_LEVELS = builder.comment("Use a custom max level for each enchantment. Disable this to use vanilla.").define("useCustomEnchantmentMaxLevels", true);
 		ENCHANTMENTS_MAX_LEVELS = builder.comment(
 	                "Map each enchantment to a max level."
 	        ).define("maxLevels", getDefaultMaxLevels());
+		builder.pop();
 
-		builder.push("# Enchantment Max Costs");
+		builder.push("enchantmentMaxCosts");
 		USE_CUSTOM_MAX_COST = builder.comment("Use a custom max cost for each enchantment. This is recommended to be put at 999, otherwise, some enchants become unavailable at higher bookshelves level. Disable this to use vanilla.").define("useCustomEnchantmentMaxCosts", true);
 		ENCHANTMENTS_MAX_COST = builder.comment(
 	                "Map each enchantment to a max cost."
 	        ).define("maxCosts", getDefaultMaxCosts());
-		
+		builder.pop();
 
-		builder.pop();
-		builder.pop();
-		builder.push("# Custom Villager Trades");
+		builder.push("villagerTrades");
 		USE_CUSTOM_BOOK_TRADES = builder
 				.comment("Make the Librarian villagers trade really simple books (Sharpness I, Knockback I, etc) at first, but trade\n"
 						+ " higher books, with multiple enchantments at higher levels.")
@@ -250,7 +269,7 @@ public class ServerConfig {
 				.define("useCustomWeaponTrades", true);
 
 		builder.pop();
-		builder.push("# Custom Cauldrons");
+		builder.push("cauldrons");
 		USE_CUSTOM_CAULDRONS = builder
 				.comment("Make the cauldrons able to hold potions, and able to merge multiple potions in one.\n")
 				.define("useCustomCauldrons", true);
@@ -258,14 +277,41 @@ public class ServerConfig {
 				.comment("This value is used when 2 potion of the same type are merged in a cauldron, to\n"
 						+ "increase the duration. For example : potion1.duration + (0.5 * potion2.duration)")
 				.defineInRange("cauldronPotionDurationMergeFactor", 0.5d, 0.1d, 1d);
+		CAULDRONS_EFFECT_ON_ENTER_SECONDS = builder
+				.comment("Duration (in seconds) of the effects applied to entities standing inside a potion\n"
+						+ "cauldron. The cauldron content is not consumed. Set to 0 to disable.")
+				.defineInRange("cauldronEffectsOnEnterSeconds", 5, 0, 60);
+		PREVENT_WATER_BOTTLE_FILLING = builder
+				.comment("Prevent players from filling a glass bottle directly in a water source,\n"
+						+ "therefore requiring a cauldron to make water bottles.")
+				.define("preventWaterBottleFilling", true);
 		
 		
 		builder.pop();
-		builder.push("# Witches thrown potions");
+		builder.push("witches");
 		USE_CUSTOM_WITCHES_POTION = builder
 				.comment("Make the witches throw more aggressive potions, and sometime even throw lingering potions")
 				.define("useCustomWitchesPotions", true);
-		
+
+		builder.pop();
+		builder.push("farmersDelight");
+		USE_FD_RAW_MEAT_REBALANCE = builder
+				.comment("When Farmer's Delight is installed, raw beef, chicken, mutton and porkchop cannot\n"
+						+ "be eaten anymore : they must be cut and cooked using Farmer's Delight stations.")
+				.define("fd_preventEatingRawMeat", true);
+		USE_FD_BREAD_REBALANCE = builder
+				.comment("When Farmer's Delight is installed, plain bread cannot be eaten as is : it becomes\n"
+						+ "an ingredient for Farmer's Delight meals (sandwiches, hamburgers...). Crafting wheat\n"
+						+ "also gives wheat dough instead of bread.")
+				.define("fd_preventEatingBread", true);
+		USE_FD_COOKED_MEAT_REBALANCE = builder
+				.comment("When Farmer's Delight is installed, plain cooked meats have a reduced food value,\n"
+						+ "making Farmer's Delight meals the better choice.")
+				.define("fd_reduceCookedMeatFood", true);
+		FD_COOKED_MEAT_NUTRITION_FACTOR = builder
+				.comment("Multiplier applied to the nutrition and saturation of plain cooked meats.")
+				.defineInRange("fd_cookedMeatNutritionFactor", 0.4d, 0.05d, 1d);
+
 		builder.pop();
 		SPEC = builder.build();
 	}

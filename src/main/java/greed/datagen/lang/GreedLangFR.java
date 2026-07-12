@@ -39,9 +39,12 @@ public class GreedLangFR extends LanguageProvider {
 		add("item.greed.trade.1_random_splash_potion", "Potion jetable mystérieuse");
 		add("item.greed.trade.2_random_potion", "Potion mystérieuse");
 		add("item.greed.trade.2_random_splash_potion", "Potion jetable mystérieuse");
-		add("item.greed.trade.trade.splash_weakness", "Potion de dé-zombification");
-		
+		add("item.greed.trade.splash_weakness", "Potion de dé-zombification");
+
 		add(GreedBlocks.CAULDRON.get(), "Chaudron");
+
+		add("message.greed.raw_meat", "La viande crue doit être découpée et cuite avant d'être mangée !");
+		add("message.greed.plain_bread", "Le pain ne se mange pas tel quel : utilisez-le dans un plat !");
 	}
 
 }

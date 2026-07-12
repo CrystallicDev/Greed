@@ -42,6 +42,9 @@ public class GreedLangEN extends LanguageProvider {
 		add("item.greed.trade.splash_weakness", "Vaccine Potion");
 		
 		add(GreedBlocks.CAULDRON.get(), "Cauldron");
+
+		add("message.greed.raw_meat", "Raw meat must be cut and cooked before being eaten!");
+		add("message.greed.plain_bread", "Plain bread cannot be eaten as is: use it in a meal!");
 	}
 
 }

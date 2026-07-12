@@ -26,8 +26,12 @@ public class EnchantMenuHandler {
         List<EnchantmentInstance> allowedEnchants = filterEnchants(state, original);
         if (allowedEnchants.isEmpty()) { return allowedEnchants; }
         
+        // curses peut être vide (liste config vide, ou aucune curse applicable à l'item —
+        // fréquent avec les items d'autres mods) : dans ce cas on ne tire jamais de curse
+        boolean rollCurse = curses.length > 0 && rng.nextFloat() <= ServerConfig.getCurseProbability(state);
+
         if (state == EnchantmentTableState.DEFAULT) {
-            if (rng.nextFloat() <= ServerConfig.getCurseProbability(state)) {
+            if (rollCurse) {
                 modified.add(new EnchantmentInstance(curses[rng.nextInt(curses.length)], 1));
             } else {
                 modified.add(new EnchantmentInstance(allowedEnchants.get(0).enchantment, 1));
@@ -37,12 +41,12 @@ public class EnchantMenuHandler {
             for (EnchantmentInstance ench : allowedEnchants) {
                 modified.add(new EnchantmentInstance(ench.enchantment, 1));
             }
-            if (rng.nextFloat() <= ServerConfig.getCurseProbability(state)) {
+            if (rollCurse) {
                 modified.add(new EnchantmentInstance(curses[rng.nextInt(curses.length)], 1));
             }
         } else if (state == EnchantmentTableState.AMETHYST_STATE) {
             modified.addAll(allowedEnchants);
-        	if (rng.nextFloat() <= ServerConfig.getCurseProbability(state)) {
+        	if (rollCurse) {
                 modified.add(new EnchantmentInstance(curses[rng.nextInt(curses.length)], 1));
             }
         }
