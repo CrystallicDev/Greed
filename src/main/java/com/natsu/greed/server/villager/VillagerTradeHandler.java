@@ -20,9 +20,9 @@ import com.natsu.greed.server.villager.events.GreedFillingTradesEvent;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.tags.ConfiguredStructureTags;
+import net.minecraft.tags.StructureTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffect;
@@ -56,7 +56,7 @@ import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
+import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.saveddata.maps.MapDecoration;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 import net.minecraftforge.common.MinecraftForge;
@@ -137,7 +137,7 @@ public class VillagerTradeHandler {
 			this.villagerXp = p_35645_;
 		}
 
-		public MerchantOffer getOffer(Entity p_35647_, Random p_35648_) {
+		public MerchantOffer getOffer(Entity p_35647_, net.minecraft.util.RandomSource p_35648_) {
 			ItemStack itemstack = new ItemStack(Items.EMERALD, this.value);
 			ItemStack itemstack1 = new ItemStack(this.item);
 			if (this.item instanceof DyeableArmorItem) {
@@ -157,7 +157,7 @@ public class VillagerTradeHandler {
 			return new MerchantOffer(itemstack, itemstack1, this.maxUses, this.villagerXp, 0.2F);
 		}
 
-		private static DyeItem getRandomDye(Random p_35650_) {
+		private static DyeItem getRandomDye(net.minecraft.util.RandomSource p_35650_) {
 			return DyeItem.byColor(DyeColor.byId(p_35650_.nextInt(16)));
 		}
 	}
@@ -177,7 +177,7 @@ public class VillagerTradeHandler {
 			this.priceMultiplier = 0.05F;
 		}
 
-		public MerchantOffer getOffer(Entity p_35662_, Random p_35663_) {
+		public MerchantOffer getOffer(Entity p_35662_, net.minecraft.util.RandomSource p_35663_) {
 			ItemStack itemstack = new ItemStack(this.item, this.cost);
 			return new MerchantOffer(itemstack, new ItemStack(Items.EMERALD), this.maxUses, this.villagerXp,
 					this.priceMultiplier);
@@ -204,7 +204,7 @@ public class VillagerTradeHandler {
 		}
 
 		@Nullable
-		public MerchantOffer getOffer(Entity p_35674_, Random p_35675_) {
+		public MerchantOffer getOffer(Entity p_35674_, net.minecraft.util.RandomSource p_35675_) {
 			if (p_35674_ instanceof VillagerDataHolder) {
 				ItemStack itemstack = new ItemStack(
 						this.trades.get(((VillagerDataHolder) p_35674_).getVillagerData().getType()), this.cost);
@@ -247,7 +247,7 @@ public class VillagerTradeHandler {
 		}
 
 		@Nullable
-		public MerchantOffer getOffer(Entity p_35732_, Random p_35733_) {
+		public MerchantOffer getOffer(Entity p_35732_, net.minecraft.util.RandomSource p_35733_) {
 			return new MerchantOffer(new ItemStack(Items.EMERALD, this.emeraldCost),
 					new ItemStack(this.fromItem.getItem(), this.fromCount),
 					new ItemStack(this.toItem.getItem(), this.toCount), this.maxUses, this.villagerXp,
@@ -289,7 +289,7 @@ public class VillagerTradeHandler {
 			this.priceMultiplier = p_35763_;
 		}
 
-		public MerchantOffer getOffer(Entity p_35771_, Random p_35772_) {
+		public MerchantOffer getOffer(Entity p_35771_, net.minecraft.util.RandomSource p_35772_) {
 			return new MerchantOffer(new ItemStack(Items.EMERALD, this.emeraldCost),
 					new ItemStack(this.itemStack.getItem(), this.numberOfItems), this.maxUses, this.villagerXp,
 					this.priceMultiplier);
@@ -310,7 +310,7 @@ public class VillagerTradeHandler {
 		}
 
 		@Nullable
-		public MerchantOffer getOffer(Entity p_186317_, Random p_186318_) {
+		public MerchantOffer getOffer(Entity p_186317_, net.minecraft.util.RandomSource p_186318_) {
 			ItemStack itemstack = new ItemStack(Items.SUSPICIOUS_STEW, 1);
 			SuspiciousStewItem.saveMobEffect(itemstack, this.effect, this.duration);
 			return new MerchantOffer(new ItemStack(Items.EMERALD, 1), itemstack, 12, this.xp, this.priceMultiplier);
@@ -339,7 +339,7 @@ public class VillagerTradeHandler {
 			this.priceMultiplier = 0.05F;
 		}
 
-		public MerchantOffer getOffer(Entity p_35801_, Random p_35802_) {
+		public MerchantOffer getOffer(Entity p_35801_, net.minecraft.util.RandomSource p_35802_) {
 			ItemStack itemstack = new ItemStack(Items.EMERALD, this.emeraldCost);
 			List<Potion> list = Registry.POTION.stream().filter((p_35804_) -> {
 				return !p_35804_.getEffects().isEmpty() && PotionBrewing.isBrewablePotion(p_35804_);
@@ -353,13 +353,13 @@ public class VillagerTradeHandler {
 
 	public static class TreasureMapForEmeralds implements VillagerTrades.ItemListing {
 		private final int emeraldCost;
-		private final TagKey<ConfiguredStructureFeature<?, ?>> destination;
+		private final TagKey<Structure> destination;
 		private final String displayName;
 		private final MapDecoration.Type destinationType;
 		private final int maxUses;
 		private final int villagerXp;
 
-		public TreasureMapForEmeralds(int p_207767_, TagKey<ConfiguredStructureFeature<?, ?>> p_207768_,
+		public TreasureMapForEmeralds(int p_207767_, TagKey<Structure> p_207768_,
 				String p_207769_, MapDecoration.Type p_207770_, int p_207771_, int p_207772_) {
 			this.emeraldCost = p_207767_;
 			this.destination = p_207768_;
@@ -370,19 +370,19 @@ public class VillagerTradeHandler {
 		}
 
 		@Nullable
-		public MerchantOffer getOffer(Entity p_35817_, Random p_35818_) {
+		public MerchantOffer getOffer(Entity p_35817_, net.minecraft.util.RandomSource p_35818_) {
 			if (!(p_35817_.level instanceof ServerLevel)) {
 				return null;
 			} else {
 				ServerLevel serverlevel = (ServerLevel) p_35817_.level;
-				BlockPos blockpos = serverlevel.findNearestMapFeature(this.destination, p_35817_.blockPosition(), 100,
+				BlockPos blockpos = serverlevel.findNearestMapStructure(this.destination, p_35817_.blockPosition(), 100,
 						true);
 				if (blockpos != null) {
 					ItemStack itemstack = MapItem.create(serverlevel, blockpos.getX(), blockpos.getZ(), (byte) 2, true,
 							true);
 					MapItem.renderBiomePreviewMap(serverlevel, itemstack);
 					MapItemSavedData.addTargetDecoration(itemstack, blockpos, "+", this.destinationType);
-					itemstack.setHoverName(new TranslatableComponent(this.displayName));
+					itemstack.setHoverName(Component.translatable(this.displayName));
 					return new MerchantOffer(new ItemStack(Items.EMERALD, this.emeraldCost),
 							new ItemStack(Items.COMPASS), itemstack, this.maxUses, this.villagerXp, 0.2F);
 				} else {

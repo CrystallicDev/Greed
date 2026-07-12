@@ -10,7 +10,7 @@ import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
+import net.minecraftforge.data.event.GatherDataEvent;
 
 @Mod.EventBusSubscriber(modid = Greed.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class GreedDataGenerators {
@@ -22,10 +22,10 @@ public class GreedDataGenerators {
         ExistingFileHelper helper = event.getExistingFileHelper();
 
         if (event.includeClient()) {
-            gen.addProvider(new GreedLangEN(gen));
-            gen.addProvider(new GreedLangFR(gen));
-            gen.addProvider(new GreedBlockStateProvider(gen, helper));
-            gen.addProvider(new GreedItemModelProvider(gen, helper));
+            gen.addProvider(event.includeClient(), new GreedLangEN(gen));
+            gen.addProvider(event.includeClient(), new GreedLangFR(gen));
+            gen.addProvider(event.includeClient(), new GreedBlockStateProvider(gen, helper));
+            gen.addProvider(event.includeClient(), new GreedItemModelProvider(gen, helper));
         }
     }
 }

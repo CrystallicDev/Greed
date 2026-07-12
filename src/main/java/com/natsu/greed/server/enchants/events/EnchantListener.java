@@ -32,10 +32,10 @@ import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.enchanting.EnchantmentLevelSetEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.event.entity.living.PotionEvent;
+import net.minecraftforge.event.entity.living.MobEffectEvent;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.event.entity.player.PlayerXpEvent;
-import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -47,7 +47,7 @@ public class EnchantListener {
 	
 	@SubscribeEvent
 	public static void onPickupXP(PlayerXpEvent.PickupXp event) {
-	    Player player = event.getPlayer();
+	    Player player = event.getEntity();
 
 	    for (ItemStack armor : player.getArmorSlots()) {
 	        if (EnchantmentHelper.getItemEnchantmentLevel(GreedEnchants.CURSE_OF_ABSORPTION.get(), armor) > 0) {
@@ -58,12 +58,12 @@ public class EnchantListener {
 	}
 	
 	@SubscribeEvent
-	public static void onPotionApply(PotionEvent.PotionAddedEvent event) {
+	public static void onPotionApply(MobEffectEvent.Added event) {
 
 	    if (!(event.getEntity() instanceof Player player))
 	        return;
-	    if (instancesToSkip.contains(event.getPotionEffect())) {
-	    	instancesToSkip.remove(event.getPotionEffect());
+	    if (instancesToSkip.contains(event.getEffectInstance())) {
+	    	instancesToSkip.remove(event.getEffectInstance());
 	    	return;
 	    }
 
@@ -77,7 +77,7 @@ public class EnchantListener {
 
 	    if (!hasCurse) return;
 
-	    MobEffectInstance original = event.getPotionEffect();
+	    MobEffectInstance original = event.getEffectInstance();
 
 	    if (original.getEffect().isBeneficial()) {
 	        int newDura = Math.max(1, (int)Math.round(original.getDuration() * (new Random().nextFloat(0.6f, 0.8f))));
@@ -96,7 +96,7 @@ public class EnchantListener {
 	@SubscribeEvent
 	public static void onDamage(LivingHurtEvent event) {
 		if (event.getSource().isFall()) {
-			ItemStack boots = event.getEntityLiving().getItemBySlot(EquipmentSlot.FEET);
+			ItemStack boots = event.getEntity().getItemBySlot(EquipmentSlot.FEET);
 			if (boots != null) { return; }
 		    if (EnchantmentHelper.getItemEnchantmentLevel(GreedEnchants.CURSE_OF_HEAVYWEIGHT.get(), boots) > 0) {
 		    	event.setAmount(event.getAmount() * 2);
@@ -105,7 +105,7 @@ public class EnchantListener {
 	}
 	
 	@SubscribeEvent
-	public static void onPlayerTick(LivingEvent.LivingUpdateEvent event) {
+	public static void onPlayerTick(LivingEvent.LivingTickEvent event) {
 
 	    if (!(event.getEntity() instanceof Player player))
 	        return;
@@ -123,14 +123,14 @@ public class EnchantListener {
 	@SubscribeEvent
 	public static void onEnchantLevelSet(EnchantmentLevelSetEvent event) {
 		if (!ServerConfig.USE_ENCHANTING_SYSTEM.get()) { return; }
-		Block below = event.getWorld().getBlockState(event.getPos().below()).getBlock();
+		Block below = event.getLevel().getBlockState(event.getPos().below()).getBlock();
 		EnchantmentTableState state;
 		if (below == Blocks.LAPIS_BLOCK) state = EnchantmentTableState.LAPIS_STATE;
 		else if (below == Blocks.AMETHYST_CLUSTER) state = EnchantmentTableState.AMETHYST_STATE;
 		else state = EnchantmentTableState.DEFAULT;
 		
 		if (event.getItem().getItem() == Items.BOOK && state == EnchantmentTableState.DEFAULT) {
-			event.setLevel(0);
+			event.setEnchantLevel(0);
 		}
 	}
 	
@@ -147,7 +147,7 @@ public class EnchantListener {
 	
 	@SubscribeEvent
 	public static void onArrow(ArrowLooseEvent event) {
-		Player player = event.getPlayer();
+		Player player = event.getEntity();
 		ItemStack bow = event.getBow();	
 		
 		int level = EnchantmentHelper.getEnchantmentLevel(GreedEnchants.STRETCHED.get(), player);

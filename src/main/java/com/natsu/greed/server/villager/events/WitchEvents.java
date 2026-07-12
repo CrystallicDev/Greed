@@ -20,7 +20,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.PotionItem;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionUtils;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -29,8 +29,8 @@ import net.minecraftforge.fml.common.Mod;
 public class WitchEvents {
 
 	@SubscribeEvent
-	public static void onThrown(EntityJoinWorldEvent event) {
-		if (event.getWorld().isClientSide()) return;
+	public static void onThrown(EntityJoinLevelEvent event) {
+		if (event.getLevel().isClientSide()) return;
 		if (!ServerConfig.USE_CUSTOM_WITCHES_POTION.get()) return;
 		if (!(event.getEntity() instanceof ThrownPotion potion)) return;
 		if (!(potion.getOwner() instanceof Witch)) return;

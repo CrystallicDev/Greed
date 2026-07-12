@@ -66,7 +66,7 @@ public class LibrarianTradesInitEvent {
 			this.villagerXp = p_35683_;
 		}
 
-		public MerchantOffer getOffer(Entity p_35685_, Random p_35686_) {
+		public MerchantOffer getOffer(Entity p_35685_, net.minecraft.util.RandomSource p_35686_) {
 			List<Enchantment> list = StreamSupport.stream(ForgeRegistries.ENCHANTMENTS.spliterator(), false).filter(Enchantment::isTradeable)
 					.filter(enchant -> enchant.getRarity() == Rarity.COMMON || enchant.getRarity() == Rarity.UNCOMMON)
 					.collect(Collectors.toList());
@@ -94,7 +94,7 @@ public class LibrarianTradesInitEvent {
 			this.villagerXp = p_35683_;
 		}
 
-		public MerchantOffer getOffer(Entity p_35685_, Random p_35686_) {
+		public MerchantOffer getOffer(Entity p_35685_, net.minecraft.util.RandomSource p_35686_) {
 			List<Enchantment> list = StreamSupport.stream(ForgeRegistries.ENCHANTMENTS.spliterator(), false).filter(Enchantment::isTradeable)
 					.collect(Collectors.toList());
 			Enchantment enchantment = list.get(p_35686_.nextInt(list.size()));
@@ -127,7 +127,7 @@ public class LibrarianTradesInitEvent {
 			this.maxEnchant = maxEnchantCount;
 		}
 
-		public MerchantOffer getOffer(Entity entity, Random random) {
+		public MerchantOffer getOffer(Entity entity, net.minecraft.util.RandomSource random) {
 			List<Enchantment> enchantList = StreamSupport.stream(ForgeRegistries.ENCHANTMENTS.spliterator(), false).filter(Enchantment::isTradeable)
 					.collect(Collectors.toList());
 			Collections.shuffle(enchantList);		// Shuffling

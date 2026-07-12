@@ -25,8 +25,8 @@ public class WaterBottleListener {
 		if (!ServerConfig.PREVENT_WATER_BOTTLE_FILLING.get()) return;
 		if (event.getItemStack().getItem() != Items.GLASS_BOTTLE) return;
 
-		Player player = event.getPlayer();
-		Level level = event.getWorld();
+		Player player = event.getEntity();
+		Level level = event.getLevel();
 		Vec3 eye = player.getEyePosition(1.0F);
 		Vec3 end = eye.add(player.getViewVector(1.0F).scale(5.0D));
 		BlockHitResult hit = level.clip(new ClipContext(eye, end,

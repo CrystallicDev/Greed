@@ -84,7 +84,7 @@ public class WeaponSmithTradesInitEvent {
 			this.priceMultiplier = p_35702_;
 		}
 
-		public MerchantOffer getOffer(Entity p_35704_, Random p_35705_) {
+		public MerchantOffer getOffer(Entity p_35704_, net.minecraft.util.RandomSource p_35705_) {
 			int i = 5 + p_35705_.nextInt(15);
 			ItemStack itemstack = EnchantmentHelper.enchantItem(p_35705_, new ItemStack(this.itemStack.getItem()), i,
 					false);
@@ -111,12 +111,12 @@ public class WeaponSmithTradesInitEvent {
 			this.priceMultiplier = priceMult;
 		}
 
-		public MerchantOffer getOffer(Entity p_35704_, Random p_35705_) {
+		public MerchantOffer getOffer(Entity p_35704_, net.minecraft.util.RandomSource p_35705_) {
 			ItemStack endItem = itemStack.copy();
 			List<Enchantment> enchantList = StreamSupport.stream(ForgeRegistries.ENCHANTMENTS.spliterator(), false).filter(e -> e.canEnchant(endItem))
 					.collect(Collectors.toList());
 			Collections.shuffle(enchantList);		// Shuffling
-			Random random = new Random();
+			net.minecraft.util.RandomSource random = net.minecraft.util.RandomSource.create();
 			int randomEnchantAmount = Mth.nextInt(random, this.minEnchantCount, this.maxEnchantCount);
 			int emeraldCost = 0;
 			List<Enchantment> applied = new ArrayList<>();
@@ -156,7 +156,7 @@ public class WeaponSmithTradesInitEvent {
 			this.priceMultiplier = priceMultiplier;
 		}
 
-		public MerchantOffer getOffer(Entity p_35704_, Random p_35705_) {
+		public MerchantOffer getOffer(Entity p_35704_, net.minecraft.util.RandomSource p_35705_) {
 			ItemStack endItem = itemStack.copy();
 			endItem.enchant(enchant, 1);
 			int j = Math.min(this.baseEmeraldCost, 64);

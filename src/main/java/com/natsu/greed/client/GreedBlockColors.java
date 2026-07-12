@@ -8,7 +8,7 @@ import com.natsu.greed.server.brewing.blockentity.GreedCauldronBlockEntity;
 
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.ColorHandlerEvent;
+import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -17,8 +17,8 @@ import net.minecraftforge.fml.common.Mod;
 public class GreedBlockColors {
 
 	@SubscribeEvent
-	public static void onBlockColors(ColorHandlerEvent.Block event) {
-		event.getBlockColors().register((state, getter, pos, tintIndex) -> {
+	public static void onBlockColors(RegisterColorHandlersEvent.Block event) {
+		event.register((state, getter, pos, tintIndex) -> {
 			if (getter != null && pos != null
 					&& getter.getBlockEntity(pos) instanceof GreedCauldronBlockEntity cauldron) {
 				return PotionUtils.getColor(cauldron.getEffects());

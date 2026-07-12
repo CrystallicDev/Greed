@@ -5,7 +5,7 @@ import java.util.Set;
 import com.natsu.greed.Greed;
 import com.natsu.greed.config.ServerConfig;
 
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -35,8 +35,8 @@ public class RawFoodListener {
 
 	private static void block(LivingEntityUseItemEvent.Start event, String messageKey) {
 		event.setCanceled(true);
-		if (event.getEntityLiving() instanceof ServerPlayer player) {
-			player.displayClientMessage(new TranslatableComponent(messageKey), true);
+		if (event.getEntity() instanceof ServerPlayer player) {
+			player.displayClientMessage(Component.translatable(messageKey), true);
 		}
 	}
 

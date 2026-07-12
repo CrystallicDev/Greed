@@ -3,7 +3,7 @@ package com.natsu.greed.mixins;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
+import net.minecraft.util.RandomSource;
 
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -70,7 +70,7 @@ public abstract class EnchantmentMenuMixin {
 		
 		EnchantmentMenu self = (EnchantmentMenu)(Object)this;
 		ContainerLevelAccess access = ((EnchantmentMenuAccessor)(Object)this).getAccess();
-        Random rng = ((EnchantmentMenuAccessor)(Object)this).getRandom();
+        RandomSource rng = ((EnchantmentMenuAccessor)(Object)this).getRandom();
         ItemStack item = ((EnchantmentMenu)(Object)this).slots.get(0).getItem();
         //Vanilla behavior
 		rng.setSeed((long) (self.getEnchantmentSeed() + index));
@@ -105,7 +105,7 @@ public abstract class EnchantmentMenuMixin {
 	public static List<EnchantmentInstance> selectEnchantment(Random random, ItemStack itemStack, int cost, boolean idk) {
 	      List<EnchantmentInstance> list = Lists.newArrayList();
 	      Item item = itemStack.getItem();
-	      int enchantability = itemStack.getItemEnchantability();
+	      int enchantability = itemStack.getEnchantmentValue();
 	      if (enchantability <= 0) {
 	         return list;
 	      } else {

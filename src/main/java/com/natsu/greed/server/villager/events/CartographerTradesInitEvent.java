@@ -22,13 +22,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BiomeTags;
-import net.minecraft.tags.ConfiguredStructureTags;
+import net.minecraft.tags.StructureTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.npc.VillagerProfession;
@@ -40,7 +40,7 @@ import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
+import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.saveddata.maps.MapDecoration;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 import net.minecraftforge.common.Tags;
@@ -63,7 +63,7 @@ public class CartographerTradesInitEvent {
 		ServerLevel theEnd = event.getServer().getLevel(Level.END);
 		
 		event.addTradeTo(ProfessionLevel.NOVICE, new ItemsForEmeralds(Items.MAP, 7, 1, 1));
-		event.addTradeTo(ProfessionLevel.NOVICE, new TreasureMapForEmeralds(13, ConfiguredStructureTags.MINESHAFT,
+		event.addTradeTo(ProfessionLevel.NOVICE, new TreasureMapForEmeralds(13, StructureTags.MINESHAFT,
 						"map.greed.mineshaft", MapDecoration.Type.TARGET_X, 12, 5));
 		event.addTradeTo(ProfessionLevel.NOVICE, new VillagerTradeHandler.EmeraldForItems(Items.PAPER, 24, 16, 2));
 		event.addTradeTo(ProfessionLevel.NOVICE, new BiomeMapListing(5, BiomeTags.HAS_MINESHAFT_MESA, "map.greed.mesa", MapDecoration.Type.TARGET_X, 1, 8));
@@ -88,9 +88,9 @@ public class CartographerTradesInitEvent {
 		event.addTradeTo(ProfessionLevel.APPRENTICE, new ItemsForEmeralds(Items.LIGHT_GRAY_BANNER, 3, 1, 15));
 		event.addTradeTo(ProfessionLevel.APPRENTICE, new ItemsForEmeralds(Items.GLOBE_BANNER_PATTERN, 3, 1, 15));
 
-		event.addTradeTo(ProfessionLevel.JOURNEYMAN, new TreasureMapForEmeralds(13, ConfiguredStructureTags.ON_OCEAN_EXPLORER_MAPS,
+		event.addTradeTo(ProfessionLevel.JOURNEYMAN, new TreasureMapForEmeralds(13, StructureTags.ON_OCEAN_EXPLORER_MAPS,
 				"filled_map.monument", MapDecoration.Type.MONUMENT, 12, 5));
-		event.addTradeTo(ProfessionLevel.JOURNEYMAN, new TreasureMapForEmeralds(13, ConfiguredStructureTags.ON_WOODLAND_EXPLORER_MAPS,
+		event.addTradeTo(ProfessionLevel.JOURNEYMAN, new TreasureMapForEmeralds(13, StructureTags.ON_WOODLAND_EXPLORER_MAPS,
 				"filled_map.mansion", MapDecoration.Type.MANSION, 12, 5));
 		
 		event.addTradeTo(ProfessionLevel.JOURNEYMAN, new ItemsForEmeralds(Items.CREEPER_BANNER_PATTERN, 3, 1, 15));
@@ -124,7 +124,7 @@ public class CartographerTradesInitEvent {
 			this.villagerXp = villagerXp;
 		}
 
-		public MerchantOffer getOffer(Entity entity, Random random) {
+		public MerchantOffer getOffer(Entity entity, net.minecraft.util.RandomSource random) {
 			if (!(entity.level instanceof ServerLevel serverLevel))
 				return null;
 			List<Holder<Biome>> biomesInTag = new ArrayList<>();
@@ -134,12 +134,10 @@ public class CartographerTradesInitEvent {
 			if (biomesInTag.isEmpty())
 				return null;
 			Holder<Biome> randomBiome = biomesInTag.get(random.nextInt(biomesInTag.size()));
-			Pair<BlockPos, Holder<Biome>> foundBiome = serverLevel.getChunkSource().getGenerator().getBiomeSource()
-					.findBiomeHorizontal(entity.blockPosition().getX(), entity.blockPosition().getY(),
-							entity.blockPosition().getZ(), 3200, 8,
-							holder -> holder.is(randomBiome.unwrapKey().orElseThrow()), random, true,
-							serverLevel.getChunkSource().getGenerator().climateSampler());
-			BlockPos biomePos = foundBiome.getFirst();
+			Pair<BlockPos, Holder<Biome>> foundBiome = serverLevel.findClosestBiome3d(
+					holder -> holder.is(randomBiome.unwrapKey().orElseThrow()),
+					entity.blockPosition(), 3200, 8, 8);
+			BlockPos biomePos = foundBiome != null ? foundBiome.getFirst() : null;
 
 			if (biomePos == null) {
 				return new MerchantOffer(new ItemStack(Items.EMERALD, 3), new ItemStack(Items.MAP), 5, villagerXp,
@@ -149,7 +147,7 @@ public class CartographerTradesInitEvent {
 			ItemStack map = MapItem.create(serverLevel, biomePos.getX(), biomePos.getZ(), (byte) 2, true, true);
 			MapItem.renderBiomePreviewMap(serverLevel, map);
 			MapItemSavedData.addTargetDecoration(map, biomePos, "+", destinationType);
-			map.setHoverName(new TranslatableComponent(displayName));
+			map.setHoverName(Component.translatable(displayName));
 
 			return new MerchantOffer(new ItemStack(Items.EMERALD, emeraldCost), new ItemStack(Items.COMPASS), map,
 					maxUses, villagerXp, 0.2f);
@@ -158,13 +156,13 @@ public class CartographerTradesInitEvent {
 	
 	public static class StructureMapListing implements VillagerTrades.ItemListing {
 		private final int emeraldCost;
-		private final TagKey<ConfiguredStructureFeature<?, ?>> destination;
+		private final TagKey<Structure> destination;
 		private final String displayName;
 		private final MapDecoration.Type destinationType;
 		private final int maxUses;
 		private final int villagerXp;
 
-		public StructureMapListing(int emeraldCost, TagKey<ConfiguredStructureFeature<?, ?>> destination,
+		public StructureMapListing(int emeraldCost, TagKey<Structure> destination,
 				String displayName, MapDecoration.Type destinationType, int maxUses, int villagerXp) {
 			this.emeraldCost = emeraldCost;
 			this.destination = destination;
@@ -176,18 +174,18 @@ public class CartographerTradesInitEvent {
 
 		@Override
 		@Nullable
-		public MerchantOffer getOffer(Entity entity, Random random) {
+		public MerchantOffer getOffer(Entity entity, net.minecraft.util.RandomSource random) {
 			if (!(entity.level instanceof ServerLevel serverLevel))
 				return null;
-			List<Holder<ConfiguredStructureFeature<?, ?>>> structuresInTag = new ArrayList<>();
-			serverLevel.registryAccess().registryOrThrow(Registry.CONFIGURED_STRUCTURE_FEATURE_REGISTRY)
+			List<Holder<Structure>> structuresInTag = new ArrayList<>();
+			serverLevel.registryAccess().registryOrThrow(Registry.STRUCTURE_REGISTRY)
 					.getTagOrEmpty(destination).forEach(structuresInTag::add);
 
 			if (structuresInTag.isEmpty())
 				return null;
-			Holder<ConfiguredStructureFeature<?, ?>> randomStructure = structuresInTag
+			Holder<Structure> randomStructure = structuresInTag
 					.get(random.nextInt(structuresInTag.size()));
-			BlockPos structurePos = serverLevel.findNearestMapFeature(destination,
+			BlockPos structurePos = serverLevel.findNearestMapStructure(destination,
 																					
 					entity.blockPosition(), 100, true);
 			if (structurePos == null) {
@@ -197,7 +195,7 @@ public class CartographerTradesInitEvent {
 			ItemStack map = MapItem.create(serverLevel, structurePos.getX(), structurePos.getZ(), (byte) 2, true, true);
 			MapItem.renderBiomePreviewMap(serverLevel, map);
 			MapItemSavedData.addTargetDecoration(map, structurePos, "+", destinationType);
-			map.setHoverName(new TranslatableComponent(displayName));
+			map.setHoverName(Component.translatable(displayName));
 
 			return new MerchantOffer(new ItemStack(Items.EMERALD, emeraldCost), new ItemStack(Items.COMPASS), map,
 					maxUses, villagerXp, 0.2f);
@@ -224,7 +222,7 @@ public class CartographerTradesInitEvent {
 			this.villagerXp = villagerXp;
 		}
 
-		public MerchantOffer getOffer(Entity entity, Random random) {
+		public MerchantOffer getOffer(Entity entity, net.minecraft.util.RandomSource random) {
 			List<Holder<Biome>> biomesInTag = new ArrayList<>();
 			level.registryAccess().registryOrThrow(Registry.BIOME_REGISTRY).getTagOrEmpty(biomeTag)
 					.forEach(biomesInTag::add);
@@ -232,12 +230,10 @@ public class CartographerTradesInitEvent {
 			if (biomesInTag.isEmpty())
 				return null;
 			Holder<Biome> randomBiome = biomesInTag.get(random.nextInt(biomesInTag.size()));
-			Pair<BlockPos, Holder<Biome>> foundBiome = level.getChunkSource().getGenerator().getBiomeSource()
-					.findBiomeHorizontal(entity.blockPosition().getX(), entity.blockPosition().getY(),
-							entity.blockPosition().getZ(), 3200, 8,
-							holder -> holder.is(randomBiome.unwrapKey().orElseThrow()), random, true,
-							level.getChunkSource().getGenerator().climateSampler());
-			BlockPos biomePos = foundBiome.getFirst();
+			Pair<BlockPos, Holder<Biome>> foundBiome = level.findClosestBiome3d(
+					holder -> holder.is(randomBiome.unwrapKey().orElseThrow()),
+					entity.blockPosition(), 3200, 8, 8);
+			BlockPos biomePos = foundBiome != null ? foundBiome.getFirst() : null;
 
 			if (biomePos == null) {
 				return new MerchantOffer(new ItemStack(Items.EMERALD, 3), new ItemStack(Items.MAP), 5, villagerXp,
@@ -247,7 +243,7 @@ public class CartographerTradesInitEvent {
 			ItemStack map = MapItem.create(level, biomePos.getX(), biomePos.getZ(), (byte) 2, true, true);
 			MapItem.renderBiomePreviewMap(level, map);
 			MapItemSavedData.addTargetDecoration(map, biomePos, "+", destinationType);
-			map.setHoverName(new TranslatableComponent(displayName));
+			map.setHoverName(Component.translatable(displayName));
 
 			return new MerchantOffer(new ItemStack(Items.EMERALD, emeraldCost), new ItemStack(Items.COMPASS), map,
 					maxUses, villagerXp, 0.2f);
@@ -256,14 +252,14 @@ public class CartographerTradesInitEvent {
 	
 	public static class DimensionalStructureMapListing implements VillagerTrades.ItemListing {
 		private final int emeraldCost;
-		private final TagKey<ConfiguredStructureFeature<?, ?>> destination;
+		private final TagKey<Structure> destination;
 		private final String displayName;
 		private final MapDecoration.Type destinationType;
 		private final int maxUses;
 		private final int villagerXp;
 		private final ServerLevel level;
 
-		public DimensionalStructureMapListing(int emeraldCost, ServerLevel level, TagKey<ConfiguredStructureFeature<?, ?>> destination,
+		public DimensionalStructureMapListing(int emeraldCost, ServerLevel level, TagKey<Structure> destination,
 				String displayName, MapDecoration.Type destinationType, int maxUses, int villagerXp) {
 			this.emeraldCost = emeraldCost;
 			this.level = level;
@@ -276,16 +272,16 @@ public class CartographerTradesInitEvent {
 
 		@Override
 		@Nullable
-		public MerchantOffer getOffer(Entity entity, Random random) {
-			List<Holder<ConfiguredStructureFeature<?, ?>>> structuresInTag = new ArrayList<>();
-			level.registryAccess().registryOrThrow(Registry.CONFIGURED_STRUCTURE_FEATURE_REGISTRY)
+		public MerchantOffer getOffer(Entity entity, net.minecraft.util.RandomSource random) {
+			List<Holder<Structure>> structuresInTag = new ArrayList<>();
+			level.registryAccess().registryOrThrow(Registry.STRUCTURE_REGISTRY)
 					.getTagOrEmpty(destination).forEach(structuresInTag::add);
 
 			if (structuresInTag.isEmpty())
 				return null;
-			Holder<ConfiguredStructureFeature<?, ?>> randomStructure = structuresInTag
+			Holder<Structure> randomStructure = structuresInTag
 					.get(random.nextInt(structuresInTag.size()));
-			BlockPos structurePos = level.findNearestMapFeature(destination,
+			BlockPos structurePos = level.findNearestMapStructure(destination,
 																					
 					entity.blockPosition(), 100, true);
 			if (structurePos == null) {
@@ -295,7 +291,7 @@ public class CartographerTradesInitEvent {
 			ItemStack map = MapItem.create(level, structurePos.getX(), structurePos.getZ(), (byte) 2, true, true);
 			MapItem.renderBiomePreviewMap(level, map);
 			MapItemSavedData.addTargetDecoration(map, structurePos, "+", destinationType);
-			map.setHoverName(new TranslatableComponent(displayName));
+			map.setHoverName(Component.translatable(displayName));
 
 			return new MerchantOffer(new ItemStack(Items.EMERALD, emeraldCost), new ItemStack(Items.COMPASS), map,
 					maxUses, villagerXp, 0.2f);
@@ -304,13 +300,13 @@ public class CartographerTradesInitEvent {
 	
 	public static class TreasureMapForEmeralds implements VillagerTrades.ItemListing {
 		private final int emeraldCost;
-		private final TagKey<ConfiguredStructureFeature<?, ?>> destination;
+		private final TagKey<Structure> destination;
 		private final String displayName;
 		private final MapDecoration.Type destinationType;
 		private final int maxUses;
 		private final int villagerXp;
 
-		public TreasureMapForEmeralds(int p_207767_, TagKey<ConfiguredStructureFeature<?, ?>> p_207768_,
+		public TreasureMapForEmeralds(int p_207767_, TagKey<Structure> p_207768_,
 				String p_207769_, MapDecoration.Type p_207770_, int p_207771_, int p_207772_) {
 			this.emeraldCost = p_207767_;
 			this.destination = p_207768_;
@@ -321,19 +317,19 @@ public class CartographerTradesInitEvent {
 		}
 
 		@Nullable
-		public MerchantOffer getOffer(Entity p_35817_, Random p_35818_) {
+		public MerchantOffer getOffer(Entity p_35817_, net.minecraft.util.RandomSource p_35818_) {
 			if (!(p_35817_.level instanceof ServerLevel)) {
 				return null;
 			} else {
 				ServerLevel serverlevel = (ServerLevel) p_35817_.level;
-				BlockPos blockpos = serverlevel.findNearestMapFeature(this.destination, p_35817_.blockPosition(), 100,
+				BlockPos blockpos = serverlevel.findNearestMapStructure(this.destination, p_35817_.blockPosition(), 100,
 						true);
 				if (blockpos != null) {
 					ItemStack itemstack = MapItem.create(serverlevel, blockpos.getX(), blockpos.getZ(), (byte) 2, true,
 							true);
 					MapItem.renderBiomePreviewMap(serverlevel, itemstack);
 					MapItemSavedData.addTargetDecoration(itemstack, blockpos, "+", this.destinationType);
-					itemstack.setHoverName(new TranslatableComponent(this.displayName));
+					itemstack.setHoverName(Component.translatable(this.displayName));
 					return new MerchantOffer(new ItemStack(Items.EMERALD, this.emeraldCost),
 							new ItemStack(Items.COMPASS), itemstack, this.maxUses, this.villagerXp, 0.2F);
 				} else {

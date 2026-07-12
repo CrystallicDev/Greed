@@ -3,7 +3,7 @@ package com.natsu.greed.server.enchants;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
+import net.minecraft.util.RandomSource;
 
 import com.natsu.greed.config.ServerConfig;
 
@@ -18,7 +18,7 @@ import net.minecraft.world.level.block.Blocks;
 
 public class EnchantMenuHandler {
 
-	public static List<EnchantmentInstance> onInterceptEnchant(EnchantmentTableState state, Random rng, ItemStack item, List<EnchantmentInstance> original){
+	public static List<EnchantmentInstance> onInterceptEnchant(EnchantmentTableState state, RandomSource rng, ItemStack item, List<EnchantmentInstance> original){
         if (state == EnchantmentTableState.DEFAULT && item.getItem() == Items.BOOK) return new ArrayList<>();
 
         List<EnchantmentInstance> modified = new ArrayList<>();

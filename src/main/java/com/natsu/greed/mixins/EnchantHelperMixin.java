@@ -20,7 +20,7 @@ public class EnchantHelperMixin {
 	private static void getEnchantmentCost(Random random, int slot, int enchantPowerBonus, ItemStack itemstack, CallbackInfoReturnable<Integer> ci) {
 		if (ServerConfig.DISABLE_BOOKSHELVES_CAP.get()) {
 			Item item = itemstack.getItem();
-			int i = itemstack.getItemEnchantability();
+			int i = itemstack.getEnchantmentValue();
 			if (i <= 0) {
 				ci.setReturnValue(0);;
 			} else {

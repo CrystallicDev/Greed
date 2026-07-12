@@ -37,7 +37,7 @@ public class ForgeCauldronListener {
 			return;
 		}
 
-		Level level = e.getWorld();
+		Level level = e.getLevel();
 		BlockState state = level.getBlockState(e.getPos());
 
 		if (state.is(Blocks.CAULDRON) && e.getItemStack().getItem() == Items.POTION) {
@@ -83,7 +83,7 @@ public class ForgeCauldronListener {
 			return;
 		}
 
-		CauldronAddingPotionEvent event = new CauldronAddingPotionEvent(e.getPlayer(), e.getHand(), pos, cauldron, potion);
+		CauldronAddingPotionEvent event = new CauldronAddingPotionEvent(e.getEntity(), e.getHand(), pos, cauldron, potion);
 		if (!MinecraftForge.EVENT_BUS.post(event) && cauldron.addPotion(potion)) {
 			exchangeBottle(e, level, pos, new ItemStack(Items.GLASS_BOTTLE), SoundEvents.BOTTLE_EMPTY);
 		} else {
@@ -97,7 +97,7 @@ public class ForgeCauldronListener {
 			return;
 		}
 
-		CauldronAddingPotionEvent event = new CauldronAddingPotionEvent(e.getPlayer(), e.getHand(), pos, cauldron, potion);
+		CauldronAddingPotionEvent event = new CauldronAddingPotionEvent(e.getEntity(), e.getHand(), pos, cauldron, potion);
 		if (!MinecraftForge.EVENT_BUS.post(event) && cauldron.addPotion(potion)) {
 			level.setBlock(pos, state.setValue(LayeredCauldronBlock.LEVEL, state.getValue(LayeredCauldronBlock.LEVEL) + 1), 3);
 			exchangeBottle(e, level, pos, new ItemStack(Items.GLASS_BOTTLE), SoundEvents.BOTTLE_EMPTY);
@@ -110,7 +110,7 @@ public class ForgeCauldronListener {
 			return;
 		}
 
-		CauldronTakingPotionEvent event = new CauldronTakingPotionEvent(e.getPlayer(), e.getHand(), pos, cauldron);
+		CauldronTakingPotionEvent event = new CauldronTakingPotionEvent(e.getEntity(), e.getHand(), pos, cauldron);
 		if (!MinecraftForge.EVENT_BUS.post(event)) {
 			ItemStack potionStack = PotionCreatorUtils.makeIntoPotion(Items.POTION, cauldron.drain());
 			level.setBlock(pos, Blocks.CAULDRON.defaultBlockState(), 3); // retour au chaudron vanilla vide
@@ -119,7 +119,7 @@ public class ForgeCauldronListener {
 	}
 
 	private static void exchangeBottle(PlayerInteractEvent.RightClickBlock e, Level level, BlockPos pos, ItemStack result, SoundEvent sound) {
-		Player player = e.getPlayer();
+		Player player = e.getEntity();
 		player.setItemInHand(e.getHand(), ItemUtils.createFilledResult(e.getItemStack(), player, result));
 		level.playSound(null, pos, sound, SoundSource.BLOCKS, 1.0F, 1.0F);
 	}
