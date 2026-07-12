@@ -16,11 +16,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-/**
- * Empêche de remplir une bouteille en verre directement dans une source d'eau :
- * les bouteilles d'eau doivent passer par un chaudron. Ne bloque QUE le remplissage
- * d'eau (le clic droit reste normal pour tout le reste, ex. souffle du dragon).
- */
+// Empêche de remplir une bouteille d'eau à une source (il faut un chaudron)
 @Mod.EventBusSubscriber(modid = Greed.MODID)
 public class WaterBottleListener {
 

@@ -35,8 +35,7 @@ public class Greed {
     	MixinExtrasBootstrap.init();
     }
 
-    // La config SERVER n'est chargée qu'à l'ouverture d'un monde : appliquer les
-    // modificateurs avant provoquerait une IllegalStateException.
+    // appliquer les modificateurs seulement une fois la config chargée
     private static void onConfigLoading(final ModConfigEvent.Loading event) {
     	applyConfigModifiers(event);
     }

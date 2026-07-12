@@ -54,11 +54,10 @@ public abstract class EnchantmentMenuMixin {
 	@Inject(method = "clickMenuButton", at = @At("RETURN"))
 	private void applyLegacyXpCost(Player player, int id, CallbackInfoReturnable<Boolean> cir) {
 		if (!ServerConfig.USE_LEGACY_XP_COST.get()) return;
-		if (!cir.getReturnValueZ()) return;					// l'enchantement n'a pas eu lieu
+		if (!cir.getReturnValueZ()) return;
 		if (player.getAbilities().instabuild) return;
 
-		// vanilla a déjà retiré (id + 1) niveaux : on complète jusqu'au coût affiché,
-		// comme en 1.7 où enchanter à 30 coûtait 30 niveaux
+		// vanilla a retiré (id + 1) niveaux ; on complète jusqu'au coût affiché (façon 1.7)
 		int extra = greed$displayedCost - (id + 1);
 		if (extra > 0) {
 			player.giveExperienceLevels(-extra);

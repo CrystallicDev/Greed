@@ -18,11 +18,7 @@ import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-/**
- * Contenu d'un chaudron Greed : la liste des effets accumulés.
- * Le niveau de remplissage est porté par le blockstate (LayeredCauldronBlock.LEVEL),
- * pas par le BlockEntity.
- */
+// Contenu d'un chaudron Greed (le niveau est porté par le blockstate)
 public class GreedCauldronBlockEntity extends BlockEntity {
 
 	private List<MobEffectInstance> effects = new ArrayList<>();
@@ -39,14 +35,8 @@ public class GreedCauldronBlockEntity extends BlockEntity {
 		return !effects.isEmpty();
 	}
 
-	/**
-	 * Fusionne les effets de la potion avec le contenu du chaudron. Quand le même
-	 * effet est présent des deux côtés, on garde l'amplificateur le plus haut : sa
-	 * durée est conservée, et la version la plus faible apporte une fraction de la
-	 * sienne (facteur configuré). Ex : Speed II (1:30) + Speed I (8:00) = Speed II (5:30).
-	 *
-	 * @return false si la potion n'a rien apporté au chaudron
-	 */
+	// Fusionne la potion au contenu ; sur effet commun, garde le plus haut ampli et
+	// ajoute une fraction de la durée du plus faible. Ex : Speed II 1:30 + Speed I 8:00 = Speed II 5:30
 	public boolean addPotion(Potion incoming) {
 		if (incoming.getEffects().isEmpty()) {
 			return false;
@@ -152,9 +142,7 @@ public class GreedCauldronBlockEntity extends BlockEntity {
 		if (tag != null) {
 			load(tag);
 		}
-		// la teinte du liquide est calculée au rendu du chunk : il faut invalider le
-		// rendu quand les effets changent, sinon la couleur n'apparaît qu'au prochain
-		// changement de blockstate (2e bouteille)
+		// invalide le rendu pour rafraîchir la teinte dès le changement d'effets
 		if (level != null && level.isClientSide()) {
 			level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
 		}

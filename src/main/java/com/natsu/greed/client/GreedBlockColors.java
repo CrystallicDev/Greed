@@ -12,11 +12,7 @@ import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-/**
- * Teinte le liquide du chaudron Greed selon la combinaison de potions qu'il contient
- * (même calcul de couleur que les fioles de potion). Le modèle vanilla du chaudron
- * d'eau expose un tintindex sur la face du liquide.
- */
+// Teinte le liquide du chaudron selon les potions qu'il contient
 @Mod.EventBusSubscriber(modid = Greed.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class GreedBlockColors {
 

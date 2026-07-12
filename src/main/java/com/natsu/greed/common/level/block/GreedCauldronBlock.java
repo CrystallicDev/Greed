@@ -24,13 +24,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.HitResult;
 
-/**
- * Chaudron contenant des potions. N'existe jamais vide : il remplace un chaudron
- * vanilla quand une potion y est versée, et redevient un chaudron vanilla une fois
- * vidé (voir ForgeCauldronListener). Les interactions vanilla (remplissage d'eau,
- * pluie, extinction des entités en feu) sont neutralisées pour ne pas corrompre
- * ou vider le contenu.
- */
+// Chaudron à potions ; interactions eau/pluie/feu vanilla neutralisées
 public class GreedCauldronBlock extends LayeredCauldronBlock implements EntityBlock {
 
 	private static final Map<Item, CauldronInteraction> NO_INTERACTIONS = CauldronInteraction.newInteractionMap();
@@ -46,9 +40,7 @@ public class GreedCauldronBlock extends LayeredCauldronBlock implements EntityBl
 
 	@Override
 	public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
-		// pas d'extinction ni de baisse de niveau vanilla : le contenu est une potion.
-		// À la place, les entités baignant dedans reçoivent les effets du chaudron
-		// pendant quelques secondes, sans consommer le contenu.
+		// applique les effets du chaudron aux entités qui y baignent, sans le vider
 		if (level.isClientSide() || !(entity instanceof LivingEntity living)) {
 			return;
 		}

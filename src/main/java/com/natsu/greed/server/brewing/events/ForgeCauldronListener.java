@@ -27,16 +27,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-/**
- * Remplace dynamiquement les chaudrons vanilla : verser une potion sur un chaudron
- * vanilla vide le transforme en chaudron Greed (qui stocke les effets dans son
- * BlockEntity), et vider un chaudron Greed avec une fiole vide le retransforme en
- * chaudron vanilla vide. Ni item ni recette custom : tous les chaudrons du monde
- * fonctionnent, y compris ceux de la génération.
- *
- * L'eau reste 100% vanilla : une bouteille d'eau (ou une potion sans effet) sur un
- * chaudron suit le comportement vanilla habituel.
- */
+// Swap chaudron vanilla <-> chaudron Greed selon qu'on y verse/retire une potion
 @Mod.EventBusSubscriber(modid = Greed.MODID)
 public class ForgeCauldronListener {
 

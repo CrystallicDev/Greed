@@ -14,11 +14,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 
-/**
- * Intégration Farmer's Delight : la viande crue (boeuf, poulet, mouton, porc) ne
- * peut plus être mangée telle quelle. Elle doit être découpée puis cuite via les
- * stations de Farmer's Delight. Les poissons et autres aliments sont inchangés.
- */
+// Farmer's Delight : viande crue et pain non consommables tels quels
 @Mod.EventBusSubscriber(modid = Greed.MODID)
 public class RawFoodListener {
 

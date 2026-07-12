@@ -12,12 +12,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.fml.ModList;
 
-/**
- * Intégration Farmer's Delight : réduit la valeur nutritive des viandes cuites
- * "simples" pour rendre les plats de Farmer's Delight plus intéressants.
- * Appelé au chargement de la config SERVER (les valeurs d'origine sont conservées
- * pour pouvoir restaurer si l'option est désactivée).
- */
+// Farmer's Delight : réduit la nutrition des viandes cuites simples
 public class GreedFoodModifiers {
 
 	private static final List<Item> PLAIN_COOKED_MEATS = List.of(
