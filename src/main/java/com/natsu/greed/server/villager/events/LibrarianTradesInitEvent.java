@@ -23,6 +23,7 @@ import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import net.minecraft.world.item.enchantment.Enchantment.Rarity;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -31,7 +32,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class LibrarianTradesInitEvent {
 
 	@SubscribeEvent
-	public static void onTradeSetup(GreedFillingTradesEvent event) {
+	public static void onTradeSetup(VillagerTradesEvent vte) {
+		GreedFillingTradesEvent event = new GreedFillingTradesEvent(vte);
 		if (event.getProfession() != VillagerProfession.LIBRARIAN || !ServerConfig.USE_CUSTOM_BOOK_TRADES.get()) return;
 		
 		event.clearTradeOf(ProfessionLevel.NOVICE);

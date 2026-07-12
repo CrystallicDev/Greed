@@ -44,6 +44,7 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.saveddata.maps.MapDecoration;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -51,7 +52,8 @@ import net.minecraftforge.fml.common.Mod;
 public class CartographerTradesInitEvent {
 
 	@SubscribeEvent
-	public static void onTradeSetup(GreedFillingTradesEvent event) {
+	public static void onTradeSetup(VillagerTradesEvent vte) {
+		GreedFillingTradesEvent event = new GreedFillingTradesEvent(vte);
 		if (event.getProfession() != VillagerProfession.CARTOGRAPHER || !ServerConfig.USE_CUSTOM_MAP_TRADES.get()) return;
 		
 		event.clearTradeOf(ProfessionLevel.NOVICE);
@@ -59,9 +61,7 @@ public class CartographerTradesInitEvent {
 		event.clearTradeOf(ProfessionLevel.JOURNEYMAN);
 		event.clearTradeOf(ProfessionLevel.EXPERT);
 		event.clearTradeOf(ProfessionLevel.MASTER);
-		ServerLevel theNether = event.getServer().getLevel(Level.NETHER);
-		ServerLevel theEnd = event.getServer().getLevel(Level.END);
-		
+
 		event.addTradeTo(ProfessionLevel.NOVICE, new ItemsForEmeralds(Items.MAP, 7, 1, 1));
 		event.addTradeTo(ProfessionLevel.NOVICE, new TreasureMapForEmeralds(13, StructureTags.MINESHAFT,
 						"map.greed.mineshaft", MapDecoration.Type.TARGET_X, 12, 5));
@@ -94,13 +94,13 @@ public class CartographerTradesInitEvent {
 				"filled_map.mansion", MapDecoration.Type.MANSION, 12, 5));
 		
 		event.addTradeTo(ProfessionLevel.JOURNEYMAN, new ItemsForEmeralds(Items.CREEPER_BANNER_PATTERN, 3, 1, 15));
-		event.addTradeTo(ProfessionLevel.JOURNEYMAN, new DimensionalStructureMapListing(15, theNether, GreedTags.ON_FORTRESS_EXPLORER_MAPS, "map.greed.nether_fortress", MapDecoration.Type.TARGET_X, 1, 15));
+		event.addTradeTo(ProfessionLevel.JOURNEYMAN, new DimensionalStructureMapListing(15, Level.NETHER, GreedTags.ON_FORTRESS_EXPLORER_MAPS, "map.greed.nether_fortress", MapDecoration.Type.TARGET_X, 1, 15));
 
 		event.addTradeTo(ProfessionLevel.EXPERT, new ItemsForEmeralds(Items.PIGLIN_BANNER_PATTERN, 3, 1, 15));
-		event.addTradeTo(ProfessionLevel.EXPERT, new DimensionalStructureMapListing(15, theNether, GreedTags.ON_BASTION_EXPLORER_MAPS, "map.greed.bastion", MapDecoration.Type.TARGET_X, 1, 15));
+		event.addTradeTo(ProfessionLevel.EXPERT, new DimensionalStructureMapListing(15, Level.NETHER, GreedTags.ON_BASTION_EXPLORER_MAPS, "map.greed.bastion", MapDecoration.Type.TARGET_X, 1, 15));
 
 		event.addTradeTo(ProfessionLevel.MASTER, new ItemsForEmeralds(Items.MOJANG_BANNER_PATTERN, 3, 1, 15));
-		event.addTradeTo(ProfessionLevel.MASTER, new DimensionalStructureMapListing(15, theEnd, GreedTags.ON_END_CITY_EXPLORER_MAPS, "map.greed.end_city", MapDecoration.Type.TARGET_X, 1, 15));
+		event.addTradeTo(ProfessionLevel.MASTER, new DimensionalStructureMapListing(15, Level.END, GreedTags.ON_END_CITY_EXPLORER_MAPS, "map.greed.end_city", MapDecoration.Type.TARGET_X, 1, 15));
 
 		
 	}
@@ -257,12 +257,12 @@ public class CartographerTradesInitEvent {
 		private final MapDecoration.Type destinationType;
 		private final int maxUses;
 		private final int villagerXp;
-		private final ServerLevel level;
+		private final ResourceKey<Level> dimension;
 
-		public DimensionalStructureMapListing(int emeraldCost, ServerLevel level, TagKey<Structure> destination,
+		public DimensionalStructureMapListing(int emeraldCost, ResourceKey<Level> dimension, TagKey<Structure> destination,
 				String displayName, MapDecoration.Type destinationType, int maxUses, int villagerXp) {
 			this.emeraldCost = emeraldCost;
-			this.level = level;
+			this.dimension = dimension;
 			this.destination = destination;
 			this.displayName = displayName;
 			this.destinationType = destinationType;
@@ -273,6 +273,9 @@ public class CartographerTradesInitEvent {
 		@Override
 		@Nullable
 		public MerchantOffer getOffer(Entity entity, net.minecraft.util.RandomSource random) {
+			if (entity.getServer() == null) return null;
+			ServerLevel level = entity.getServer().getLevel(dimension);
+			if (level == null) return null;
 			List<Holder<Structure>> structuresInTag = new ArrayList<>();
 			level.registryAccess().registryOrThrow(Registry.STRUCTURE_REGISTRY)
 					.getTagOrEmpty(destination).forEach(structuresInTag::add);
