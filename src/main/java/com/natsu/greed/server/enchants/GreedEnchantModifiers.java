@@ -3,7 +3,7 @@ package com.natsu.greed.server.enchants;
 import java.util.Map;
 
 import com.natsu.greed.config.ServerConfig;
-import com.natsu.greed.mixins.EnchantmentAccessor;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
 import net.minecraft.world.item.enchantment.Enchantment.Rarity;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -23,7 +23,7 @@ public class GreedEnchantModifiers {
 	        if (enchantment == null) continue;
 	        
 	        Enchantment.Rarity rarity = ServerConfig.intToRarity(entry.getValue());
-	        ((EnchantmentAccessor) enchantment).setRarity(rarity);
+	        ObfuscationReflectionHelper.setPrivateValue(Enchantment.class, enchantment, rarity, "f_44674_");
 	    }
 	}
 	

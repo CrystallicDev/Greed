@@ -19,7 +19,7 @@ import com.natsu.greed.config.ServerConfig;
 import com.natsu.greed.server.villager.events.GreedFillingTradesEvent;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.StructureTags;
@@ -149,11 +149,11 @@ public class VillagerTradeHandler {
 		private final int villagerXp;
 
 		public EmeraldsForVillagerTypeItem(int p_35669_, int p_35670_, int p_35671_, Map<VillagerType, Item> p_35672_) {
-			Registry.VILLAGER_TYPE.stream().filter((p_35680_) -> {
+			BuiltInRegistries.VILLAGER_TYPE.stream().filter((p_35680_) -> {
 				return !p_35672_.containsKey(p_35680_);
 			}).findAny().ifPresent((p_35677_) -> {
 				throw new IllegalStateException(
-						"Missing trade for villager type: " + Registry.VILLAGER_TYPE.getKey(p_35677_));
+						"Missing trade for villager type: " + BuiltInRegistries.VILLAGER_TYPE.getKey(p_35677_));
 			});
 			this.trades = p_35672_;
 			this.cost = p_35669_;
@@ -299,7 +299,7 @@ public class VillagerTradeHandler {
 
 		public MerchantOffer getOffer(Entity p_35801_, net.minecraft.util.RandomSource p_35802_) {
 			ItemStack itemstack = new ItemStack(Items.EMERALD, this.emeraldCost);
-			List<Potion> list = Registry.POTION.stream().filter((p_35804_) -> {
+			List<Potion> list = BuiltInRegistries.POTION.stream().filter((p_35804_) -> {
 				return !p_35804_.getEffects().isEmpty() && PotionBrewing.isBrewablePotion(p_35804_);
 			}).collect(Collectors.toList());
 			Potion potion = list.get(p_35802_.nextInt(list.size()));

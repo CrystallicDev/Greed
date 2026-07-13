@@ -22,10 +22,10 @@ public class GreedDataGenerators {
         ExistingFileHelper helper = event.getExistingFileHelper();
 
         if (event.includeClient()) {
-            gen.addProvider(event.includeClient(), new GreedLangEN(gen));
-            gen.addProvider(event.includeClient(), new GreedLangFR(gen));
-            gen.addProvider(event.includeClient(), new GreedBlockStateProvider(gen, helper));
-            gen.addProvider(event.includeClient(), new GreedItemModelProvider(gen, helper));
+            gen.addProvider(event.includeClient(), new GreedLangEN(gen.getPackOutput()));
+            gen.addProvider(event.includeClient(), new GreedLangFR(gen.getPackOutput()));
+            gen.addProvider(event.includeClient(), new GreedBlockStateProvider(gen.getPackOutput(), helper));
+            gen.addProvider(event.includeClient(), new GreedItemModelProvider(gen.getPackOutput(), helper));
         }
     }
 }

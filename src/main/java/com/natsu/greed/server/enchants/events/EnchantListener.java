@@ -95,7 +95,7 @@ public class EnchantListener {
 	
 	@SubscribeEvent
 	public static void onDamage(LivingHurtEvent event) {
-		if (event.getSource().isFall()) {
+		if (event.getSource().is(net.minecraft.tags.DamageTypeTags.IS_FALL)) {
 			ItemStack boots = event.getEntity().getItemBySlot(EquipmentSlot.FEET);
 			if (boots != null) { return; }
 		    if (EnchantmentHelper.getItemEnchantmentLevel(GreedEnchants.CURSE_OF_HEAVYWEIGHT.get(), boots) > 0) {

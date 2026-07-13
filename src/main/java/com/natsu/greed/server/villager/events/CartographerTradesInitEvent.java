@@ -21,7 +21,7 @@ import com.natsu.greed.server.villager.events.GreedFillingTradesEvent.Profession
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -128,7 +128,7 @@ public class CartographerTradesInitEvent {
 			if (!(entity.level instanceof ServerLevel serverLevel))
 				return null;
 			List<Holder<Biome>> biomesInTag = new ArrayList<>();
-			serverLevel.registryAccess().registryOrThrow(Registry.BIOME_REGISTRY).getTagOrEmpty(biomeTag)
+			serverLevel.registryAccess().registryOrThrow(Registries.BIOME).getTagOrEmpty(biomeTag)
 					.forEach(biomesInTag::add);
 
 			if (biomesInTag.isEmpty())
@@ -181,7 +181,7 @@ public class CartographerTradesInitEvent {
 			ServerLevel level = entity.getServer().getLevel(dimension);
 			if (level == null) return null;
 			List<Holder<Structure>> structuresInTag = new ArrayList<>();
-			level.registryAccess().registryOrThrow(Registry.STRUCTURE_REGISTRY)
+			level.registryAccess().registryOrThrow(Registries.STRUCTURE)
 					.getTagOrEmpty(destination).forEach(structuresInTag::add);
 
 			if (structuresInTag.isEmpty())

@@ -4,13 +4,13 @@ import com.natsu.greed.Greed;
 import com.natsu.greed.common.registry.GreedBlocks;
 import com.natsu.greed.common.registry.GreedEnchants;
 
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraftforge.common.data.LanguageProvider;
 
 public class GreedLangFR extends LanguageProvider {
 
-	public GreedLangFR(DataGenerator gen) {
-		super(gen, Greed.MODID, "fr_fr");
+	public GreedLangFR(PackOutput output) {
+		super(output, Greed.MODID, "fr_fr");
 	}
 
 	@Override

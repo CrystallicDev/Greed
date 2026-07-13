@@ -7,7 +7,6 @@
     "mixins": [
         "EnchantmentMenuMixin",
         "EnchantmentMenuAccessor",
-		"EnchantmentAccessor",
 		"EnchantmentMixin",
 		"FishHookMixin",
 		"EnchantHelperMixin",
