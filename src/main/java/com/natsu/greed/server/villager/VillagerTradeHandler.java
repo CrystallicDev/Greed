@@ -329,10 +329,10 @@ public class VillagerTradeHandler {
 
 		@Nullable
 		public MerchantOffer getOffer(Entity p_35817_, net.minecraft.util.RandomSource p_35818_) {
-			if (!(p_35817_.level instanceof ServerLevel)) {
+			if (!(p_35817_.level() instanceof ServerLevel)) {
 				return null;
 			} else {
-				ServerLevel serverlevel = (ServerLevel) p_35817_.level;
+				ServerLevel serverlevel = (ServerLevel) p_35817_.level();
 				BlockPos blockpos = serverlevel.findNearestMapStructure(this.destination, p_35817_.blockPosition(), 100,
 						true);
 				if (blockpos != null) {

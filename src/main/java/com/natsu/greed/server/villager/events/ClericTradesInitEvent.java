@@ -93,7 +93,7 @@ public class ClericTradesInitEvent {
 		}
 
 		public MerchantOffer getOffer(Entity entity, net.minecraft.util.RandomSource random) {
-			if (!(entity.level instanceof ServerLevel serverLevel))
+			if (!(entity.level() instanceof ServerLevel serverLevel))
 				return null;
 			ItemStack potion = PotionCreatorUtils.makeIntoPotion(Items.POTION, effects);
 			potion.setHoverName(Component.translatable(displayName));
@@ -124,7 +124,7 @@ public class ClericTradesInitEvent {
 		}
 
 		public MerchantOffer getOffer(Entity entity, net.minecraft.util.RandomSource random) {
-			if (!(entity.level instanceof ServerLevel serverLevel))
+			if (!(entity.level() instanceof ServerLevel serverLevel))
 				return null;
 			List<MobEffect> possibleEffects = StreamSupport.stream(ForgeRegistries.MOB_EFFECTS.spliterator(), false).collect(Collectors.toList());
 			List<MobEffectInstance> effects = new ArrayList<>();
@@ -159,7 +159,7 @@ public class ClericTradesInitEvent {
 		}
 
 		public MerchantOffer getOffer(Entity entity, net.minecraft.util.RandomSource random) {
-			if (!(entity.level instanceof ServerLevel serverLevel))
+			if (!(entity.level() instanceof ServerLevel serverLevel))
 				return null;
 			ItemStack potion = PotionCreatorUtils.makeIntoPotion(Items.SPLASH_POTION, effects);
 			potion.setHoverName(Component.translatable(displayName));
@@ -190,7 +190,7 @@ public class ClericTradesInitEvent {
 		}
 
 		public MerchantOffer getOffer(Entity entity, net.minecraft.util.RandomSource random) {
-			if (!(entity.level instanceof ServerLevel serverLevel))
+			if (!(entity.level() instanceof ServerLevel serverLevel))
 				return null;
 			List<MobEffect> possibleEffects = StreamSupport.stream(ForgeRegistries.MOB_EFFECTS.spliterator(), false).collect(Collectors.toList());
 			List<MobEffectInstance> effects = new ArrayList<>();

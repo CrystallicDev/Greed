@@ -81,7 +81,7 @@ public class EnchantListener {
 
 	    if (original.getEffect().isBeneficial()) {
 	        int newDura = Math.max(1, (int)Math.round(original.getDuration() * (new Random().nextFloat(0.6f, 0.8f))));
-	        player.getLevel().getServer().tell(new TickTask(0, 
+	        player.level().getServer().tell(new TickTask(0, 
 	        		() -> {
 	        			player.removeEffect(original.getEffect());
 	        			MobEffectInstance instance = new MobEffectInstance(original.getEffect(), newDura, original.getAmplifier(),
@@ -114,7 +114,7 @@ public class EnchantListener {
 
 	    if (EnchantmentHelper.getItemEnchantmentLevel(GreedEnchants.CURSE_OF_CREEPING.get(), boots) > 0) {
 
-	        if (player.isCrouching() && player.isOnGround()) {
+	        if (player.isCrouching() && player.onGround()) {
 	            player.setDeltaMovement(0, player.getDeltaMovement().y, 0);
 	        }
 	    }
