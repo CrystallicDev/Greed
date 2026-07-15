@@ -229,16 +229,14 @@ public class ServerConfig {
 		builder.pop();
 
 		builder.push("enchantmentMaxLevels");
-		USE_CUSTOM_MAX_LEVELS = builder.comment("Use a custom max level for each enchantment. Disable this to use vanilla.\n"
-				+ "NOTE: not available in 1.19.4 (Enchantment loads before the mod's mixins).").define("useCustomEnchantmentMaxLevels", false);
+		USE_CUSTOM_MAX_LEVELS = builder.comment("Use a custom max level for each enchantment. Disable this to use vanilla.").define("useCustomEnchantmentMaxLevels", true);
 		ENCHANTMENTS_MAX_LEVELS = builder.comment(
 	                "Map each enchantment to a max level."
 	        ).define("maxLevels", getDefaultMaxLevels());
 		builder.pop();
 
 		builder.push("enchantmentMaxCosts");
-		USE_CUSTOM_MAX_COST = builder.comment("Use a custom max cost for each enchantment. This is recommended to be put at 999, otherwise, some enchants become unavailable at higher bookshelves level. Disable this to use vanilla.\n"
-				+ "NOTE: not available in 1.19.4 (Enchantment loads before the mod's mixins).").define("useCustomEnchantmentMaxCosts", false);
+		USE_CUSTOM_MAX_COST = builder.comment("Use a custom max cost for each enchantment. This is recommended to be put at 999, otherwise, some enchants become unavailable at higher bookshelves level. Disable this to use vanilla.").define("useCustomEnchantmentMaxCosts", true);
 		ENCHANTMENTS_MAX_COST = builder.comment(
 	                "Map each enchantment to a max cost."
 	        ).define("maxCosts", getDefaultMaxCosts());
