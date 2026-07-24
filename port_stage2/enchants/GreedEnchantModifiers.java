@@ -3,7 +3,7 @@ package com.natsu.greed.server.enchants;
 import java.util.Map;
 
 import com.natsu.greed.config.ServerConfig;
-import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
+import net.neoforged.fml.util.ObfuscationReflectionHelper;
 
 import net.minecraft.world.item.enchantment.Enchantment.Rarity;
 import net.minecraftforge.registries.ForgeRegistries;

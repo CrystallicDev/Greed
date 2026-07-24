@@ -9,13 +9,13 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.common.EventBusSubscriber;
 
 // Farmer's Delight : viande crue et pain non consommables tels quels
-@Mod.EventBusSubscriber(modid = Greed.MODID)
+@EventBusSubscriber(modid = Greed.MODID)
 public class RawFoodListener {
 
 	private static final Set<Item> BLOCKED_RAW_MEATS = Set.of(

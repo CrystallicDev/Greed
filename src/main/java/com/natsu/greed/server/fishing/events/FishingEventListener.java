@@ -6,12 +6,12 @@ import com.natsu.greed.common.registry.GreedEnchants;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.FishingHook;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraftforge.event.entity.EntityJoinLevelEvent;
-import net.minecraftforge.event.level.NoteBlockEvent.Play;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
+import net.neoforged.neoforge.event.level.NoteBlockEvent.Play;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 
-@Mod.EventBusSubscriber(modid = Greed.MODID)
+@EventBusSubscriber(modid = Greed.MODID)
 public class FishingEventListener {
 	
 	//This should be compatible with Pride's Fishing Hook handling ?
@@ -20,7 +20,9 @@ public class FishingEventListener {
 		if (event.getEntity() instanceof FishingHook hook) {
 			if (hook.getOwner() instanceof Player player) {
 				if (!event.getLevel().isClientSide && event.getEntity().tickCount <= 0) {
-					int lightLevel = EnchantmentHelper.getEnchantmentLevel(GreedEnchants.LIGHT.get(), player);
+					net.minecraft.core.Holder<net.minecraft.world.item.enchantment.Enchantment> light =
+							GreedEnchants.get(player.registryAccess(), GreedEnchants.LIGHT);
+					int lightLevel = light == null ? 0 : EnchantmentHelper.getEnchantmentLevel(light, player);
 					hook.setDeltaMovement(hook.getDeltaMovement().multiply(1 + (0.2 * lightLevel), 1 + (0.07 * lightLevel), 1 + (0.2 * lightLevel)));
 				}
 			}

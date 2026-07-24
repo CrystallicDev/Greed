@@ -3,25 +3,27 @@ package com.natsu.greed.server.lootmodifier;
 import java.util.function.Supplier;
 
 import com.google.common.base.Suppliers;
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.natsu.greed.common.registry.GreedEnchants;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.minecraft.core.Holder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraftforge.common.loot.IGlobalLootModifier;
-import net.minecraftforge.common.loot.LootModifier;
+import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
+import net.neoforged.neoforge.common.loot.LootModifier;
 
 public class ScarcityLootModifier extends LootModifier {
 
-	public static final Supplier<Codec<ScarcityLootModifier>> CODEC = Suppliers.memoize(
-			() -> RecordCodecBuilder.create(inst -> LootModifier.codecStart(inst).apply(inst, ScarcityLootModifier::new)));
+	public static final Supplier<MapCodec<ScarcityLootModifier>> CODEC = Suppliers.memoize(
+			() -> RecordCodecBuilder.mapCodec(inst -> LootModifier.codecStart(inst).apply(inst, ScarcityLootModifier::new)));
 
 	protected ScarcityLootModifier(LootItemCondition[] conditions) {
 		super(conditions);
@@ -29,10 +31,12 @@ public class ScarcityLootModifier extends LootModifier {
 
 	@Override
 	protected ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
-		Entity entity = context.getParamOrNull(LootContextParams.KILLER_ENTITY);
+		Entity entity = context.getParamOrNull(LootContextParams.ATTACKING_ENTITY);
 		if (!(entity instanceof Player player)) return generatedLoot;
 
-		int level = EnchantmentHelper.getItemEnchantmentLevel(GreedEnchants.CURSE_OF_SCARCITY.get(), player.getMainHandItem());
+		Holder<Enchantment> curse = GreedEnchants.get(context.getLevel().registryAccess(), GreedEnchants.CURSE_OF_SCARCITY);
+		if (curse == null) return generatedLoot;
+		int level = EnchantmentHelper.getItemEnchantmentLevel(curse, player.getMainHandItem());
 		if (level == 0) return generatedLoot;
 
 		ObjectArrayList<ItemStack> result = new ObjectArrayList<>();
@@ -52,7 +56,7 @@ public class ScarcityLootModifier extends LootModifier {
 	}
 
 	@Override
-	public Codec<? extends IGlobalLootModifier> codec() {
+	public MapCodec<? extends IGlobalLootModifier> codec() {
 		return CODEC.get();
 	}
 

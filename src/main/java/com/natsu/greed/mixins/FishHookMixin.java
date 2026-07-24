@@ -10,8 +10,10 @@ import com.natsu.greed.Greed;
 import com.natsu.greed.common.registry.GreedEnchants;
 import com.natsu.greed.server.fishing.GrappleHandler;
 
+import net.minecraft.core.Holder;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -28,7 +30,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(value = FishingHook.class, priority = -9999)		// We want to be called last, especially if Pride is loaded
+@Mixin(value = FishingHook.class, priority = -9999, remap = false)		// We want to be called last, especially if Pride is loaded
 public class FishHookMixin {
 
 
@@ -38,9 +40,9 @@ public class FishHookMixin {
         Player player = self.getPlayerOwner();
         if (player == null) return;
         ItemStack rodStack = player.getMainHandItem();
-        int grapplingLevel = EnchantmentHelper.getItemEnchantmentLevel(
-        		GreedEnchants.GRAPPLING.get(), rodStack
-        );
+        Holder<Enchantment> grappling = GreedEnchants.get(self.registryAccess(), GreedEnchants.GRAPPLING);
+        if (grappling == null) return;
+        int grapplingLevel = EnchantmentHelper.getItemEnchantmentLevel(grappling, rodStack);
         if (grapplingLevel > 0 && self.getHookedIn() == null) {
             GrappleHandler.handleGrapple(self, player);
             cir.setReturnValue(0);
@@ -53,7 +55,8 @@ public class FishHookMixin {
         FishingHook self = (FishingHook)(Object) this;
     	Entity entity = self.getOwner();
         if (entity instanceof LivingEntity living) {
-        	int level = EnchantmentHelper.getEnchantmentLevel(GreedEnchants.REELING.get(), living);
+        	Holder<Enchantment> reeling = GreedEnchants.get(self.registryAccess(), GreedEnchants.REELING);
+        	int level = reeling == null ? 0 : EnchantmentHelper.getEnchantmentLevel(reeling, living);
 			if (entity != null) {
 				Vec3 vec3 = (new Vec3(entity.getX() - self.getX(), entity.getY() - self.getY(),
 						entity.getZ() - self.getZ())).scale(0.1D);

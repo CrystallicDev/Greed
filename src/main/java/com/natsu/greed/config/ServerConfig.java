@@ -10,77 +10,77 @@ import java.util.Objects;
 import com.natsu.greed.server.enchants.EnchantmentTableState;
 
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ArmorMaterials;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.Enchantment.Rarity;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import net.minecraft.world.item.enchantment.Enchantments;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
 
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 public class ServerConfig {
 
 	private static final Logger LOGGER = LogUtils.getLogger();
 
-	public static final ForgeConfigSpec SPEC;
+	public static final ModConfigSpec SPEC;
 	
 	// # Custom Enchant system
-	public static final ForgeConfigSpec.BooleanValue USE_ENCHANTING_SYSTEM;
-	public static final ForgeConfigSpec.BooleanValue DISABLE_BOOKSHELVES_CAP;
-	public static final ForgeConfigSpec.BooleanValue USE_LEGACY_XP_COST;
-	public static final ForgeConfigSpec.ConfigValue<List<? extends String>> DEFAULTSTAGE_CURSE_LIST;
-	public static final ForgeConfigSpec.DoubleValue DEFAULTSTAGE_CURSE_PROBA;
-	public static final ForgeConfigSpec.ConfigValue<List<? extends String>> DEFAULTSTAGE_ENCHANTMENT_BAN_LIST;
-	public static final ForgeConfigSpec.BooleanValue DEFAULTSTAGE_ENCHANT_ISWHITELIST;
-	public static final ForgeConfigSpec.ConfigValue<List<? extends String>> LAPIS_CURSE_LIST;
-	public static final ForgeConfigSpec.DoubleValue LAPIS_CURSE_PROBA;
-	public static final ForgeConfigSpec.ConfigValue<List<? extends String>> LAPIS_ENCHANTMENT_BAN_LIST;
-	public static final ForgeConfigSpec.BooleanValue LAPIS_ENCHANT_ISWHITELIST;
-	public static final ForgeConfigSpec.ConfigValue<List<? extends String>> AMETHYST_CURSE_LIST;
-	public static final ForgeConfigSpec.DoubleValue AMETHYST_CURSE_PROBA;
-	public static final ForgeConfigSpec.ConfigValue<List<? extends String>> AMETHYST_ENCHANTMENT_BAN_LIST;
-	public static final ForgeConfigSpec.BooleanValue AMETHYST_ENCHANT_ISWHITELIST;
+	public static final ModConfigSpec.BooleanValue USE_ENCHANTING_SYSTEM;
+	public static final ModConfigSpec.BooleanValue DISABLE_BOOKSHELVES_CAP;
+	public static final ModConfigSpec.BooleanValue USE_LEGACY_XP_COST;
+	public static final ModConfigSpec.ConfigValue<List<? extends String>> DEFAULTSTAGE_CURSE_LIST;
+	public static final ModConfigSpec.DoubleValue DEFAULTSTAGE_CURSE_PROBA;
+	public static final ModConfigSpec.ConfigValue<List<? extends String>> DEFAULTSTAGE_ENCHANTMENT_BAN_LIST;
+	public static final ModConfigSpec.BooleanValue DEFAULTSTAGE_ENCHANT_ISWHITELIST;
+	public static final ModConfigSpec.ConfigValue<List<? extends String>> LAPIS_CURSE_LIST;
+	public static final ModConfigSpec.DoubleValue LAPIS_CURSE_PROBA;
+	public static final ModConfigSpec.ConfigValue<List<? extends String>> LAPIS_ENCHANTMENT_BAN_LIST;
+	public static final ModConfigSpec.BooleanValue LAPIS_ENCHANT_ISWHITELIST;
+	public static final ModConfigSpec.ConfigValue<List<? extends String>> AMETHYST_CURSE_LIST;
+	public static final ModConfigSpec.DoubleValue AMETHYST_CURSE_PROBA;
+	public static final ModConfigSpec.ConfigValue<List<? extends String>> AMETHYST_ENCHANTMENT_BAN_LIST;
+	public static final ModConfigSpec.BooleanValue AMETHYST_ENCHANT_ISWHITELIST;
 	
 	// # Custom Enchants Values
-	public static final ForgeConfigSpec.BooleanValue USE_CUSTOM_RARITY;
-	public static final ForgeConfigSpec.ConfigValue<List<? extends String>> ENCHANTMENTS_RARITY;
-	public static final ForgeConfigSpec.BooleanValue USE_CUSTOM_MAX_LEVELS;
-	public static final ForgeConfigSpec.ConfigValue<List<? extends String>> ENCHANTMENTS_MAX_LEVELS;
-	public static final ForgeConfigSpec.BooleanValue USE_CUSTOM_MAX_COST;
-	public static final ForgeConfigSpec.ConfigValue<List<? extends String>> ENCHANTMENTS_MAX_COST;
+	public static final ModConfigSpec.BooleanValue USE_CUSTOM_RARITY;
+	public static final ModConfigSpec.ConfigValue<List<? extends String>> ENCHANTMENTS_RARITY;
+	public static final ModConfigSpec.BooleanValue USE_CUSTOM_MAX_LEVELS;
+	public static final ModConfigSpec.ConfigValue<List<? extends String>> ENCHANTMENTS_MAX_LEVELS;
+	public static final ModConfigSpec.BooleanValue USE_CUSTOM_MAX_COST;
+	public static final ModConfigSpec.ConfigValue<List<? extends String>> ENCHANTMENTS_MAX_COST;
 	
 	// # Custom Trades
-	public static final ForgeConfigSpec.BooleanValue USE_CUSTOM_BOOK_TRADES;
-	public static final ForgeConfigSpec.BooleanValue USE_CUSTOM_MAP_TRADES;
-	public static final ForgeConfigSpec.BooleanValue USE_CUSTOM_CLERIC_TRADES;
-	public static final ForgeConfigSpec.BooleanValue USE_CUSTOM_ARMOR_TRADES;
-	public static final ForgeConfigSpec.BooleanValue USE_CUSTOM_TOOL_TRADES;
-	public static final ForgeConfigSpec.BooleanValue USE_CUSTOM_WEAPON_TRADES;
+	public static final ModConfigSpec.BooleanValue USE_CUSTOM_BOOK_TRADES;
+	public static final ModConfigSpec.BooleanValue USE_CUSTOM_MAP_TRADES;
+	public static final ModConfigSpec.BooleanValue USE_CUSTOM_CLERIC_TRADES;
+	public static final ModConfigSpec.BooleanValue USE_CUSTOM_ARMOR_TRADES;
+	public static final ModConfigSpec.BooleanValue USE_CUSTOM_TOOL_TRADES;
+	public static final ModConfigSpec.BooleanValue USE_CUSTOM_WEAPON_TRADES;
 	
 	// # Custom Cauldrons
-	public static final ForgeConfigSpec.BooleanValue USE_CUSTOM_CAULDRONS;
-	public static final ForgeConfigSpec.DoubleValue CAULDRONS_POTION_DURATION_MERGE_FACTOR;
-	public static final ForgeConfigSpec.IntValue CAULDRONS_EFFECT_ON_ENTER_SECONDS;
-	public static final ForgeConfigSpec.BooleanValue PREVENT_WATER_BOTTLE_FILLING;
+	public static final ModConfigSpec.BooleanValue USE_CUSTOM_CAULDRONS;
+	public static final ModConfigSpec.DoubleValue CAULDRONS_POTION_DURATION_MERGE_FACTOR;
+	public static final ModConfigSpec.IntValue CAULDRONS_EFFECT_ON_ENTER_SECONDS;
+	public static final ModConfigSpec.BooleanValue PREVENT_WATER_BOTTLE_FILLING;
 	
 	// # Custom Witches Thrown potions
-	public static final ForgeConfigSpec.BooleanValue USE_CUSTOM_WITCHES_POTION;
+	public static final ModConfigSpec.BooleanValue USE_CUSTOM_WITCHES_POTION;
 
 	// # Farmer's Delight integration
-	public static final ForgeConfigSpec.BooleanValue USE_FD_RAW_MEAT_REBALANCE;
-	public static final ForgeConfigSpec.BooleanValue USE_FD_BREAD_REBALANCE;
-	public static final ForgeConfigSpec.BooleanValue USE_FD_COOKED_MEAT_REBALANCE;
-	public static final ForgeConfigSpec.DoubleValue FD_COOKED_MEAT_NUTRITION_FACTOR;
+	public static final ModConfigSpec.BooleanValue USE_FD_RAW_MEAT_REBALANCE;
+	public static final ModConfigSpec.BooleanValue USE_FD_BREAD_REBALANCE;
+	public static final ModConfigSpec.BooleanValue USE_FD_COOKED_MEAT_REBALANCE;
+	public static final ModConfigSpec.DoubleValue FD_COOKED_MEAT_NUTRITION_FACTOR;
 	
 	static {
-		ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
+		ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
 		builder.push("enchantingTableStages");
 		USE_ENCHANTING_SYSTEM = builder.define("useEnchantingTableStages", true);
 		DISABLE_BOOKSHELVES_CAP = builder.define("disableBookshelvesCap", true);
@@ -104,7 +104,7 @@ public class ServerConfig {
 			    	if (!(obj instanceof String s)) return false;
 			        ResourceLocation rl = ResourceLocation.tryParse(s);
 			        if (rl == null) { LOGGER.warn("Cannot find curse: {}", s); }
-			        return rl != null && ForgeRegistries.ENCHANTMENTS.containsKey(rl);
+			        return rl != null;
 			    });
 		
 		DEFAULTSTAGE_CURSE_PROBA = builder
@@ -129,7 +129,7 @@ public class ServerConfig {
 			    	if (!(obj instanceof String s)) return false;
 			        ResourceLocation rl = ResourceLocation.tryParse(s);
 			        if (rl == null) { LOGGER.warn("Cannot find enchant: {}", s); }
-			        return rl != null && ForgeRegistries.ENCHANTMENTS.containsKey(rl);
+			        return rl != null;
 			    });
 		DEFAULTSTAGE_ENCHANT_ISWHITELIST = builder
 				.comment("When true, reverse the previous ban list as a white list. Only listed enchantments will\n"
@@ -153,7 +153,7 @@ public class ServerConfig {
 			    	if (!(obj instanceof String s)) return false;
 			        ResourceLocation rl = ResourceLocation.tryParse(s);
 			        if (rl == null) { LOGGER.warn("Cannot find curse: {}", s); }
-			        return rl != null && ForgeRegistries.ENCHANTMENTS.containsKey(rl);
+			        return rl != null;
 			    });
 		
 		LAPIS_CURSE_PROBA = builder
@@ -176,7 +176,7 @@ public class ServerConfig {
 			    	if (!(obj instanceof String s)) return false;
 			        ResourceLocation rl = ResourceLocation.tryParse(s);
 			        if (rl == null) { LOGGER.warn("Cannot find enchant: {}", s); }
-			        return rl != null && ForgeRegistries.ENCHANTMENTS.containsKey(rl);
+			        return rl != null;
 			    });
 		LAPIS_ENCHANT_ISWHITELIST = builder
 				.comment("When true, reverse the previous ban list as a white list. Only listed enchantments will\n"
@@ -193,7 +193,7 @@ public class ServerConfig {
 			    	if (!(obj instanceof String s)) return false;
 			        ResourceLocation rl = ResourceLocation.tryParse(s);
 			        if (rl == null) { LOGGER.warn("Cannot find curse: {}", s); }
-			        return rl != null && ForgeRegistries.ENCHANTMENTS.containsKey(rl);
+			        return rl != null;
 			    });
 		
 		AMETHYST_CURSE_PROBA = builder
@@ -209,7 +209,7 @@ public class ServerConfig {
 			    	if (!(obj instanceof String s)) return false;
 			        ResourceLocation rl = ResourceLocation.tryParse(s);
 			        if (rl == null) { LOGGER.warn("Cannot find enchant: {}", s); }
-			        return rl != null && ForgeRegistries.ENCHANTMENTS.containsKey(rl);
+			        return rl != null;
 			    });
 		AMETHYST_ENCHANT_ISWHITELIST = builder
 				.comment("When true, reverse the previous ban list as a white list. Only listed enchantments will\n"
@@ -317,29 +317,30 @@ public class ServerConfig {
 	}
 	
 	
-	public static List<Enchantment> getCurseList(EnchantmentTableState tableState, ItemStack applicableItem) {
+	// 1.21 : le registre d'enchants n'est plus accessible statiquement (il faut un RegistryAccess).
+	// On renvoie les clés ; la résolution en Holder + le filtre canEnchant se font côté handler (Bloc B).
+	private static List<ResourceKey<Enchantment>> toKeys(List<? extends String> ids) {
+		return ids.stream()
+				.map(ResourceLocation::tryParse).filter(Objects::nonNull)
+				.map(rl -> ResourceKey.create(Registries.ENCHANTMENT, rl))
+				.toList();
+	}
+
+	public static List<ResourceKey<Enchantment>> getCurseList(EnchantmentTableState tableState) {
 		switch (tableState) {
-		case AMETHYST_STATE:
-			return AMETHYST_CURSE_LIST.get().stream().map(ResourceLocation::new).map(rl -> ForgeRegistries.ENCHANTMENTS.getValue(rl)).filter(Objects::nonNull).filter(rl -> rl.canEnchant(applicableItem)).toList();
+		case AMETHYST_STATE: return toKeys(AMETHYST_CURSE_LIST.get());
+		case LAPIS_STATE:    return toKeys(LAPIS_CURSE_LIST.get());
 		case DEFAULT:
-			return DEFAULTSTAGE_CURSE_LIST.get().stream().map(ResourceLocation::new).map(rl -> ForgeRegistries.ENCHANTMENTS.getValue(rl)).filter(Objects::nonNull).filter(rl -> rl.canEnchant(applicableItem)).toList();
-		case LAPIS_STATE:
-			return LAPIS_CURSE_LIST.get().stream().map(ResourceLocation::new).map(rl -> ForgeRegistries.ENCHANTMENTS.getValue(rl)).filter(Objects::nonNull).filter(rl -> rl.canEnchant(applicableItem)).toList();
-		default:
-			return DEFAULTSTAGE_CURSE_LIST.get().stream().map(ResourceLocation::new).map(rl -> ForgeRegistries.ENCHANTMENTS.getValue(rl)).filter(Objects::nonNull).filter(rl -> rl.canEnchant(applicableItem)).toList();
+		default:             return toKeys(DEFAULTSTAGE_CURSE_LIST.get());
 		}
 	}
-	
-	public static List<Enchantment> getEnchantmentList(EnchantmentTableState tableState) {
+
+	public static List<ResourceKey<Enchantment>> getEnchantmentList(EnchantmentTableState tableState) {
 		switch (tableState) {
-		case AMETHYST_STATE:
-			return AMETHYST_ENCHANTMENT_BAN_LIST.get().stream().map(ResourceLocation::new).map(rl -> ForgeRegistries.ENCHANTMENTS.getValue(rl)).filter(Objects::nonNull).toList();
+		case AMETHYST_STATE: return toKeys(AMETHYST_ENCHANTMENT_BAN_LIST.get());
+		case LAPIS_STATE:    return toKeys(LAPIS_ENCHANTMENT_BAN_LIST.get());
 		case DEFAULT:
-			return DEFAULTSTAGE_ENCHANTMENT_BAN_LIST.get().stream().map(ResourceLocation::new).map(rl -> ForgeRegistries.ENCHANTMENTS.getValue(rl)).filter(Objects::nonNull).toList();
-		case LAPIS_STATE:
-			return LAPIS_ENCHANTMENT_BAN_LIST.get().stream().map(ResourceLocation::new).map(rl -> ForgeRegistries.ENCHANTMENTS.getValue(rl)).filter(Objects::nonNull).toList();
-		default:
-			return DEFAULTSTAGE_ENCHANTMENT_BAN_LIST.get().stream().map(ResourceLocation::new).map(rl -> ForgeRegistries.ENCHANTMENTS.getValue(rl)).filter(Objects::nonNull).toList();
+		default:             return toKeys(DEFAULTSTAGE_ENCHANTMENT_BAN_LIST.get());
 		}
 	}
 	
@@ -371,14 +372,6 @@ public class ServerConfig {
 		}
 	}
 	
-	public static Enchantment.Rarity intToRarity(int value) {
-	    return switch (value) {
-	        case 0  -> Enchantment.Rarity.COMMON;
-	        case 1  -> Enchantment.Rarity.UNCOMMON;
-	        case 2  -> Enchantment.Rarity.RARE;
-	        default -> Enchantment.Rarity.VERY_RARE;
-	    };
-	}
 	
 	private static List<String> getDefaultRarities() {
 		Map<String, Integer> defaults = new HashMap<>();

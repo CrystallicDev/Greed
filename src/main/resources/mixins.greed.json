@@ -2,16 +2,9 @@
     "required": true,
     "minVersion": "0.8",
     "package": "com.natsu.greed.mixins",
-    "refmap": "mixins.greed.refmap.json",
-    "compatibilityLevel": "JAVA_17",
+    "compatibilityLevel": "JAVA_21",
     "mixins": [
-        "EnchantmentMenuMixin",
-        "EnchantmentMenuAccessor",
-		"EnchantmentMaxLevelMixin",
-		"EnchantmentMaxCostMixin",
-		"FishHookMixin",
-		"EnchantHelperMixin",
-		"ItemAccessor"
+        "FishHookMixin"
     ],
     "client": [],
     "server": [],

@@ -2,8 +2,10 @@ package com.natsu.greed.server.fishing;
 
 import com.natsu.greed.common.registry.GreedEnchants;
 
+import net.minecraft.core.Holder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.FishingHook;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 
 public class GrappleHandler {
@@ -20,7 +22,8 @@ public class GrappleHandler {
 
 	    if (!hook.horizontalCollision && !hook.verticalCollision) return;
 
-	    int level = EnchantmentHelper.getEnchantmentLevel(GreedEnchants.GRAPPLING.get(), player);
+	    Holder<Enchantment> grappling = GreedEnchants.get(player.registryAccess(), GreedEnchants.GRAPPLING);
+	    int level = grappling == null ? 0 : EnchantmentHelper.getEnchantmentLevel(grappling, player);
 	    double speed = 1.5 + (0.5 * (level - 1));
 
 	    player.setDeltaMovement(

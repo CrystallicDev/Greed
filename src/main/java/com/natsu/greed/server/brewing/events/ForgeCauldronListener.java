@@ -22,13 +22,13 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LayeredCauldronBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 
 // Swap chaudron vanilla <-> chaudron Greed selon qu'on y verse/retire une potion
-@Mod.EventBusSubscriber(modid = Greed.MODID)
+@EventBusSubscriber(modid = Greed.MODID)
 public class ForgeCauldronListener {
 
 	@SubscribeEvent
@@ -84,7 +84,7 @@ public class ForgeCauldronListener {
 		}
 
 		CauldronAddingPotionEvent event = new CauldronAddingPotionEvent(e.getEntity(), e.getHand(), pos, cauldron, potion);
-		if (!MinecraftForge.EVENT_BUS.post(event) && cauldron.addPotion(potion)) {
+		if (!NeoForge.EVENT_BUS.post(event) && cauldron.addPotion(potion)) {
 			exchangeBottle(e, level, pos, new ItemStack(Items.GLASS_BOTTLE), SoundEvents.BOTTLE_EMPTY);
 		} else {
 			level.setBlock(pos, oldState, 3); // annulé : on restaure le chaudron vanilla
@@ -98,7 +98,7 @@ public class ForgeCauldronListener {
 		}
 
 		CauldronAddingPotionEvent event = new CauldronAddingPotionEvent(e.getEntity(), e.getHand(), pos, cauldron, potion);
-		if (!MinecraftForge.EVENT_BUS.post(event) && cauldron.addPotion(potion)) {
+		if (!NeoForge.EVENT_BUS.post(event) && cauldron.addPotion(potion)) {
 			level.setBlock(pos, state.setValue(LayeredCauldronBlock.LEVEL, state.getValue(LayeredCauldronBlock.LEVEL) + 1), 3);
 			exchangeBottle(e, level, pos, new ItemStack(Items.GLASS_BOTTLE), SoundEvents.BOTTLE_EMPTY);
 		}
@@ -111,7 +111,7 @@ public class ForgeCauldronListener {
 		}
 
 		CauldronTakingPotionEvent event = new CauldronTakingPotionEvent(e.getEntity(), e.getHand(), pos, cauldron);
-		if (!MinecraftForge.EVENT_BUS.post(event)) {
+		if (!NeoForge.EVENT_BUS.post(event)) {
 			ItemStack potionStack = PotionCreatorUtils.makeIntoPotion(Items.POTION, cauldron.drain());
 			level.setBlock(pos, Blocks.CAULDRON.defaultBlockState(), 3); // retour au chaudron vanilla vide
 			exchangeBottle(e, level, pos, potionStack, SoundEvents.BOTTLE_FILL);

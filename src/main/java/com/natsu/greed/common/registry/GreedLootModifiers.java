@@ -1,23 +1,24 @@
 package com.natsu.greed.common.registry;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.natsu.greed.Greed;
 import com.natsu.greed.server.lootmodifier.ScarcityLootModifier;
 import com.natsu.greed.server.lootmodifier.VoidingLootModifier;
 
-import net.minecraftforge.common.loot.IGlobalLootModifier;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
 public class GreedLootModifiers {
 
-	public static final DeferredRegister<Codec<? extends IGlobalLootModifier>> SERIALIZERS =
-			DeferredRegister.create(ForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, Greed.MODID);
+	// 1.21/NeoForge : le registre des sérialiseurs contient des MapCodec, plus des Codec.
+	public static final DeferredRegister<MapCodec<? extends IGlobalLootModifier>> SERIALIZERS =
+			DeferredRegister.create(NeoForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, Greed.MODID);
 
-	public static final RegistryObject<Codec<VoidingLootModifier>> VOIDING_MODIFIER =
+	public static final DeferredHolder<MapCodec<? extends IGlobalLootModifier>, MapCodec<VoidingLootModifier>> VOIDING_MODIFIER =
 			SERIALIZERS.register("voiding", VoidingLootModifier.CODEC);
-	public static final RegistryObject<Codec<ScarcityLootModifier>> SCARCITY_MODIFIER =
+	public static final DeferredHolder<MapCodec<? extends IGlobalLootModifier>, MapCodec<ScarcityLootModifier>> SCARCITY_MODIFIER =
 			SERIALIZERS.register("scarcity", ScarcityLootModifier.CODEC);
 
 }

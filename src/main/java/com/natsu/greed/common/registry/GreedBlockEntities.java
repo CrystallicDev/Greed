@@ -3,19 +3,18 @@ package com.natsu.greed.common.registry;
 import com.natsu.greed.Greed;
 import com.natsu.greed.server.brewing.blockentity.GreedCauldronBlockEntity;
 
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
 public class GreedBlockEntities {
 
-	public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, Greed.MODID);
-	
-	public static final RegistryObject<BlockEntityType<GreedCauldronBlockEntity>> CAULDRON = BLOCK_ENTITIES.register("potion_cauldron",
-			() -> BlockEntityType.Builder.of(GreedCauldronBlockEntity::new, GreedBlocks.CAULDRON.get()).build(null)
-			);
-	
+	public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES =
+			DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, Greed.MODID);
+
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<GreedCauldronBlockEntity>> CAULDRON =
+			BLOCK_ENTITIES.register("potion_cauldron",
+					() -> BlockEntityType.Builder.of(GreedCauldronBlockEntity::new, GreedBlocks.CAULDRON.get()).build(null));
+
 }

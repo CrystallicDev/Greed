@@ -7,13 +7,13 @@ import com.natsu.greed.common.registry.GreedBlocks;
 import com.natsu.greed.server.brewing.blockentity.GreedCauldronBlockEntity;
 
 import net.minecraft.world.item.alchemy.PotionUtils;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RegisterColorHandlersEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 
 // Teinte le liquide du chaudron selon les potions qu'il contient
-@Mod.EventBusSubscriber(modid = Greed.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+@EventBusSubscriber(modid = Greed.MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class GreedBlockColors {
 
 	@SubscribeEvent
