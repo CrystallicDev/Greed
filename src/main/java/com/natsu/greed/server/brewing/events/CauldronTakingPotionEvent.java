@@ -7,13 +7,13 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.neoforged.bus.api.ICancellableEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
-import net.neoforged.bus.api.Event;
 
 import com.google.common.base.Preconditions;
 import com.natsu.greed.server.brewing.blockentity.GreedCauldronBlockEntity;
 
-public class CauldronTakingPotionEvent extends PlayerEvent {
+public class CauldronTakingPotionEvent extends PlayerEvent implements ICancellableEvent {
 
 	private final InteractionHand hand;
     private final BlockPos cauldronPos;
@@ -46,11 +46,5 @@ public class CauldronTakingPotionEvent extends PlayerEvent {
 	public GreedCauldronBlockEntity getBlockEntity() {
 		return blockEntity;
 	}
-    
-	@Override
-	public boolean isCancelable() {
-		return true;
-	}
-    
-	
+
 }

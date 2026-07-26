@@ -8,6 +8,7 @@ import com.natsu.greed.server.brewing.blockentity.GreedCauldronBlockEntity;
 import com.natsu.greed.utils.PotionCreatorUtils;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -17,7 +18,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potion;
-import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LayeredCauldronBlock;
@@ -41,8 +42,8 @@ public class ForgeCauldronListener {
 		BlockState state = level.getBlockState(e.getPos());
 
 		if (state.is(Blocks.CAULDRON) && e.getItemStack().getItem() == Items.POTION) {
-			Potion potion = PotionUtils.getPotion(e.getItemStack());
-			if (potion.getEffects().isEmpty()) {
+			Potion potion = extractStandardPotion(e.getItemStack());
+			if (potion == null || potion.getEffects().isEmpty()) {
 				return; // eau, awkward, etc. : comportement vanilla
 			}
 			consumeEvent(e, level);
@@ -51,8 +52,8 @@ public class ForgeCauldronListener {
 			}
 		} else if (state.getBlock() instanceof GreedCauldronBlock) {
 			if (e.getItemStack().getItem() == Items.POTION) {
-				Potion potion = PotionUtils.getPotion(e.getItemStack());
-				if (potion.getEffects().isEmpty()) {
+				Potion potion = extractStandardPotion(e.getItemStack());
+				if (potion == null || potion.getEffects().isEmpty()) {
 					return;
 				}
 				if (state.getValue(LayeredCauldronBlock.LEVEL) >= 3) {
@@ -76,6 +77,15 @@ public class ForgeCauldronListener {
 		e.setCancellationResult(InteractionResult.sidedSuccess(level.isClientSide()));
 	}
 
+	// 1.21 : la potion d'un item se lit dans le composant POTION_CONTENTS (base potion Holder).
+	private static Potion extractStandardPotion(ItemStack stack) {
+		PotionContents contents = stack.get(DataComponents.POTION_CONTENTS);
+		if (contents == null || contents.potion().isEmpty()) {
+			return null;
+		}
+		return contents.potion().get().value();
+	}
+
 	private static void fillVanillaCauldron(PlayerInteractEvent.RightClickBlock e, Level level, BlockState oldState, Potion potion) {
 		BlockPos pos = e.getPos();
 		level.setBlock(pos, GreedBlocks.CAULDRON.get().defaultBlockState().setValue(LayeredCauldronBlock.LEVEL, 1), 3);
@@ -84,7 +94,8 @@ public class ForgeCauldronListener {
 		}
 
 		CauldronAddingPotionEvent event = new CauldronAddingPotionEvent(e.getEntity(), e.getHand(), pos, cauldron, potion);
-		if (!NeoForge.EVENT_BUS.post(event) && cauldron.addPotion(potion)) {
+		NeoForge.EVENT_BUS.post(event);
+		if (!event.isCanceled() && cauldron.addPotion(potion)) {
 			exchangeBottle(e, level, pos, new ItemStack(Items.GLASS_BOTTLE), SoundEvents.BOTTLE_EMPTY);
 		} else {
 			level.setBlock(pos, oldState, 3); // annulé : on restaure le chaudron vanilla
@@ -98,7 +109,8 @@ public class ForgeCauldronListener {
 		}
 
 		CauldronAddingPotionEvent event = new CauldronAddingPotionEvent(e.getEntity(), e.getHand(), pos, cauldron, potion);
-		if (!NeoForge.EVENT_BUS.post(event) && cauldron.addPotion(potion)) {
+		NeoForge.EVENT_BUS.post(event);
+		if (!event.isCanceled() && cauldron.addPotion(potion)) {
 			level.setBlock(pos, state.setValue(LayeredCauldronBlock.LEVEL, state.getValue(LayeredCauldronBlock.LEVEL) + 1), 3);
 			exchangeBottle(e, level, pos, new ItemStack(Items.GLASS_BOTTLE), SoundEvents.BOTTLE_EMPTY);
 		}
@@ -111,7 +123,8 @@ public class ForgeCauldronListener {
 		}
 
 		CauldronTakingPotionEvent event = new CauldronTakingPotionEvent(e.getEntity(), e.getHand(), pos, cauldron);
-		if (!NeoForge.EVENT_BUS.post(event)) {
+		NeoForge.EVENT_BUS.post(event);
+		if (!event.isCanceled()) {
 			ItemStack potionStack = PotionCreatorUtils.makeIntoPotion(Items.POTION, cauldron.drain());
 			level.setBlock(pos, Blocks.CAULDRON.defaultBlockState(), 3); // retour au chaudron vanilla vide
 			exchangeBottle(e, level, pos, potionStack, SoundEvents.BOTTLE_FILL);

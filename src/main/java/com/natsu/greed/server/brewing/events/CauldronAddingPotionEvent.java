@@ -8,9 +8,10 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.alchemy.Potion;
+import net.neoforged.bus.api.ICancellableEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
-public class CauldronAddingPotionEvent extends PlayerEvent {
+public class CauldronAddingPotionEvent extends PlayerEvent implements ICancellableEvent {
 
 	private final InteractionHand hand;
     private final BlockPos cauldronPos;
@@ -50,10 +51,5 @@ public class CauldronAddingPotionEvent extends PlayerEvent {
 	public Potion getIncomingPotion() {
 		return incomingPotion;
 	}
-    
-	@Override
-	public boolean isCancelable() {
-		return true;
-	}
-	
+
 }
