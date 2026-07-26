@@ -15,17 +15,17 @@ public class GreedLangFR extends LanguageProvider {
 
 	@Override
 	protected void addTranslations() {
-		add(GreedEnchants.CURSE_OF_ABSORPTION.get(), "Malédiction d'absorption");
-		add(GreedEnchants.CURSE_OF_COMBINATION.get(), "Malédiction de fusion");
-		add(GreedEnchants.CURSE_OF_CREEPING.get(), "Malédiction d'accroupissement");
-		add(GreedEnchants.CURSE_OF_SCARCITY.get(), "Malédiction de diminution");
-		add(GreedEnchants.CURSE_OF_THE_SPONGE.get(), "Malédiction de l'Éponge");
-		add(GreedEnchants.CURSE_OF_VOIDING.get(), "Malédiction d'annulation");
-		add(GreedEnchants.CURSE_OF_HEAVYWEIGHT.get(), "Malédiction de lourdeur");
-		add(GreedEnchants.LIGHT.get(), "Légèreté");
-		add(GreedEnchants.REELING.get(), "Repêchage");
-		add(GreedEnchants.GRAPPLING.get(), "Grappin");
-		add(GreedEnchants.STRETCHED.get(), "Corde Tendue");
+		add("enchantment.greed.curse_of_absorption", "Malédiction d'absorption");
+		add("enchantment.greed.curse_of_combination", "Malédiction de fusion");
+		add("enchantment.greed.curse_of_creeping", "Malédiction d'accroupissement");
+		add("enchantment.greed.curse_of_scarcity", "Malédiction de diminution");
+		add("enchantment.greed.curse_of_the_sponge", "Malédiction de l'Éponge");
+		add("enchantment.greed.curse_of_voiding", "Malédiction d'annulation");
+		add("enchantment.greed.curse_of_heavyweight", "Malédiction de lourdeur");
+		add("enchantment.greed.light", "Légèreté");
+		add("enchantment.greed.reeling", "Repêchage");
+		add("enchantment.greed.grappling", "Grappin");
+		add("enchantment.greed.stretched", "Corde Tendue");
 		
 		add("map.greed.mesa", "Carte d'exploration de mésa");
 		add("map.greed.jungle", "Carte d'exploration de la jungle");

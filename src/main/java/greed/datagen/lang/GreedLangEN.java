@@ -15,17 +15,17 @@ public class GreedLangEN extends LanguageProvider {
 
 	@Override
 	protected void addTranslations() {
-		add(GreedEnchants.CURSE_OF_ABSORPTION.get(), "Curse of Absorption");
-		add(GreedEnchants.CURSE_OF_COMBINATION.get(), "Curse of Combination");
-		add(GreedEnchants.CURSE_OF_CREEPING.get(), "Curse of Creeping");
-		add(GreedEnchants.CURSE_OF_SCARCITY.get(), "Curse of Scarcity");
-		add(GreedEnchants.CURSE_OF_THE_SPONGE.get(), "Curse of The Sponge");
-		add(GreedEnchants.CURSE_OF_VOIDING.get(), "Curse of Voiding");
-		add(GreedEnchants.CURSE_OF_HEAVYWEIGHT.get(), "Curse of Heavyweight");
-		add(GreedEnchants.LIGHT.get(), "Light");
-		add(GreedEnchants.REELING.get(), "Reeling");
-		add(GreedEnchants.GRAPPLING.get(), "Grappling");
-		add(GreedEnchants.STRETCHED.get(), "Stretched");
+		add("enchantment.greed.curse_of_absorption", "Curse of Absorption");
+		add("enchantment.greed.curse_of_combination", "Curse of Combination");
+		add("enchantment.greed.curse_of_creeping", "Curse of Creeping");
+		add("enchantment.greed.curse_of_scarcity", "Curse of Scarcity");
+		add("enchantment.greed.curse_of_the_sponge", "Curse of The Sponge");
+		add("enchantment.greed.curse_of_voiding", "Curse of Voiding");
+		add("enchantment.greed.curse_of_heavyweight", "Curse of Heavyweight");
+		add("enchantment.greed.light", "Light");
+		add("enchantment.greed.reeling", "Reeling");
+		add("enchantment.greed.grappling", "Grappling");
+		add("enchantment.greed.stretched", "Stretched");
 		
 		add("map.greed.mesa", "Mesa Explorer Map");
 		add("map.greed.jungle", "Jungle Explorer Map");

@@ -19,7 +19,7 @@ public class GreedItemModelProvider extends ItemModelProvider {
 
 	@Override
 	protected void registerModels() {
-		withExistingParent(net.minecraftforge.registries.ForgeRegistries.BLOCKS.getKey(GreedBlocks.CAULDRON.get()).getPath(), 
+		withExistingParent(net.minecraft.core.registries.BuiltInRegistries.BLOCK.getKey(GreedBlocks.CAULDRON.get()).getPath(), 
 				mcLoc("item/cauldron")
 				);
 	}
