@@ -315,8 +315,14 @@ public class ServerConfig {
 		builder.pop();
 		SPEC = builder.build();
 	}
-	
-	
+
+	// Les trades villageois sont (re)chargés par NeoForge PENDANT updateRegistryTags, avant que la
+	// config SERVER soit chargée : lire .get() y jette. On retombe alors sur la valeur par défaut.
+	public static boolean getOrDefault(ModConfigSpec.BooleanValue value) {
+		return SPEC.isLoaded() ? value.get() : value.getDefault();
+	}
+
+
 	// 1.21 : le registre d'enchants n'est plus accessible statiquement (il faut un RegistryAccess).
 	// On renvoie les clés ; la résolution en Holder + le filtre canEnchant se font côté handler (Bloc B).
 	private static List<ResourceKey<Enchantment>> toKeys(List<? extends String> ids) {

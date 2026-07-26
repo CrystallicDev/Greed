@@ -57,7 +57,7 @@ public class CartographerTradesInitEvent {
 	@SubscribeEvent
 	public static void onTradeSetup(VillagerTradesEvent vte) {
 		GreedFillingTradesEvent event = new GreedFillingTradesEvent(vte);
-		if (event.getProfession() != VillagerProfession.CARTOGRAPHER || !ServerConfig.USE_CUSTOM_MAP_TRADES.get()) return;
+		if (event.getProfession() != VillagerProfession.CARTOGRAPHER || !ServerConfig.getOrDefault(ServerConfig.USE_CUSTOM_MAP_TRADES)) return;
 		
 		event.clearTradeOf(ProfessionLevel.NOVICE);
 		event.clearTradeOf(ProfessionLevel.APPRENTICE);
