@@ -97,7 +97,7 @@ public class EnchantListener {
 	public static void onDamage(LivingHurtEvent event) {
 		if (event.getSource().isFall()) {
 			ItemStack boots = event.getEntityLiving().getItemBySlot(EquipmentSlot.FEET);
-			if (boots != null) { return; }
+			if (boots.isEmpty()) { return; }
 		    if (EnchantmentHelper.getItemEnchantmentLevel(GreedEnchants.CURSE_OF_HEAVYWEIGHT.get(), boots) > 0) {
 		    	event.setAmount(event.getAmount() * 2);
 		    }
