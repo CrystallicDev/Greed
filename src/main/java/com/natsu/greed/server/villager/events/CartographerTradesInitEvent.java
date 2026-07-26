@@ -137,9 +137,12 @@ public class CartographerTradesInitEvent {
 			if (biomesInTag.isEmpty())
 				return null;
 			Holder<Biome> randomBiome = biomesInTag.get(random.nextInt(biomesInTag.size()));
+			// findClosestBiome3d est une recherche 3D coûteuse : on pré-calcule la clé (le prédicat est
+			// appelé pour chaque échantillon) et on utilise des pas grossiers pour éviter un gel serveur.
+			ResourceKey<Biome> targetBiome = randomBiome.unwrapKey().orElseThrow();
 			Pair<BlockPos, Holder<Biome>> foundBiome = serverLevel.findClosestBiome3d(
-					holder -> holder.is(randomBiome.unwrapKey().orElseThrow()),
-					entity.blockPosition(), 3200, 8, 8);
+					holder -> holder.is(targetBiome),
+					entity.blockPosition(), 2400, 32, 64);
 			BlockPos biomePos = foundBiome != null ? foundBiome.getFirst() : null;
 
 			if (biomePos == null) {
@@ -189,9 +192,7 @@ public class CartographerTradesInitEvent {
 				return null;
 			Holder<Structure> randomStructure = structuresInTag
 					.get(random.nextInt(structuresInTag.size()));
-			BlockPos structurePos = level.findNearestMapStructure(destination,
-																					
-					entity.blockPosition(), 100, true);
+			BlockPos structurePos = level.findNearestMapStructure(destination, entity.blockPosition(), 50, true);
 			if (structurePos == null) {
 				return new MerchantOffer(new ItemCost(Items.EMERALD, 3), new ItemStack(Items.MAP), 5, villagerXp, 0.2f);
 			}
