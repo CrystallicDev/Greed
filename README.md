@@ -38,7 +38,7 @@ To answer those questions, and more, **Greed** changes the way the **Enchanting 
 |Loader|Version|
 |--------|--------|
 | Forge | 1.18.2, 1.19.2, 1.19.4, 1.20.1, 1.20.6 |
-| Neoforge | , 1.20.6, 1.21.1, 1.21.11, 26.1.2, 26.2 |
+| Neoforge | 1.20.6, 1.21.1, 1.21.11, 26.1.2, 26.2 |
 | Fabric | 1.18.2, 1.19.2, 1.19.4, 1.20.1, 1.20.6, 1.21.1, 1.21.11, 26.1.2, 26.2 |
 
 ## Usage 
