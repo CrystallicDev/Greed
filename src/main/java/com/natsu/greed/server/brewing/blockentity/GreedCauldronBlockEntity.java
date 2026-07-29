@@ -10,12 +10,12 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -108,26 +108,19 @@ public class GreedCauldronBlockEntity extends BlockEntity {
 		}
 	}
 
-	// 1.21 : les NBT du BlockEntity gagnent un HolderLookup.Provider ; MobEffectInstance.save() n'a plus
-	// de param (sérialise via son CODEC). L'override de lecture est loadAdditional, plus load.
+	// 26.1 : la persistance NBT passe par ValueOutput/ValueInput (codec-based). MobEffectInstance a un
+	// CODEC public → on stocke/lit la liste d'effets directement.
 	@Override
-	protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-		super.saveAdditional(tag, registries);
-		ListTag effectsTag = new ListTag();
-		effects.forEach(effect -> effectsTag.add(effect.save()));
-		tag.put("effects", effectsTag);
+	protected void saveAdditional(ValueOutput output) {
+		super.saveAdditional(output);
+		output.store("effects", MobEffectInstance.CODEC.listOf(), List.copyOf(effects));
 	}
 
 	@Override
-	protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-		super.loadAdditional(tag, registries);
+	protected void loadAdditional(ValueInput input) {
+		super.loadAdditional(input);
 		effects.clear();
-		tag.getList("effects", Tag.TAG_COMPOUND).forEach(t -> {
-			MobEffectInstance effect = MobEffectInstance.load((CompoundTag) t);
-			if (effect != null) {
-				effects.add(effect);
-			}
-		});
+		effects.addAll(input.read("effects", MobEffectInstance.CODEC.listOf()).orElse(List.of()));
 	}
 
 	@Override
@@ -140,12 +133,10 @@ public class GreedCauldronBlockEntity extends BlockEntity {
 		return saveWithFullMetadata(registries);
 	}
 
+	// 26.1 : onDataPacket reçoit directement un ValueInput (le framework a déjà décodé le packet).
 	@Override
-	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider registries) {
-		CompoundTag tag = pkt.getTag();
-		if (tag != null) {
-			loadAdditional(tag, registries);
-		}
+	public void onDataPacket(Connection net, ValueInput input) {
+		loadAdditional(input);
 		// invalide le rendu pour rafraîchir la teinte dès le changement d'effets
 		if (level != null && level.isClientSide()) {
 			level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);

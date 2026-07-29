@@ -6,7 +6,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.enchantment.Enchantment;
 
 /**
@@ -30,7 +30,7 @@ public class GreedEnchants {
 	public static final ResourceKey<Enchantment> STRETCHED = key("stretched");
 
 	private static ResourceKey<Enchantment> key(String name) {
-		return ResourceKey.create(Registries.ENCHANTMENT, ResourceLocation.fromNamespaceAndPath(Greed.MODID, name));
+		return ResourceKey.create(Registries.ENCHANTMENT, Identifier.fromNamespaceAndPath(Greed.MODID, name));
 	}
 
 	/** Résout le Holder de l'enchant, ou null si le datapack ne le fournit pas encore (Bloc B). */

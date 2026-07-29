@@ -74,7 +74,8 @@ public class ForgeCauldronListener {
 
 	private static void consumeEvent(PlayerInteractEvent.RightClickBlock e, Level level) {
 		e.setCanceled(true);
-		e.setCancellationResult(InteractionResult.sidedSuccess(level.isClientSide()));
+		// 26.1 : InteractionResult unifié, sidedSuccess(boolean) supprimé → SUCCESS marche des deux côtés.
+		e.setCancellationResult(InteractionResult.SUCCESS);
 	}
 
 	// 1.21 : la potion d'un item se lit dans le composant POTION_CONTENTS (base potion Holder).

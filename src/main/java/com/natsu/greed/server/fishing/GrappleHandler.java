@@ -11,7 +11,7 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 public class GrappleHandler {
 
 	public static void handleGrapple(FishingHook hook, Player player) {
-	    if (player.level().isClientSide) return;
+	    if (player.level().isClientSide()) return;
 
 	    double dx = hook.getX() - player.getX();
 	    double dy = hook.getY() - player.getY();
@@ -33,7 +33,7 @@ public class GrappleHandler {
 	    );
 
 	    player.setOnGround(false);
-	    player.hasImpulse = true;
+	    player.needsSync = true;
 	    player.hurtMarked = true;
 
 	    hook.discard();

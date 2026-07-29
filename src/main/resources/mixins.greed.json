@@ -4,10 +4,7 @@
     "package": "com.natsu.greed.mixins",
     "compatibilityLevel": "JAVA_21",
     "mixins": [
-        "FishHookMixin",
-        "EnchantHelperMixin",
-        "EnchantmentMenuMixin",
-        "EnchantmentMenuAccessor"
+        "FishHookMixin"
     ],
     "client": [],
     "server": [],

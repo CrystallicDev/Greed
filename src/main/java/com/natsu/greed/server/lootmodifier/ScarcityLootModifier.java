@@ -25,13 +25,15 @@ public class ScarcityLootModifier extends LootModifier {
 	public static final Supplier<MapCodec<ScarcityLootModifier>> CODEC = Suppliers.memoize(
 			() -> RecordCodecBuilder.mapCodec(inst -> LootModifier.codecStart(inst).apply(inst, ScarcityLootModifier::new)));
 
-	protected ScarcityLootModifier(LootItemCondition[] conditions) {
-		super(conditions);
+	// 26.1 : LootModifier gagne un champ int priority (ctor + codec).
+	protected ScarcityLootModifier(LootItemCondition[] conditions, int priority) {
+		super(conditions, priority);
 	}
 
 	@Override
 	protected ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
-		Entity entity = context.getParamOrNull(LootContextParams.ATTACKING_ENTITY);
+		// 26.1 : getParamOrNull → getOptionalParameter.
+		Entity entity = context.getOptionalParameter(LootContextParams.ATTACKING_ENTITY);
 		if (!(entity instanceof Player player)) return generatedLoot;
 
 		Holder<Enchantment> curse = GreedEnchants.get(context.getLevel().registryAccess(), GreedEnchants.CURSE_OF_SCARCITY);

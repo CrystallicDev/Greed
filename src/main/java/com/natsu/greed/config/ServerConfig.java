@@ -12,8 +12,7 @@ import com.natsu.greed.server.enchants.EnchantmentTableState;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ArmorMaterials;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -102,7 +101,7 @@ public class ServerConfig {
 			    		"greed:curse_of_voiding"),
 			    obj -> {
 			    	if (!(obj instanceof String s)) return false;
-			        ResourceLocation rl = ResourceLocation.tryParse(s);
+			        Identifier rl = Identifier.tryParse(s);
 			        if (rl == null) { LOGGER.warn("Cannot find curse: {}", s); }
 			        return rl != null;
 			    });
@@ -127,7 +126,7 @@ public class ServerConfig {
 			    		"minecraft:frost_walker"),
 			    obj -> {
 			    	if (!(obj instanceof String s)) return false;
-			        ResourceLocation rl = ResourceLocation.tryParse(s);
+			        Identifier rl = Identifier.tryParse(s);
 			        if (rl == null) { LOGGER.warn("Cannot find enchant: {}", s); }
 			        return rl != null;
 			    });
@@ -151,7 +150,7 @@ public class ServerConfig {
 			    		"greed:curse_of_voiding"),
 			    obj -> {
 			    	if (!(obj instanceof String s)) return false;
-			        ResourceLocation rl = ResourceLocation.tryParse(s);
+			        Identifier rl = Identifier.tryParse(s);
 			        if (rl == null) { LOGGER.warn("Cannot find curse: {}", s); }
 			        return rl != null;
 			    });
@@ -174,7 +173,7 @@ public class ServerConfig {
 					    		"minecraft:frost_walker"),
 			    obj -> {
 			    	if (!(obj instanceof String s)) return false;
-			        ResourceLocation rl = ResourceLocation.tryParse(s);
+			        Identifier rl = Identifier.tryParse(s);
 			        if (rl == null) { LOGGER.warn("Cannot find enchant: {}", s); }
 			        return rl != null;
 			    });
@@ -191,7 +190,7 @@ public class ServerConfig {
 			    new ArrayList<>(),
 			    obj -> {
 			    	if (!(obj instanceof String s)) return false;
-			        ResourceLocation rl = ResourceLocation.tryParse(s);
+			        Identifier rl = Identifier.tryParse(s);
 			        if (rl == null) { LOGGER.warn("Cannot find curse: {}", s); }
 			        return rl != null;
 			    });
@@ -207,7 +206,7 @@ public class ServerConfig {
 			    List.of("minecraft:silk_touch"),
 			    obj -> {
 			    	if (!(obj instanceof String s)) return false;
-			        ResourceLocation rl = ResourceLocation.tryParse(s);
+			        Identifier rl = Identifier.tryParse(s);
 			        if (rl == null) { LOGGER.warn("Cannot find enchant: {}", s); }
 			        return rl != null;
 			    });
@@ -327,7 +326,7 @@ public class ServerConfig {
 	// On renvoie les clés ; la résolution en Holder + le filtre canEnchant se font côté handler (Bloc B).
 	private static List<ResourceKey<Enchantment>> toKeys(List<? extends String> ids) {
 		return ids.stream()
-				.map(ResourceLocation::tryParse).filter(Objects::nonNull)
+				.map(Identifier::tryParse).filter(Objects::nonNull)
 				.map(rl -> ResourceKey.create(Registries.ENCHANTMENT, rl))
 				.toList();
 	}

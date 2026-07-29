@@ -9,6 +9,7 @@ import com.natsu.greed.common.registry.GreedEnchants;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.core.Holder;
+import net.minecraft.world.item.ItemInstance;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -23,13 +24,15 @@ public class VoidingLootModifier extends LootModifier {
 	public static final Supplier<MapCodec<VoidingLootModifier>> CODEC = Suppliers.memoize(
 			() -> RecordCodecBuilder.mapCodec(inst -> LootModifier.codecStart(inst).apply(inst, VoidingLootModifier::new)));
 
-	protected VoidingLootModifier(LootItemCondition[] conditions) {
-		super(conditions);
+	// 26.1 : LootModifier gagne un champ int priority (ctor + codec).
+	protected VoidingLootModifier(LootItemCondition[] conditions, int priority) {
+		super(conditions, priority);
 	}
 
 	@Override
 	protected ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
-		ItemStack tool = context.getParamOrNull(LootContextParams.TOOL);
+		// 26.1 : getParamOrNull → getOptionalParameter ; le param TOOL est un ItemInstance.
+		ItemInstance tool = context.getOptionalParameter(LootContextParams.TOOL);
 		if (tool == null) return generatedLoot;
 
 		Holder<Enchantment> curse = GreedEnchants.get(context.getLevel().registryAccess(), GreedEnchants.CURSE_OF_VOIDING);

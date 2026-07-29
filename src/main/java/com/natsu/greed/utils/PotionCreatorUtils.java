@@ -14,13 +14,15 @@ public class PotionCreatorUtils {
 	// 1.21 : plus de NBT CustomPotionColor/CustomPotionEffects, tout passe par le composant POTION_CONTENTS.
 	public static ItemStack makeIntoPotion(Item item, List<MobEffectInstance> effects, int color) {
 		ItemStack stack = new ItemStack(item);
-		PotionContents contents = new PotionContents(Optional.empty(), Optional.of(color), List.copyOf(effects));
+		// 26.1 : PotionContents gagne un 4e composant customName (Optional<String>).
+		PotionContents contents = new PotionContents(Optional.empty(), Optional.of(color), List.copyOf(effects), Optional.empty());
 		stack.set(DataComponents.POTION_CONTENTS, contents);
 		return stack;
 	}
 
 	public static ItemStack makeIntoPotion(Item item, List<MobEffectInstance> effects) {
-		return makeIntoPotion(item, effects, PotionContents.getColor(effects));
+		// 26.1 : getColor() est sans arg ; la couleur d'une liste d'effets passe par getColorOptional.
+		return makeIntoPotion(item, effects, PotionContents.getColorOptional(effects).orElse(-13083194));
 	}
 
 }

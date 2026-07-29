@@ -11,7 +11,6 @@ import com.natsu.greed.server.enchants.EnchantmentTableState;
 
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.server.TickTask;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -44,12 +43,18 @@ public class EnchantListener {
 		return holder == null ? 0 : EnchantmentHelper.getItemEnchantmentLevel(holder, stack);
 	}
 
+	// 26.1 : LivingEntity.getArmorSlots() supprimé → on énumère les 4 emplacements d'armure.
+	private static List<ItemStack> armorItems(LivingEntity entity) {
+		return List.of(entity.getItemBySlot(EquipmentSlot.HEAD), entity.getItemBySlot(EquipmentSlot.CHEST),
+				entity.getItemBySlot(EquipmentSlot.LEGS), entity.getItemBySlot(EquipmentSlot.FEET));
+	}
+
 	@SubscribeEvent
 	public static void onPickupXP(PlayerXpEvent.PickupXp event) {
 		Player player = event.getEntity();
-		for (ItemStack armor : player.getArmorSlots()) {
+		for (ItemStack armor : armorItems(player)) {
 			if (levelOf(player, GreedEnchants.CURSE_OF_ABSORPTION, armor) > 0) {
-				event.getOrb().value *= 0.75;
+				event.getOrb().setValue((int) Math.round(event.getOrb().getValue() * 0.75));
 				return;
 			}
 		}
@@ -61,7 +66,7 @@ public class EnchantListener {
 		if (instancesToSkip.remove(event.getEffectInstance())) return;
 
 		boolean hasCurse = false;
-		for (ItemStack armor : player.getArmorSlots()) {
+		for (ItemStack armor : armorItems(player)) {
 			if (levelOf(player, GreedEnchants.CURSE_OF_THE_SPONGE, armor) > 0) {
 				hasCurse = true;
 			}
@@ -71,13 +76,14 @@ public class EnchantListener {
 		MobEffectInstance original = event.getEffectInstance();
 		if (original.getEffect().value().isBeneficial()) {
 			int newDura = Math.max(1, (int) Math.round(original.getDuration() * (new Random().nextFloat(0.6f, 0.8f))));
-			player.level().getServer().tell(new TickTask(0, () -> {
+			// 26.1 : MinecraftServer.tell(TickTask) supprimé → execute(Runnable) (même report en fin de tick).
+			player.level().getServer().execute(() -> {
 				player.removeEffect(original.getEffect());
 				MobEffectInstance instance = new MobEffectInstance(original.getEffect(), newDura, original.getAmplifier(),
 						original.isAmbient(), original.isVisible(), original.showIcon());
 				instancesToSkip.add(instance);
 				player.addEffect(instance);
-			}));
+			});
 		}
 	}
 
@@ -121,7 +127,7 @@ public class EnchantListener {
 	public static void onAnvilUpdate(AnvilUpdateEvent event) {
 		if (hasCurse(event.getPlayer(), event.getLeft()) || hasCurse(event.getPlayer(), event.getRight())) {
 			event.setOutput(ItemStack.EMPTY);
-			event.setCost(40);
+			event.setXpCost(40);
 			event.setCanceled(true);
 		}
 	}
