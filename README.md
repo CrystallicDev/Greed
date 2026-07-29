@@ -37,9 +37,9 @@ To answer those questions, and more, **Greed** changes the way the **Enchanting 
 ## Availability 
 |Loader|Version|
 |--------|--------|
-| Forge | 1.18.2, 1.19.2, 1.19.4, 1.20.1 |
-| Neoforge | 1.21.11, 26.1.2, 26.2 |
-| Fabric | 1.18.2, 1.19.2, 1.19.4, 1.20.1, 1.21.11, 26.1.2, 26.2 |
+| Forge | 1.18.2, 1.19.2, 1.19.4, 1.20.1, 1.20.6 |
+| Neoforge | , 1.20.6, 1.21.1, 1.21.11, 26.1.2, 26.2 |
+| Fabric | 1.18.2, 1.19.2, 1.19.4, 1.20.1, 1.20.6, 1.21.1, 1.21.11, 26.1.2, 26.2 |
 
 ## Usage 
 Feel free to integrate Elixirs in any of your modpacks, or create new versions of this mod. However, any redistributed version, modified or not, must stay fully free, and keep a link to the original.
