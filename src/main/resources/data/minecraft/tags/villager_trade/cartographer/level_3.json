@@ -1,0 +1,8 @@
+{
+  "replace": true,
+  "values": [
+    "greed:cartographer/3/emerald_compass_monument_map",
+    "greed:cartographer/3/emerald_compass_mansion_map",
+    "greed:cartographer/3/emerald_creeper_banner_pattern"
+  ]
+}

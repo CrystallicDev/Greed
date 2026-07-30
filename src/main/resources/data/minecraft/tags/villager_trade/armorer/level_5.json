@@ -1,0 +1,9 @@
+{
+  "replace": true,
+  "values": [
+    "greed:armorer/5/emerald_enchanted_diamond_leggings",
+    "greed:armorer/5/emerald_enchanted_diamond_boots",
+    "greed:armorer/5/emerald_enchanted_diamond_helmet",
+    "greed:armorer/5/emerald_enchanted_diamond_chestplate"
+  ]
+}

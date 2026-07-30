@@ -1,0 +1,8 @@
+{
+  "replace": true,
+  "values": [
+    "greed:cartographer/1/emerald_map",
+    "greed:cartographer/1/paper_emerald",
+    "greed:cartographer/1/emerald_compass_mineshaft_map"
+  ]
+}

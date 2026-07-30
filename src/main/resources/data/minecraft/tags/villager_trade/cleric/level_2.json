@@ -1,0 +1,8 @@
+{
+  "replace": true,
+  "values": [
+    "greed:cleric/2/emerald_glass_bottle",
+    "greed:cleric/2/glowstone_emerald",
+    "greed:cleric/2/emerald_healing_potion"
+  ]
+}

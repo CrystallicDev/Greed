@@ -1,0 +1,12 @@
+{
+  "wants": {
+    "id": "minecraft:emerald",
+    "count": 2.0
+  },
+  "gives": {
+    "id": "minecraft:experience_bottle"
+  },
+  "max_uses": 30.0,
+  "xp": 5.0,
+  "reputation_discount": 0.05
+}

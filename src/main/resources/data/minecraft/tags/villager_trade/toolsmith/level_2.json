@@ -1,0 +1,11 @@
+{
+  "replace": true,
+  "values": [
+    "greed:toolsmith/2/coal_emerald",
+    "greed:toolsmith/2/emerald_eff_iron_pickaxe",
+    "greed:toolsmith/2/emerald_eff_iron_hoe",
+    "greed:toolsmith/2/emerald_eff_iron_shovel",
+    "greed:toolsmith/2/emerald_eff_iron_axe",
+    "greed:toolsmith/2/iron_emerald"
+  ]
+}

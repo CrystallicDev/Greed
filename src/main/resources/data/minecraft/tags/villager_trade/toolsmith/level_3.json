@@ -1,0 +1,9 @@
+{
+  "replace": true,
+  "values": [
+    "greed:toolsmith/3/emerald_enchanted_iron_pickaxe",
+    "greed:toolsmith/3/emerald_enchanted_iron_hoe",
+    "greed:toolsmith/3/emerald_enchanted_iron_shovel",
+    "greed:toolsmith/3/emerald_enchanted_iron_axe"
+  ]
+}

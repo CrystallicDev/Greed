@@ -1,0 +1,9 @@
+{
+  "replace": true,
+  "values": [
+    "greed:toolsmith/5/emerald_enchanted_diamond_pickaxe",
+    "greed:toolsmith/5/emerald_enchanted_diamond_hoe",
+    "greed:toolsmith/5/emerald_enchanted_diamond_shovel",
+    "greed:toolsmith/5/emerald_enchanted_diamond_axe"
+  ]
+}

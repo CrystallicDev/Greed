@@ -1,0 +1,22 @@
+{
+  "replace": true,
+  "values": [
+    "greed:cartographer/2/emerald_white_banner",
+    "greed:cartographer/2/emerald_blue_banner",
+    "greed:cartographer/2/emerald_light_blue_banner",
+    "greed:cartographer/2/emerald_red_banner",
+    "greed:cartographer/2/emerald_pink_banner",
+    "greed:cartographer/2/emerald_green_banner",
+    "greed:cartographer/2/emerald_lime_banner",
+    "greed:cartographer/2/emerald_gray_banner",
+    "greed:cartographer/2/emerald_black_banner",
+    "greed:cartographer/2/emerald_purple_banner",
+    "greed:cartographer/2/emerald_magenta_banner",
+    "greed:cartographer/2/emerald_cyan_banner",
+    "greed:cartographer/2/emerald_brown_banner",
+    "greed:cartographer/2/emerald_yellow_banner",
+    "greed:cartographer/2/emerald_orange_banner",
+    "greed:cartographer/2/emerald_light_gray_banner",
+    "greed:cartographer/2/emerald_globe_banner_pattern"
+  ]
+}

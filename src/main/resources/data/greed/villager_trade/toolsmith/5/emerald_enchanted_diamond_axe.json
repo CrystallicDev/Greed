@@ -1,0 +1,19 @@
+{
+  "wants": {
+    "id": "minecraft:emerald",
+    "count": 45.0
+  },
+  "gives": {
+    "id": "minecraft:diamond_axe"
+  },
+  "max_uses": 3.0,
+  "xp": 30.0,
+  "reputation_discount": 0.2,
+  "given_item_modifiers": [
+    {
+      "function": "minecraft:enchant_with_levels",
+      "levels": 12,
+      "options": "#minecraft:in_enchanting_table"
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "replace": true,
+  "values": [
+    "greed:cleric/1/rotten_flesh_emerald",
+    "greed:cleric/1/spider_eye_emerald",
+    "greed:cleric/1/bone_emerald"
+  ]
+}

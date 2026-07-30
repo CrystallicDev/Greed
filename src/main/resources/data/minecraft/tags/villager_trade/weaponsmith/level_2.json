@@ -1,0 +1,9 @@
+{
+  "replace": true,
+  "values": [
+    "greed:weaponsmith/2/emerald_sharp_iron_sword",
+    "greed:weaponsmith/2/emerald_unbreaking_shield",
+    "greed:weaponsmith/2/emerald_sharp_iron_axe",
+    "greed:weaponsmith/2/iron_emerald"
+  ]
+}

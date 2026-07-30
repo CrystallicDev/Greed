@@ -1,0 +1,20 @@
+{
+  "wants": {
+    "id": "minecraft:emerald",
+    "count": 18.0
+  },
+  "gives": {
+    "id": "minecraft:splash_potion",
+    "components": {
+      "minecraft:potion_contents": {
+        "potion": "minecraft:weakness"
+      }
+    }
+  },
+  "max_uses": 10.0,
+  "xp": 15.0,
+  "reputation_discount": 0.2,
+  "additional_wants": {
+    "id": "minecraft:glass_bottle"
+  }
+}

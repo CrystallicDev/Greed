@@ -1,0 +1,19 @@
+{
+  "wants": {
+    "id": "minecraft:emerald",
+    "count": 26.0
+  },
+  "gives": {
+    "id": "minecraft:iron_shovel"
+  },
+  "max_uses": 4.0,
+  "xp": 8.0,
+  "reputation_discount": 0.2,
+  "given_item_modifiers": [
+    {
+      "function": "minecraft:enchant_with_levels",
+      "levels": 12,
+      "options": "#minecraft:in_enchanting_table"
+    }
+  ]
+}

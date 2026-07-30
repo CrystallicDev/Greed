@@ -1,0 +1,42 @@
+{
+  "wants": {
+    "id": "minecraft:emerald",
+    "count": 13.0
+  },
+  "additional_wants": {
+    "id": "minecraft:compass"
+  },
+  "gives": {
+    "id": "minecraft:map"
+  },
+  "max_uses": 12.0,
+  "xp": 5.0,
+  "reputation_discount": 0.2,
+  "given_item_modifiers": [
+    {
+      "function": "minecraft:exploration_map",
+      "destination": "minecraft:mineshaft",
+      "decoration": "minecraft:target_x",
+      "search_radius": 100
+    },
+    {
+      "function": "minecraft:set_name",
+      "name": {
+        "translate": "map.greed.mineshaft"
+      },
+      "target": "item_name"
+    },
+    {
+      "function": "minecraft:filtered",
+      "item_filter": {
+        "items": "minecraft:filled_map",
+        "predicates": {
+          "minecraft:map_id": {}
+        }
+      },
+      "on_fail": {
+        "function": "minecraft:discard"
+      }
+    }
+  ]
+}

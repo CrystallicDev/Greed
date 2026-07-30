@@ -1,0 +1,9 @@
+{
+  "replace": true,
+  "values": [
+    "greed:armorer/4/emerald_multi_iron_leggings",
+    "greed:armorer/4/emerald_multi_iron_boots",
+    "greed:armorer/4/emerald_multi_iron_helmet",
+    "greed:armorer/4/emerald_multi_iron_chestplate"
+  ]
+}

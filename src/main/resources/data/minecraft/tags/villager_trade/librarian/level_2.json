@@ -1,0 +1,8 @@
+{
+  "replace": true,
+  "values": [
+    "greed:librarian/2/emerald_and_book_common",
+    "greed:librarian/2/emerald_enchanting_table",
+    "greed:librarian/2/emerald_lantern"
+  ]
+}

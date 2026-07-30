@@ -1,0 +1,18 @@
+{
+  "wants": {
+    "id": "minecraft:emerald",
+    "count": 18.0
+  },
+  "gives": {
+    "id": "minecraft:iron_boots"
+  },
+  "max_uses": 3.0,
+  "xp": 7.0,
+  "reputation_discount": 0.2,
+  "given_item_modifiers": [
+    {
+      "function": "minecraft:enchant_with_levels",
+      "levels": 30
+    }
+  ]
+}

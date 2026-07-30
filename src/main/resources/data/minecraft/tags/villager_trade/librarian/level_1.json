@@ -1,0 +1,8 @@
+{
+  "replace": true,
+  "values": [
+    "greed:librarian/1/emerald_name_tag",
+    "greed:librarian/1/paper_emerald",
+    "greed:librarian/1/emerald_bookshelf"
+  ]
+}
