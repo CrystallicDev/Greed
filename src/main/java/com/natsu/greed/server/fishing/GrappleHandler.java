@@ -20,7 +20,10 @@ public class GrappleHandler {
 	    double distance = Math.sqrt(dx*dx + dy*dy + dz*dz);
 	    if (distance < 0.001) return;
 
-	    if (!hook.horizontalCollision && !hook.verticalCollision) return;
+	    // Le hook fige sa vélocité en se posant (gravité coupée dès onGround) → verticalCollision
+	    // redevient false. On teste onGround() (stable) au lieu de verticalCollision, sinon le grapple
+	    // n'accroche que tant que le bobber bouge encore (impression de distance minimale).
+	    if (!hook.horizontalCollision && !hook.onGround()) return;
 
 	    Holder<Enchantment> grappling = GreedEnchants.get(player.registryAccess(), GreedEnchants.GRAPPLING);
 	    int level = grappling == null ? 0 : EnchantmentHelper.getEnchantmentLevel(grappling, player);
