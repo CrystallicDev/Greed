@@ -1,7 +1,6 @@
 {
   "replace": true,
   "values": [
-    "greed:librarian/4/emerald_and_book_expert",
     "greed:librarian/4/writable_book_emerald",
     "greed:librarian/4/emerald_clock"
   ]
