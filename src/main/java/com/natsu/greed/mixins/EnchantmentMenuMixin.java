@@ -68,8 +68,8 @@ public abstract class EnchantmentMenuMixin {
 
 		// comportement vanilla : tirage des enchants candidats (tag in_enchanting_table)
 		rng.setSeed((long) (accessor.getEnchantmentSeed().get() + slot));
-		Optional<HolderSet.Named<Enchantment>> pool = registryAccess.registryOrThrow(Registries.ENCHANTMENT)
-				.getTag(EnchantmentTags.IN_ENCHANTING_TABLE);
+		Optional<HolderSet.Named<Enchantment>> pool = registryAccess.lookupOrThrow(Registries.ENCHANTMENT)
+				.get(EnchantmentTags.IN_ENCHANTING_TABLE);
 		if (pool.isEmpty()) return;
 		List<EnchantmentInstance> vanillaList = EnchantmentHelper.selectEnchantment(rng, stack, cost, pool.get().stream());
 		if (stack.is(Items.BOOK) && vanillaList.size() > 1) {

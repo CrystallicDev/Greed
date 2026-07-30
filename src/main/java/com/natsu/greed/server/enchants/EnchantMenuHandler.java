@@ -35,11 +35,11 @@ public class EnchantMenuHandler {
 			if (rollCurse) {
 				modified.add(new EnchantmentInstance(curses.get(rng.nextInt(curses.size())), 1));
 			} else {
-				modified.add(new EnchantmentInstance(allowedEnchants.get(0).enchantment, 1));
+				modified.add(new EnchantmentInstance(allowedEnchants.get(0).enchantment(), 1));
 			}
 		} else if (state == EnchantmentTableState.LAPIS_STATE) {
 			for (EnchantmentInstance ench : allowedEnchants) {
-				modified.add(new EnchantmentInstance(ench.enchantment, 1));
+				modified.add(new EnchantmentInstance(ench.enchantment(), 1));
 			}
 			if (rollCurse) {
 				modified.add(new EnchantmentInstance(curses.get(rng.nextInt(curses.size())), 1));
@@ -55,9 +55,9 @@ public class EnchantMenuHandler {
 
 	private static List<Holder<Enchantment>> resolveCurses(EnchantmentTableState state, ItemStack item, RegistryAccess access) {
 		List<Holder<Enchantment>> curses = new ArrayList<>();
-		var registry = access.registryOrThrow(Registries.ENCHANTMENT);
+		var registry = access.lookupOrThrow(Registries.ENCHANTMENT);
 		for (ResourceKey<Enchantment> key : ServerConfig.getCurseList(state)) {
-			registry.getHolder(key).ifPresent(holder -> {
+			registry.get(key).ifPresent(holder -> {
 				if (item.supportsEnchantment(holder)) curses.add(holder);
 			});
 		}
@@ -69,7 +69,7 @@ public class EnchantMenuHandler {
 		boolean isWhiteList = ServerConfig.isWhiteList(state);
 		List<ResourceKey<Enchantment>> stageEnchants = ServerConfig.getEnchantmentList(state);
 		for (EnchantmentInstance instance : original) {
-			boolean listed = instance.enchantment.unwrapKey().map(stageEnchants::contains).orElse(false);
+			boolean listed = instance.enchantment().unwrapKey().map(stageEnchants::contains).orElse(false);
 			// liste blanche : on garde les enchants listés ; liste noire : on garde les non-listés.
 			if (listed == isWhiteList) {
 				allowed.add(instance);
