@@ -15,7 +15,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.LayeredCauldronBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -31,11 +30,12 @@ public class GreedCauldronBlock extends LayeredCauldronBlock implements EntityBl
 			new CauldronInteraction.Dispatcher();
 
 	// codec() du parent est invariant en MapCodec<LayeredCauldronBlock> : on type le CODEC dessus.
-	public static final MapCodec<LayeredCauldronBlock> CODEC = simpleCodec(properties -> new GreedCauldronBlock());
+	public static final MapCodec<LayeredCauldronBlock> CODEC = simpleCodec(GreedCauldronBlock::new);
 
-	// 1.21 : ctor (précipitation, interactions, properties) ; la précipitation est un enum (NONE = jamais rempli par la pluie).
-	public GreedCauldronBlock() {
-		super(Biome.Precipitation.NONE, NO_INTERACTIONS, BlockBehaviour.Properties.ofFullCopy(Blocks.WATER_CAULDRON));
+	// 1.21 : ctor (précipitation, interactions, properties). 26.1 : les Properties doivent porter l'ID
+	// de registre (injecté par DeferredRegister.Blocks.registerBlock) → le bloc les reçoit en paramètre.
+	public GreedCauldronBlock(BlockBehaviour.Properties properties) {
+		super(Biome.Precipitation.NONE, NO_INTERACTIONS, properties);
 	}
 
 	@Override
