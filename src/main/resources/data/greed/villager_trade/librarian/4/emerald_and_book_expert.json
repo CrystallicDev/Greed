@@ -14,9 +14,9 @@
   "reputation_discount": 0.2,
   "given_item_modifiers": [
     {
-      "function": "minecraft:enchant_randomly",
-      "options": "#greed:trades/tradeable",
-      "only_compatible": false
+      "function": "minecraft:enchant_with_levels",
+      "levels": 20,
+      "options": "#greed:trades/tradeable"
     },
     {
       "function": "minecraft:filtered",
