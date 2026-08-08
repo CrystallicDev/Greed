@@ -8,7 +8,6 @@ import com.natsu.greed.common.registry.GreedEnchants;
 import com.natsu.greed.common.registry.GreedLootModifiers;
 import com.natsu.greed.config.ServerConfig;
 import com.natsu.greed.server.enchants.GreedEnchantModifiers;
-import com.natsu.greed.server.food.GreedFoodModifiers;
 import com.natsu.greed.server.villager.VillagerTradeHandler;
 import com.natsu.greed.server.villager.events.CartographerTradesInitEvent;
 
@@ -47,7 +46,6 @@ public class Greed {
     private static void applyConfigModifiers(ModConfigEvent event) {
     	if (event.getConfig().getSpec() == ServerConfig.SPEC) {
     		GreedEnchantModifiers.init();
-    		GreedFoodModifiers.init();
     	}
     }
 

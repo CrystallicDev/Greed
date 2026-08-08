@@ -1,30 +1,13 @@
 package com.natsu.greed.common.enchants;
-
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.world.item.enchantment.Enchantment.Rarity;
-
 public class CurseOfScarcity extends Enchantment {
-
 	public CurseOfScarcity() {
-		super(Rarity.RARE, EnchantmentCategory.WEAPON, new EquipmentSlot[]{EquipmentSlot.MAINHAND});
+		super(Enchantment.definition(ItemTags.SWORD_ENCHANTABLE, 2, 3,
+				Enchantment.dynamicCost(15, 9), Enchantment.dynamicCost(65, 9), 4, EquipmentSlot.MAINHAND));
 	}
-	
-	@Override
-	public int getMaxLevel() {
-		return 3;
-	}
-	
-	@Override
-	public boolean isCurse() {
-		return true;
-	}
-	
-	@Override
-	protected boolean checkCompatibility(Enchantment enchant) {
-		return this != enchant && enchant != Enchantments.MOB_LOOTING;
-	}
-
+	@Override public boolean isCurse() { return true; }
+	@Override protected boolean checkCompatibility(Enchantment e) { return this != e && e != Enchantments.LOOTING; }
 }

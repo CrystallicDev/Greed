@@ -28,7 +28,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(value = FishingHook.class, priority = -9999)		// We want to be called last, especially if Pride is loaded
+@Mixin(value = FishingHook.class, priority = -9999, remap = false)		// We want to be called last, especially if Pride is loaded
 public class FishHookMixin {
 
 

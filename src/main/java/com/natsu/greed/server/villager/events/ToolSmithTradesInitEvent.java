@@ -3,18 +3,17 @@ package com.natsu.greed.server.villager.events;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
+import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 import com.natsu.greed.Greed;
 import com.natsu.greed.config.ServerConfig;
 import com.natsu.greed.server.villager.VillagerTradeHandler;
-import com.natsu.greed.server.villager.events.ArmorerTradesInitEvent.EnchantedItemForEmeralds;
-import com.natsu.greed.server.villager.events.ArmorerTradesInitEvent.MultiEnchantedItemForEmeralds;
 import com.natsu.greed.server.villager.events.GreedFillingTradesEvent.ProfessionLevel;
 
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerTrades;
@@ -24,11 +23,11 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.MerchantOffer;
-import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.event.village.VillagerTradesEvent;
 
 @Mod.EventBusSubscriber(modid = Greed.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ToolSmithTradesInitEvent {
@@ -50,10 +49,10 @@ public class ToolSmithTradesInitEvent {
 		event.addTradeTo(ProfessionLevel.NOVICE, new VillagerTradeHandler.ItemsForEmeralds(new ItemStack(Items.IRON_AXE), 4, 1, 12, 2, 0.2F));
 		event.addTradeTo(ProfessionLevel.APPRENTICE, new VillagerTradeHandler.EmeraldForItems(Items.COAL, 16, 32, 1));
 		
-		event.addTradeTo(ProfessionLevel.APPRENTICE, new SimpleEnchantedItemForEmeralds(Items.IRON_PICKAXE, 12, 4, 4, Enchantments.BLOCK_EFFICIENCY, 0.2F));
-		event.addTradeTo(ProfessionLevel.APPRENTICE, new SimpleEnchantedItemForEmeralds(Items.IRON_HOE, 12, 4, 3, Enchantments.BLOCK_EFFICIENCY, 0.2F));
-		event.addTradeTo(ProfessionLevel.APPRENTICE, new SimpleEnchantedItemForEmeralds(Items.IRON_SHOVEL, 12, 4, 3, Enchantments.BLOCK_EFFICIENCY, 0.2F));
-		event.addTradeTo(ProfessionLevel.APPRENTICE, new SimpleEnchantedItemForEmeralds(Items.IRON_AXE, 12, 4, 4, Enchantments.BLOCK_EFFICIENCY, 0.2F));
+		event.addTradeTo(ProfessionLevel.APPRENTICE, new SimpleEnchantedItemForEmeralds(Items.IRON_PICKAXE, 12, 4, 4, Enchantments.EFFICIENCY, 0.2F));
+		event.addTradeTo(ProfessionLevel.APPRENTICE, new SimpleEnchantedItemForEmeralds(Items.IRON_HOE, 12, 4, 3, Enchantments.EFFICIENCY, 0.2F));
+		event.addTradeTo(ProfessionLevel.APPRENTICE, new SimpleEnchantedItemForEmeralds(Items.IRON_SHOVEL, 12, 4, 3, Enchantments.EFFICIENCY, 0.2F));
+		event.addTradeTo(ProfessionLevel.APPRENTICE, new SimpleEnchantedItemForEmeralds(Items.IRON_AXE, 12, 4, 4, Enchantments.EFFICIENCY, 0.2F));
 		event.addTradeTo(ProfessionLevel.APPRENTICE, new VillagerTradeHandler.EmeraldForItems(Items.IRON_INGOT, 8, 32, 1));
 		
 		event.addTradeTo(ProfessionLevel.JOURNEYMAN, new EnchantedItemForEmeralds(Items.IRON_PICKAXE, 27, 4, 10, 0.2F));
@@ -80,28 +79,27 @@ public class ToolSmithTradesInitEvent {
 		private final int villagerXp;
 		private final float priceMultiplier;
 
-		public EnchantedItemForEmeralds(Item p_35693_, int p_35694_, int p_35695_, int p_35696_) {
-			this(p_35693_, p_35694_, p_35695_, p_35696_, 0.05F);
+		public EnchantedItemForEmeralds(Item item, int baseCost, int maxUses, int xp) {
+			this(item, baseCost, maxUses, xp, 0.05F);
 		}
 
-		public EnchantedItemForEmeralds(Item p_35698_, int p_35699_, int p_35700_, int p_35701_, float p_35702_) {
-			this.itemStack = new ItemStack(p_35698_);
-			this.baseEmeraldCost = p_35699_;
-			this.maxUses = p_35700_;
-			this.villagerXp = p_35701_;
-			this.priceMultiplier = p_35702_;
+		public EnchantedItemForEmeralds(Item item, int baseCost, int maxUses, int xp, float priceMult) {
+			this.itemStack = new ItemStack(item);
+			this.baseEmeraldCost = baseCost;
+			this.maxUses = maxUses;
+			this.villagerXp = xp;
+			this.priceMultiplier = priceMult;
 		}
 
-		public MerchantOffer getOffer(Entity p_35704_, net.minecraft.util.RandomSource p_35705_) {
-			int i = 5 + p_35705_.nextInt(15);
-			ItemStack itemstack = EnchantmentHelper.enchantItem(p_35705_, new ItemStack(this.itemStack.getItem()), i,
-					false);
+		public MerchantOffer getOffer(Entity trader, RandomSource random) {
+			int i = 5 + random.nextInt(15);
+			ItemStack itemstack = EnchantmentHelper.enchantItem(trader.level().enabledFeatures(), random,
+					new ItemStack(this.itemStack.getItem()), i, false);
 			int j = Math.min(this.baseEmeraldCost + i, 64);
-			ItemStack itemstack1 = new ItemStack(Items.EMERALD, j);
-			return new MerchantOffer(itemstack1, itemstack, this.maxUses, this.villagerXp, this.priceMultiplier);
+			return new MerchantOffer(new ItemCost(Items.EMERALD, j), itemstack, this.maxUses, this.villagerXp, this.priceMultiplier);
 		}
 	}
-	
+
 	public static class MultiEnchantedItemForEmeralds implements VillagerTrades.ItemListing {
 		private final ItemStack itemStack;
 		private final int maxUses;
@@ -119,33 +117,35 @@ public class ToolSmithTradesInitEvent {
 			this.priceMultiplier = priceMult;
 		}
 
-		public MerchantOffer getOffer(Entity p_35704_, net.minecraft.util.RandomSource p_35705_) {
+		public MerchantOffer getOffer(Entity trader, RandomSource rng) {
 			ItemStack endItem = itemStack.copy();
-			List<Enchantment> enchantList = StreamSupport.stream(ForgeRegistries.ENCHANTMENTS.spliterator(), false).filter(e -> e.canEnchant(endItem))
-					.collect(Collectors.toList());
-			Collections.shuffle(enchantList);		// Shuffling
-			net.minecraft.util.RandomSource random = net.minecraft.util.RandomSource.create();
+			List<Enchantment> enchantList = BuiltInRegistries.ENCHANTMENT.stream()
+					.filter(e -> e.canEnchant(endItem)).collect(Collectors.toList());
+			Collections.shuffle(enchantList);
+			RandomSource random = RandomSource.create();
 			int randomEnchantAmount = Mth.nextInt(random, this.minEnchantCount, this.maxEnchantCount);
 			int emeraldCost = 0;
 			List<Enchantment> applied = new ArrayList<>();
 			for (int i = 0; i < Math.min(randomEnchantAmount, enchantList.size()); i++) {
 				Enchantment enchantment = enchantList.get(i);
-				for (Enchantment appliedEnchant : applied) { if (!appliedEnchant.isCompatibleWith(enchantment)) { continue; } }
+				for (Enchantment appliedEnchant : applied) {
+					if (!appliedEnchant.isCompatibleWith(enchantment)) { continue; }
+				}
 				int enchantLevel = Mth.nextInt(random, enchantment.getMinLevel(), enchantment.getMaxLevel());
 				if (enchantment.isCurse()) {
 					emeraldCost += -2 + random.nextInt(1 + enchantLevel * 5) + enchantLevel;
-				} else { emeraldCost += 2 + random.nextInt(3 + enchantLevel * (enchantment.isTreasureOnly() ? 7 : 5)) + 3 * enchantLevel; }
+				} else {
+					emeraldCost += 2 + random.nextInt(3 + enchantLevel * (enchantment.isTreasureOnly() ? 7 : 5)) + 3 * enchantLevel;
+				}
 				emeraldCost = Math.max(emeraldCost, 1);
 				endItem.enchant(enchantment, enchantLevel);
 				applied.add(enchantment);
 			}
-			if (emeraldCost >= 64) { emeraldCost = 64; }
-			
-			ItemStack itemstack1 = new ItemStack(Items.EMERALD, emeraldCost);
-			return new MerchantOffer(itemstack1, endItem, this.maxUses, this.villagerXp, this.priceMultiplier);
+			if (emeraldCost >= 64) emeraldCost = 64;
+			return new MerchantOffer(new ItemCost(Items.EMERALD, emeraldCost), endItem, this.maxUses, this.villagerXp, this.priceMultiplier);
 		}
 	}
-	
+
 	public static class SimpleEnchantedItemForEmeralds implements VillagerTrades.ItemListing {
 		private final ItemStack itemStack;
 		private final int baseEmeraldCost;
@@ -154,9 +154,8 @@ public class ToolSmithTradesInitEvent {
 		private final Enchantment enchant;
 		private final float priceMultiplier;
 
-
-		public SimpleEnchantedItemForEmeralds(Item p_35698_, int baseEmeraldCost, int maxUses, int villagerXp, Enchantment enchant, float priceMultiplier) {
-			this.itemStack = new ItemStack(p_35698_);
+		public SimpleEnchantedItemForEmeralds(Item item, int baseEmeraldCost, int maxUses, int villagerXp, Enchantment enchant, float priceMultiplier) {
+			this.itemStack = new ItemStack(item);
 			this.baseEmeraldCost = baseEmeraldCost;
 			this.maxUses = maxUses;
 			this.enchant = enchant;
@@ -164,12 +163,11 @@ public class ToolSmithTradesInitEvent {
 			this.priceMultiplier = priceMultiplier;
 		}
 
-		public MerchantOffer getOffer(Entity p_35704_, net.minecraft.util.RandomSource p_35705_) {
+		public MerchantOffer getOffer(Entity trader, RandomSource random) {
 			ItemStack endItem = itemStack.copy();
-			endItem.enchant(enchant, 1);
+			endItem.enchant(this.enchant, 1);
 			int j = Math.min(this.baseEmeraldCost, 64);
-			ItemStack itemstack1 = new ItemStack(Items.EMERALD, j);
-			return new MerchantOffer(itemstack1, endItem, this.maxUses, this.villagerXp, this.priceMultiplier);
+			return new MerchantOffer(new ItemCost(Items.EMERALD, j), endItem, this.maxUses, this.villagerXp, this.priceMultiplier);
 		}
 	}
 }

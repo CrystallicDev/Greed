@@ -8,6 +8,7 @@ import com.natsu.greed.server.brewing.blockentity.GreedCauldronBlockEntity;
 import com.natsu.greed.utils.PotionCreatorUtils;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -17,7 +18,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potion;
-import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LayeredCauldronBlock;
@@ -41,8 +42,8 @@ public class ForgeCauldronListener {
 		BlockState state = level.getBlockState(e.getPos());
 
 		if (state.is(Blocks.CAULDRON) && e.getItemStack().getItem() == Items.POTION) {
-			Potion potion = PotionUtils.getPotion(e.getItemStack());
-			if (potion.getEffects().isEmpty()) {
+			Potion potion = extractStandardPotion(e.getItemStack());
+			if (potion == null || potion.getEffects().isEmpty()) {
 				return; // eau, awkward, etc. : comportement vanilla
 			}
 			consumeEvent(e, level);
@@ -51,8 +52,8 @@ public class ForgeCauldronListener {
 			}
 		} else if (state.getBlock() instanceof GreedCauldronBlock) {
 			if (e.getItemStack().getItem() == Items.POTION) {
-				Potion potion = PotionUtils.getPotion(e.getItemStack());
-				if (potion.getEffects().isEmpty()) {
+				Potion potion = extractStandardPotion(e.getItemStack());
+				if (potion == null || potion.getEffects().isEmpty()) {
 					return;
 				}
 				if (state.getValue(LayeredCauldronBlock.LEVEL) >= 3) {
@@ -74,6 +75,15 @@ public class ForgeCauldronListener {
 	private static void consumeEvent(PlayerInteractEvent.RightClickBlock e, Level level) {
 		e.setCanceled(true);
 		e.setCancellationResult(InteractionResult.sidedSuccess(level.isClientSide()));
+	}
+
+	// 1.20.6 : la potion de base d'un item se lit dans le composant POTION_CONTENTS
+	private static Potion extractStandardPotion(ItemStack stack) {
+		PotionContents contents = stack.get(DataComponents.POTION_CONTENTS);
+		if (contents == null || contents.potion().isEmpty()) {
+			return null;
+		}
+		return contents.potion().get().value();
 	}
 
 	private static void fillVanillaCauldron(PlayerInteractEvent.RightClickBlock e, Level level, BlockState oldState, Potion potion) {

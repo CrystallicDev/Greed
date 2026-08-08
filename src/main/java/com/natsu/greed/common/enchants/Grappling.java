@@ -1,27 +1,13 @@
 package com.natsu.greed.common.enchants;
-
 import com.natsu.greed.common.registry.GreedEnchants;
-
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.world.item.enchantment.Enchantment.Rarity;
-
 public class Grappling extends Enchantment {
-
 	public Grappling() {
-		super(Rarity.VERY_RARE, EnchantmentCategory.FISHING_ROD, new EquipmentSlot[]{EquipmentSlot.MAINHAND});
+		super(Enchantment.definition(ItemTags.FISHING_ENCHANTABLE, 1, 3,
+				Enchantment.dynamicCost(15, 9), Enchantment.dynamicCost(65, 9), 8, EquipmentSlot.MAINHAND));
 	}
-	
-	@Override
-	public int getMaxLevel() {
-		return 3;
-	}
-	
-	@Override
-	protected boolean checkCompatibility(Enchantment enchant) {
-		return this != enchant && enchant != GreedEnchants.REELING.get();
-	}
-	
+	@Override protected boolean checkCompatibility(Enchantment e) { return this != e && e != GreedEnchants.REELING.get(); }
 }

@@ -1,30 +1,17 @@
 package com.natsu.greed.server.enchants;
 
-import java.util.Map;
-
-import com.natsu.greed.config.ServerConfig;
-import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
-
-import net.minecraft.world.item.enchantment.Enchantment.Rarity;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.Enchantments;
-
+/**
+ * Rareté d'enchant personnalisée (useCustomEnchantmentRarity).
+ *
+ * <p>1.21 : la "rareté" 1.18 est devenue le champ {@code weight} de l'{@code EnchantmentDefinition},
+ * un record immuable — on ne peut plus la muter par réflexion au démarrage. Un pilotage runtime par
+ * config n'est plus possible ; il faudrait passer par un datapack qui réécrit les JSON d'enchants.
+ * Feature reportée : {@link #init()} est un no-op pour l'instant.
+ */
 public class GreedEnchantModifiers {
 
 	public static void init() {
-		if (!ServerConfig.USE_CUSTOM_RARITY.get()) { return; }
-		Map<String, Integer> rarityMap = ServerConfig.getMap(ServerConfig.ENCHANTMENTS_RARITY.get());
-
-	    for (Map.Entry<String, Integer> entry : rarityMap.entrySet()) {
-	        ResourceLocation id = new ResourceLocation(entry.getKey());
-	        Enchantment enchantment = ForgeRegistries.ENCHANTMENTS.getValue(id);
-	        if (enchantment == null) continue;
-	        
-	        Enchantment.Rarity rarity = ServerConfig.intToRarity(entry.getValue());
-	        ObfuscationReflectionHelper.setPrivateValue(Enchantment.class, enchantment, rarity, "f_44674_");
-	    }
+		// no-op (voir javadoc) — TODO 1.21 : override du poids via datapack.
 	}
-	
+
 }

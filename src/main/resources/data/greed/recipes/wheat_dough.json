@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "wheat_dough",
+  "forge:condition": {
+    "type": "forge:mod_loaded",
+    "modid": "farmersdelight"
+  },
+  "ingredients": [
+    "minecraft:wheat",
+    "minecraft:wheat",
+    "minecraft:wheat"
+  ],
+  "result": {
+    "id": "farmersdelight:wheat_dough",
+    "count": 1
+  }
+}

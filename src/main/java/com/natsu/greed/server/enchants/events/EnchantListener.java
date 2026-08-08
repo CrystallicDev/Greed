@@ -79,7 +79,7 @@ public class EnchantListener {
 
 	    MobEffectInstance original = event.getEffectInstance();
 
-	    if (original.getEffect().isBeneficial()) {
+	    if (original.getEffect().value().isBeneficial()) {
 	        int newDura = Math.max(1, (int)Math.round(original.getDuration() * (new Random().nextFloat(0.6f, 0.8f))));
 	        player.level().getServer().tell(new TickTask(0, 
 	        		() -> {
@@ -160,13 +160,7 @@ public class EnchantListener {
 	}
 	
 	public static boolean hasCurse(ItemStack stack) {
-		Map<Enchantment, Integer> enchants = EnchantmentHelper.getEnchantments(stack);
-		for (Enchantment enchant : enchants.keySet()) {
-			if (enchant == GreedEnchants.CURSE_OF_COMBINATION.get()) {
-				return true;
-			}
-		}
-		return false;
+		return EnchantmentHelper.getItemEnchantmentLevel(GreedEnchants.CURSE_OF_COMBINATION.get(), stack) > 0;
 	}
 	
 }

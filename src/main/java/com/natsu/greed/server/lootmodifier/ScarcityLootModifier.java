@@ -3,7 +3,7 @@ package com.natsu.greed.server.lootmodifier;
 import java.util.function.Supplier;
 
 import com.google.common.base.Suppliers;
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.natsu.greed.common.registry.GreedEnchants;
 
@@ -20,8 +20,8 @@ import net.minecraftforge.common.loot.LootModifier;
 
 public class ScarcityLootModifier extends LootModifier {
 
-	public static final Supplier<Codec<ScarcityLootModifier>> CODEC = Suppliers.memoize(
-			() -> RecordCodecBuilder.create(inst -> LootModifier.codecStart(inst).apply(inst, ScarcityLootModifier::new)));
+	public static final Supplier<MapCodec<ScarcityLootModifier>> CODEC = Suppliers.memoize(
+			() -> RecordCodecBuilder.mapCodec(inst -> LootModifier.codecStart(inst).apply(inst, ScarcityLootModifier::new)));
 
 	protected ScarcityLootModifier(LootItemCondition[] conditions) {
 		super(conditions);
@@ -52,7 +52,7 @@ public class ScarcityLootModifier extends LootModifier {
 	}
 
 	@Override
-	public Codec<? extends IGlobalLootModifier> codec() {
+	 public MapCodec<? extends IGlobalLootModifier> codec() {
 		return CODEC.get();
 	}
 

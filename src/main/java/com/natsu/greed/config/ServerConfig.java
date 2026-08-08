@@ -15,7 +15,6 @@ import net.minecraft.world.item.ArmorMaterials;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.Enchantment.Rarity;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import net.minecraft.world.item.enchantment.Enchantments;
 import org.slf4j.Logger;
@@ -369,15 +368,6 @@ public class ServerConfig {
 			return DEFAULTSTAGE_ENCHANT_ISWHITELIST.get();
 		
 		}
-	}
-	
-	public static Enchantment.Rarity intToRarity(int value) {
-	    return switch (value) {
-	        case 0  -> Enchantment.Rarity.COMMON;
-	        case 1  -> Enchantment.Rarity.UNCOMMON;
-	        case 2  -> Enchantment.Rarity.RARE;
-	        default -> Enchantment.Rarity.VERY_RARE;
-	    };
 	}
 	
 	private static List<String> getDefaultRarities() {

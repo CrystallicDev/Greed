@@ -1,30 +1,13 @@
 package com.natsu.greed.common.enchants;
-
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.world.item.enchantment.Enchantment.Rarity;
-
 public class CurseOfVoiding extends Enchantment {
-
 	public CurseOfVoiding() {
-		super(Rarity.RARE, EnchantmentCategory.DIGGER, new EquipmentSlot[]{EquipmentSlot.MAINHAND});
+		super(Enchantment.definition(ItemTags.MINING_ENCHANTABLE, 2, 3,
+				Enchantment.dynamicCost(15, 9), Enchantment.dynamicCost(65, 9), 4, EquipmentSlot.MAINHAND));
 	}
-	
-	@Override
-	public int getMaxLevel() {
-		return 3;
-	}
-	
-	@Override
-	public boolean isCurse() {
-		return true;
-	}
-	
-	@Override
-	protected boolean checkCompatibility(Enchantment enchant) {
-		return this != enchant && enchant != Enchantments.BLOCK_FORTUNE;
-	}
-
+	@Override public boolean isCurse() { return true; }
+	@Override protected boolean checkCompatibility(Enchantment e) { return this != e && e != Enchantments.FORTUNE; }
 }

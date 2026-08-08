@@ -7,6 +7,8 @@ import com.natsu.greed.common.registry.GreedBlockEntities;
 import com.natsu.greed.config.ServerConfig;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -90,9 +92,9 @@ public class GreedCauldronBlockEntity extends BlockEntity {
 		return out;
 	}
 
-	private static MobEffectInstance findByEffect(MobEffect effect, List<MobEffectInstance> list) {
+	private static MobEffectInstance findByEffect(Holder<MobEffect> effect, List<MobEffectInstance> list) {
 		for (MobEffectInstance instance : list) {
-			if (instance.getEffect() == effect) {
+			if (instance.getEffect().equals(effect)) {
 				return instance;
 			}
 		}
@@ -106,17 +108,19 @@ public class GreedCauldronBlockEntity extends BlockEntity {
 		}
 	}
 
+	// 1.21 : les NBT du BlockEntity gagnent un HolderLookup.Provider ; MobEffectInstance.save() n'a plus
+	// de param (sérialise via son CODEC). L'override de lecture est loadAdditional, plus load.
 	@Override
-	public void saveAdditional(CompoundTag tag) {
-		super.saveAdditional(tag);
+	protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+		super.saveAdditional(tag, registries);
 		ListTag effectsTag = new ListTag();
-		effects.forEach(effect -> effectsTag.add(effect.save(new CompoundTag())));
+		effects.forEach(effect -> effectsTag.add(effect.save()));
 		tag.put("effects", effectsTag);
 	}
 
 	@Override
-	public void load(CompoundTag tag) {
-		super.load(tag);
+	protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+		super.loadAdditional(tag, registries);
 		effects.clear();
 		tag.getList("effects", Tag.TAG_COMPOUND).forEach(t -> {
 			MobEffectInstance effect = MobEffectInstance.load((CompoundTag) t);
@@ -132,15 +136,15 @@ public class GreedCauldronBlockEntity extends BlockEntity {
 	}
 
 	@Override
-	public CompoundTag getUpdateTag() {
-		return saveWithFullMetadata();
+	public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
+		return saveWithFullMetadata(registries);
 	}
 
 	@Override
-	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
+	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider registries) {
 		CompoundTag tag = pkt.getTag();
 		if (tag != null) {
-			load(tag);
+			loadAdditional(tag, registries);
 		}
 		// invalide le rendu pour rafraîchir la teinte dès le changement d'effets
 		if (level != null && level.isClientSide()) {

@@ -13,7 +13,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 
-@Mixin(EnchantmentHelper.class)
+@Mixin(value = EnchantmentHelper.class, remap = false)
 public class EnchantHelperMixin {
 
 	@Inject(method = "getEnchantmentCost", at = @At("HEAD"), cancellable = true)

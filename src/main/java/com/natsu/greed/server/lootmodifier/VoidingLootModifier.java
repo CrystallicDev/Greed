@@ -3,7 +3,7 @@ package com.natsu.greed.server.lootmodifier;
 import java.util.function.Supplier;
 
 import com.google.common.base.Suppliers;
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.natsu.greed.common.registry.GreedEnchants;
 
@@ -18,8 +18,8 @@ import net.minecraftforge.common.loot.LootModifier;
 
 public class VoidingLootModifier extends LootModifier {
 
-	public static final Supplier<Codec<VoidingLootModifier>> CODEC = Suppliers.memoize(
-			() -> RecordCodecBuilder.create(inst -> LootModifier.codecStart(inst).apply(inst, VoidingLootModifier::new)));
+	public static final Supplier<MapCodec<VoidingLootModifier>> CODEC = Suppliers.memoize(
+			() -> RecordCodecBuilder.mapCodec(inst -> LootModifier.codecStart(inst).apply(inst, VoidingLootModifier::new)));
 
 	protected VoidingLootModifier(LootItemCondition[] conditions) {
 		super(conditions);
@@ -50,7 +50,7 @@ public class VoidingLootModifier extends LootModifier {
 	}
 
 	@Override
-	public Codec<? extends IGlobalLootModifier> codec() {
+	 public MapCodec<? extends IGlobalLootModifier> codec() {
 		return CODEC.get();
 	}
 

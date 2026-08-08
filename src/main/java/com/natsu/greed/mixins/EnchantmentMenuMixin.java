@@ -24,6 +24,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.util.Mth;
 import net.minecraft.util.random.WeightedRandom;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.EnchantmentMenu;
 import net.minecraft.world.item.Item;
@@ -38,7 +39,7 @@ import net.minecraft.world.level.block.Blocks;
 
 import org.spongepowered.asm.mixin.injection.At;
 
-@Mixin(EnchantmentMenu.class)
+@Mixin(value = EnchantmentMenu.class, remap = false)
 public abstract class EnchantmentMenuMixin {
 
 	@Unique
@@ -65,7 +66,7 @@ public abstract class EnchantmentMenuMixin {
 	}
 
 	@Inject(method = "getEnchantmentList", at = @At("HEAD"), cancellable = true)
-	private void onGetEnchantList(ItemStack p_39472_, int index, int cost, CallbackInfoReturnable<List<EnchantmentInstance>> ci) {
+	private void onGetEnchantList(FeatureFlagSet enabledFeatures, ItemStack p_39472_, int index, int cost, CallbackInfoReturnable<List<EnchantmentInstance>> ci) {
 		if (!ServerConfig.USE_ENCHANTING_SYSTEM.get()) { return; }
 		
 		EnchantmentMenu self = (EnchantmentMenu)(Object)this;
@@ -74,7 +75,7 @@ public abstract class EnchantmentMenuMixin {
         ItemStack item = ((EnchantmentMenu)(Object)this).slots.get(0).getItem();
         //Vanilla behavior
 		rng.setSeed((long) (self.getEnchantmentSeed() + index));
-		List<EnchantmentInstance> vanillaList = EnchantmentHelper.selectEnchantment(rng, p_39472_, cost, false);
+		List<EnchantmentInstance> vanillaList = EnchantmentHelper.selectEnchantment(enabledFeatures, rng, p_39472_, cost, false);
 		if (p_39472_.is(Items.BOOK) && vanillaList.size() > 1) {
 			vanillaList.remove(rng.nextInt(vanillaList.size()));
 		}

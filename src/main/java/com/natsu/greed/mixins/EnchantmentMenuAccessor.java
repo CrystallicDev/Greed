@@ -7,7 +7,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.EnchantmentMenu;
 
-@Mixin(EnchantmentMenu.class)
+@Mixin(value = EnchantmentMenu.class, remap = false)
 public interface EnchantmentMenuAccessor {
 	@Accessor
     ContainerLevelAccess getAccess();

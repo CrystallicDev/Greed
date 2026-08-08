@@ -13,14 +13,15 @@ import com.natsu.greed.common.enchants.Light;
 import com.natsu.greed.common.enchants.Reeling;
 import com.natsu.greed.common.enchants.Stretched;
 
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 public class GreedEnchants {
 
-	public static final DeferredRegister<Enchantment> ENCHANTMENTS = DeferredRegister.create(ForgeRegistries.ENCHANTMENTS, Greed.MODID);
+	// 1.20.6 : les enchants restent un registre code → DeferredRegister sur le registre vanilla.
+	public static final DeferredRegister<Enchantment> ENCHANTMENTS = DeferredRegister.create(Registries.ENCHANTMENT, Greed.MODID);
 	
 	public static final RegistryObject<Enchantment> CURSE_OF_THE_SPONGE = ENCHANTMENTS.register("curse_of_the_sponge", 
 			() -> new CurseOfTheSponge());
