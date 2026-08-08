@@ -31,12 +31,10 @@ public class ScarcityLootModifier extends LootModifier {
 
 	@Override
 	protected ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
-		Entity entity = context.getParamOrNull(LootContextParams.ATTACKING_ENTITY);
+		Entity entity = context.getParamOrNull(LootContextParams.KILLER_ENTITY);
 		if (!(entity instanceof Player player)) return generatedLoot;
 
-		Holder<Enchantment> curse = GreedEnchants.get(context.getLevel().registryAccess(), GreedEnchants.CURSE_OF_SCARCITY);
-		if (curse == null) return generatedLoot;
-		int level = EnchantmentHelper.getItemEnchantmentLevel(curse, player.getMainHandItem());
+		int level = EnchantmentHelper.getItemEnchantmentLevel(GreedEnchants.CURSE_OF_SCARCITY.get(), player.getMainHandItem());
 		if (level == 0) return generatedLoot;
 
 		ObjectArrayList<ItemStack> result = new ObjectArrayList<>();

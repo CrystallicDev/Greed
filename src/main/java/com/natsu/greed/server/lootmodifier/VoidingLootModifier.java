@@ -32,8 +32,7 @@ public class VoidingLootModifier extends LootModifier {
 		ItemStack tool = context.getParamOrNull(LootContextParams.TOOL);
 		if (tool == null) return generatedLoot;
 
-		Holder<Enchantment> curse = GreedEnchants.get(context.getLevel().registryAccess(), GreedEnchants.CURSE_OF_VOIDING);
-		if (curse == null) return generatedLoot;
+		Enchantment curse = GreedEnchants.CURSE_OF_VOIDING.get();
 		int level = EnchantmentHelper.getItemEnchantmentLevel(curse, tool);
 		if (level == 0) return generatedLoot;
 

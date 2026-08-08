@@ -22,8 +22,7 @@ public class GrappleHandler {
 
 	    if (!hook.horizontalCollision && !hook.verticalCollision) return;
 
-	    Holder<Enchantment> grappling = GreedEnchants.get(player.registryAccess(), GreedEnchants.GRAPPLING);
-	    int level = grappling == null ? 0 : EnchantmentHelper.getEnchantmentLevel(grappling, player);
+	    int level = EnchantmentHelper.getEnchantmentLevel(GreedEnchants.GRAPPLING.get(), player);
 	    double speed = 1.5 + (0.5 * (level - 1));
 
 	    player.setDeltaMovement(

@@ -26,7 +26,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.AnvilUpdateEvent;
 import net.neoforged.neoforge.event.enchanting.EnchantmentLevelSetEvent;
-import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
+import net.neoforged.neoforge.event.entity.living.LivingHurtEvent;
 import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
 import net.neoforged.neoforge.event.entity.player.ArrowLooseEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerXpEvent;
@@ -38,17 +38,15 @@ public class EnchantListener {
 	// Réduire la durée de l'effet re-déclenche MobEffectEvent.Added : on ignore l'instance qu'on repose.
 	private static final List<MobEffectInstance> instancesToSkip = new ArrayList<>();
 
-	// 1.21 : les enchants sont des Holder résolus via le RegistryAccess de l'entité.
-	private static int levelOf(LivingEntity entity, ResourceKey<Enchantment> key, ItemStack stack) {
-		Holder<Enchantment> holder = GreedEnchants.get(entity.registryAccess(), key);
-		return holder == null ? 0 : EnchantmentHelper.getItemEnchantmentLevel(holder, stack);
+	private static int levelOf(LivingEntity entity, Enchantment enchant, ItemStack stack) {
+		return EnchantmentHelper.getItemEnchantmentLevel(enchant, stack);
 	}
 
 	@SubscribeEvent
 	public static void onPickupXP(PlayerXpEvent.PickupXp event) {
 		Player player = event.getEntity();
 		for (ItemStack armor : player.getArmorSlots()) {
-			if (levelOf(player, GreedEnchants.CURSE_OF_ABSORPTION, armor) > 0) {
+			if (levelOf(player, GreedEnchants.CURSE_OF_ABSORPTION.get(), armor) > 0) {
 				event.getOrb().value *= 0.75;
 				return;
 			}
@@ -62,7 +60,7 @@ public class EnchantListener {
 
 		boolean hasCurse = false;
 		for (ItemStack armor : player.getArmorSlots()) {
-			if (levelOf(player, GreedEnchants.CURSE_OF_THE_SPONGE, armor) > 0) {
+			if (levelOf(player, GreedEnchants.CURSE_OF_THE_SPONGE.get(), armor) > 0) {
 				hasCurse = true;
 			}
 		}
@@ -82,11 +80,11 @@ public class EnchantListener {
 	}
 
 	@SubscribeEvent
-	public static void onDamage(LivingIncomingDamageEvent event) {
+	public static void onDamage(LivingHurtEvent event) {
 		if (event.getSource().is(net.minecraft.tags.DamageTypeTags.IS_FALL)) {
 			ItemStack boots = event.getEntity().getItemBySlot(EquipmentSlot.FEET);
 			if (boots.isEmpty()) { return; }
-			if (levelOf(event.getEntity(), GreedEnchants.CURSE_OF_HEAVYWEIGHT, boots) > 0) {
+			if (levelOf(event.getEntity(), GreedEnchants.CURSE_OF_HEAVYWEIGHT.get(), boots) > 0) {
 				event.setAmount(event.getAmount() * 2);
 			}
 		}
@@ -96,7 +94,7 @@ public class EnchantListener {
 	public static void onPlayerTick(PlayerTickEvent.Post event) {
 		Player player = event.getEntity();
 		ItemStack boots = player.getItemBySlot(EquipmentSlot.FEET);
-		if (levelOf(player, GreedEnchants.CURSE_OF_CREEPING, boots) > 0) {
+		if (levelOf(player, GreedEnchants.CURSE_OF_CREEPING.get(), boots) > 0) {
 			if (player.isCrouching() && player.onGround()) {
 				player.setDeltaMovement(0, player.getDeltaMovement().y, 0);
 			}
@@ -129,8 +127,7 @@ public class EnchantListener {
 	@SubscribeEvent
 	public static void onArrow(ArrowLooseEvent event) {
 		Player player = event.getEntity();
-		Holder<Enchantment> stretched = GreedEnchants.get(player.registryAccess(), GreedEnchants.STRETCHED);
-		int level = stretched == null ? 0 : EnchantmentHelper.getEnchantmentLevel(stretched, player);
+		int level = EnchantmentHelper.getEnchantmentLevel(GreedEnchants.STRETCHED.get(), player);
 		if (level > 0) {
 			float newCharge = event.getCharge() * (1f + (0.5f * level));
 			event.setCharge((int) Math.round(newCharge));
@@ -138,7 +135,7 @@ public class EnchantListener {
 	}
 
 	private static boolean hasCurse(Player player, ItemStack stack) {
-		return levelOf(player, GreedEnchants.CURSE_OF_COMBINATION, stack) > 0;
+		return levelOf(player, GreedEnchants.CURSE_OF_COMBINATION.get(), stack) > 0;
 	}
 
 }

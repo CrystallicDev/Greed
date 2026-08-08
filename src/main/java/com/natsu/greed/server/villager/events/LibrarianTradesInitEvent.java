@@ -10,9 +10,7 @@ import com.natsu.greed.config.ServerConfig;
 import com.natsu.greed.server.villager.VillagerTradeHandler;
 import com.natsu.greed.server.villager.events.GreedFillingTradesEvent.ProfessionLevel;
 
-import net.minecraft.core.Holder;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.tags.EnchantmentTags;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
@@ -67,11 +65,10 @@ public class LibrarianTradesInitEvent {
 		event.addTradeTo(ProfessionLevel.MASTER, new MultiEnchantBookForEmeralds(15, 2, 5));
 	}
 
-	// enchants négociables (tag tradeable) du registre datapack du monde
-	private static List<Holder<Enchantment>> tradeable(Entity trader) {
-		return trader.level().registryAccess().registryOrThrow(Registries.ENCHANTMENT).holders()
-				.filter(h -> h.is(EnchantmentTags.TRADEABLE))
-				.map(h -> (Holder<Enchantment>) h)
+	// enchants négociables (isTradeable) du registre
+	private static List<Enchantment> tradeable(Entity trader) {
+		return BuiltInRegistries.ENCHANTMENT.stream()
+				.filter(Enchantment::isTradeable)
 				.collect(Collectors.toList());
 	}
 
@@ -83,15 +80,15 @@ public class LibrarianTradesInitEvent {
 		}
 
 		public MerchantOffer getOffer(Entity trader, RandomSource random) {
-			List<Holder<Enchantment>> list = tradeable(trader).stream()
-					.filter(h -> h.value().getWeight() >= COMMON_UNCOMMON_WEIGHT)
+			List<Enchantment> list = tradeable(trader).stream()
+					.filter(e -> e.getWeight() >= COMMON_UNCOMMON_WEIGHT)
 					.collect(Collectors.toList());
 			if (list.isEmpty()) return null;
-			Holder<Enchantment> enchantment = list.get(random.nextInt(list.size()));
-			int i = Mth.nextInt(random, enchantment.value().getMinLevel(), enchantment.value().getMaxLevel());
+			Enchantment enchantment = list.get(random.nextInt(list.size()));
+			int i = Mth.nextInt(random, enchantment.getMinLevel(), enchantment.getMaxLevel());
 			ItemStack itemstack = EnchantedBookItem.createForEnchantment(new EnchantmentInstance(enchantment, i));
 			int j = 2 + random.nextInt(5 + i * 10) + 3 * i;
-			if (enchantment.is(EnchantmentTags.TREASURE)) j *= 2;
+			if (enchantment.isTreasureOnly()) j *= 2;
 			if (j > 64) j = 64;
 			return new MerchantOffer(new ItemCost(Items.EMERALD, j), Optional.of(new ItemCost(Items.BOOK)),
 					itemstack, 12, this.villagerXp, 0.2F);
@@ -106,13 +103,13 @@ public class LibrarianTradesInitEvent {
 		}
 
 		public MerchantOffer getOffer(Entity trader, RandomSource random) {
-			List<Holder<Enchantment>> list = tradeable(trader);
+			List<Enchantment> list = tradeable(trader);
 			if (list.isEmpty()) return null;
-			Holder<Enchantment> enchantment = list.get(random.nextInt(list.size()));
-			int i = Mth.nextInt(random, enchantment.value().getMinLevel(), enchantment.value().getMaxLevel());
+			Enchantment enchantment = list.get(random.nextInt(list.size()));
+			int i = Mth.nextInt(random, enchantment.getMinLevel(), enchantment.getMaxLevel());
 			ItemStack itemstack = EnchantedBookItem.createForEnchantment(new EnchantmentInstance(enchantment, i));
 			int j = 2 + random.nextInt(5 + i * 10) + 3 * i;
-			if (enchantment.is(EnchantmentTags.TREASURE)) j *= 2;
+			if (enchantment.isTreasureOnly()) j *= 2;
 			if (j > 64) j = 64;
 			return new MerchantOffer(new ItemCost(Items.EMERALD, j), Optional.of(new ItemCost(Items.BOOK)),
 					itemstack, 12, this.villagerXp, 0.2F);
@@ -131,19 +128,19 @@ public class LibrarianTradesInitEvent {
 		}
 
 		public MerchantOffer getOffer(Entity trader, RandomSource random) {
-			List<Holder<Enchantment>> enchantList = tradeable(trader);
+			List<Enchantment> enchantList = tradeable(trader);
 			if (enchantList.isEmpty()) return null;
 			Collections.shuffle(enchantList);
 			int randomEnchantAmount = Mth.nextInt(random, this.minEnchant, this.maxEnchant);
 			int emeraldCost = 0;
 			ItemStack itemStack = new ItemStack(Items.ENCHANTED_BOOK);
 			for (int i = 0; i < Math.min(randomEnchantAmount, enchantList.size()); i++) {
-				Holder<Enchantment> enchantment = enchantList.get(i);
-				int enchantLevel = Mth.nextInt(random, enchantment.value().getMinLevel(), enchantment.value().getMaxLevel());
-				if (enchantment.is(EnchantmentTags.CURSE)) {
+				Enchantment enchantment = enchantList.get(i);
+				int enchantLevel = Mth.nextInt(random, enchantment.getMinLevel(), enchantment.getMaxLevel());
+				if (enchantment.isCurse()) {
 					emeraldCost += -2 + random.nextInt(1 + enchantLevel * 5) + enchantLevel;
 				} else {
-					emeraldCost += 2 + random.nextInt(3 + enchantLevel * (enchantment.is(EnchantmentTags.TREASURE) ? 7 : 5)) + 3 * enchantLevel;
+					emeraldCost += 2 + random.nextInt(3 + enchantLevel * (enchantment.isTreasureOnly() ? 7 : 5)) + 3 * enchantLevel;
 				}
 				emeraldCost = Math.max(emeraldCost, 1);
 				itemStack.enchant(enchantment, enchantLevel);

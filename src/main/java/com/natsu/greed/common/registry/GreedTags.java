@@ -11,11 +11,11 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 public class GreedTags {
 
 	public static final TagKey<Structure> ON_BASTION_EXPLORER_MAPS = TagKey.create(Registries.STRUCTURE, 
-			ResourceLocation.fromNamespaceAndPath(Greed.MODID, "bastion_explorer_maps"));
+			new ResourceLocation(Greed.MODID, "bastion_explorer_maps"));
 	public static final TagKey<Structure> ON_FORTRESS_EXPLORER_MAPS = TagKey.create(Registries.STRUCTURE, 
-			ResourceLocation.fromNamespaceAndPath(Greed.MODID, "fortress_explorer_maps"));
+			new ResourceLocation(Greed.MODID, "fortress_explorer_maps"));
 	public static final TagKey<Structure> ON_END_CITY_EXPLORER_MAPS = TagKey.create(Registries.STRUCTURE, 
-			ResourceLocation.fromNamespaceAndPath(Greed.MODID, "end_city_explorer_maps"));
+			new ResourceLocation(Greed.MODID, "end_city_explorer_maps"));
 	
 	/*public static final TagKey<Structure> CARTOGRAPHER_STRUCTURE_LEVEL_2 = TagKey.create(Registries.STRUCTURE, 
 			ResourceLocation.fromNamespaceAndPath(Greed.MODID, "cartographer_structure_level_2"));

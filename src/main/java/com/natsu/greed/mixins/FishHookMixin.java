@@ -40,9 +40,7 @@ public class FishHookMixin {
         Player player = self.getPlayerOwner();
         if (player == null) return;
         ItemStack rodStack = player.getMainHandItem();
-        Holder<Enchantment> grappling = GreedEnchants.get(self.registryAccess(), GreedEnchants.GRAPPLING);
-        if (grappling == null) return;
-        int grapplingLevel = EnchantmentHelper.getItemEnchantmentLevel(grappling, rodStack);
+        int grapplingLevel = EnchantmentHelper.getItemEnchantmentLevel(GreedEnchants.GRAPPLING.get(), rodStack);
         if (grapplingLevel > 0 && self.getHookedIn() == null) {
             GrappleHandler.handleGrapple(self, player);
             cir.setReturnValue(0);
@@ -55,8 +53,7 @@ public class FishHookMixin {
         FishingHook self = (FishingHook)(Object) this;
     	Entity entity = self.getOwner();
         if (entity instanceof LivingEntity living) {
-        	Holder<Enchantment> reeling = GreedEnchants.get(self.registryAccess(), GreedEnchants.REELING);
-        	int level = reeling == null ? 0 : EnchantmentHelper.getEnchantmentLevel(reeling, living);
+        	int level = EnchantmentHelper.getEnchantmentLevel(GreedEnchants.REELING.get(), living);
 			if (entity != null) {
 				Vec3 vec3 = (new Vec3(entity.getX() - self.getX(), entity.getY() - self.getY(),
 						entity.getZ() - self.getZ())).scale(0.1D);

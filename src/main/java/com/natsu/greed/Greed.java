@@ -2,6 +2,7 @@ package com.natsu.greed;
 
 import com.natsu.greed.common.registry.GreedBlockEntities;
 import com.natsu.greed.common.registry.GreedBlocks;
+import com.natsu.greed.common.registry.GreedEnchants;
 import com.natsu.greed.common.registry.GreedLootModifiers;
 import com.natsu.greed.config.ServerConfig;
 import com.natsu.greed.server.food.GreedFoodModifiers;
@@ -17,11 +18,12 @@ public class Greed {
 	public static final String MODID = "greed";
 
 	// NeoForge injecte le bus et le container ; MixinExtras est fourni par le loader.
-	// Les enchantements sont désormais un registre datapack (voir GreedEnchants), plus un DeferredRegister.
+	// 1.20.6 : les enchants sont encore un registre code → DeferredRegister classique.
 	public Greed(IEventBus modEventBus, ModContainer modContainer) {
 		GreedLootModifiers.SERIALIZERS.register(modEventBus);
 		GreedBlockEntities.BLOCK_ENTITIES.register(modEventBus);
 		GreedBlocks.BLOCKS.register(modEventBus);
+		GreedEnchants.ENCHANTMENTS.register(modEventBus);
 		modContainer.registerConfig(ModConfig.Type.SERVER, ServerConfig.SPEC);
 		// 1.21 : le rééquilibrage food patche les composants par défaut au démarrage (bus mod).
 		modEventBus.addListener(GreedFoodModifiers::onModifyComponents);

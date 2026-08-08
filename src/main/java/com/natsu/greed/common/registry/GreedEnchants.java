@@ -1,41 +1,41 @@
 package com.natsu.greed.common.registry;
 
 import com.natsu.greed.Greed;
+import com.natsu.greed.common.enchants.CurseOfAbsorption;
+import com.natsu.greed.common.enchants.CurseOfCombination;
+import com.natsu.greed.common.enchants.CurseOfCreeping;
+import com.natsu.greed.common.enchants.CurseOfHeavyweight;
+import com.natsu.greed.common.enchants.CurseOfScarcity;
+import com.natsu.greed.common.enchants.CurseOfTheSponge;
+import com.natsu.greed.common.enchants.CurseOfVoiding;
+import com.natsu.greed.common.enchants.Grappling;
+import com.natsu.greed.common.enchants.Light;
+import com.natsu.greed.common.enchants.Reeling;
+import com.natsu.greed.common.enchants.Stretched;
 
-import net.minecraft.core.Holder;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
 /**
- * 1.21 : Enchantment est un record final, on ne peut plus l'étendre. Les enchants de Greed sont
- * désormais des entrées du registre datapack {@link Registries#ENCHANTMENT}, définies en JSON dans
- * data/greed/enchantment/. Ici on ne garde que les clés ; on résout le Holder à l'usage via le
- * RegistryAccess (voir {@link #get}).
+ * 1.20.6 : les enchantements sont encore enregistrés par code (pas de datapack comme en 1.21), et
+ * {@link Enchantment} reste extensible. On revient donc à un DeferredRegister classique de sous-classes.
  */
 public class GreedEnchants {
 
-	public static final ResourceKey<Enchantment> CURSE_OF_THE_SPONGE = key("curse_of_the_sponge");
-	public static final ResourceKey<Enchantment> CURSE_OF_ABSORPTION = key("curse_of_absorption");
-	public static final ResourceKey<Enchantment> CURSE_OF_VOIDING = key("curse_of_voiding");
-	public static final ResourceKey<Enchantment> CURSE_OF_CREEPING = key("curse_of_creeping");
-	public static final ResourceKey<Enchantment> CURSE_OF_COMBINATION = key("curse_of_combination");
-	public static final ResourceKey<Enchantment> CURSE_OF_SCARCITY = key("curse_of_scarcity");
-	public static final ResourceKey<Enchantment> CURSE_OF_HEAVYWEIGHT = key("curse_of_heavyweight");
-	public static final ResourceKey<Enchantment> LIGHT = key("light");
-	public static final ResourceKey<Enchantment> REELING = key("reeling");
-	public static final ResourceKey<Enchantment> GRAPPLING = key("grappling");
-	public static final ResourceKey<Enchantment> STRETCHED = key("stretched");
+	public static final DeferredRegister<Enchantment> ENCHANTMENTS = DeferredRegister.create(Registries.ENCHANTMENT, Greed.MODID);
 
-	private static ResourceKey<Enchantment> key(String name) {
-		return ResourceKey.create(Registries.ENCHANTMENT, ResourceLocation.fromNamespaceAndPath(Greed.MODID, name));
-	}
-
-	/** Résout le Holder de l'enchant, ou null si le datapack ne le fournit pas encore (Bloc B). */
-	public static Holder<Enchantment> get(RegistryAccess access, ResourceKey<Enchantment> key) {
-		return access.lookupOrThrow(Registries.ENCHANTMENT).get(key).orElse(null);
-	}
+	public static final DeferredHolder<Enchantment, CurseOfTheSponge> CURSE_OF_THE_SPONGE = ENCHANTMENTS.register("curse_of_the_sponge", CurseOfTheSponge::new);
+	public static final DeferredHolder<Enchantment, CurseOfAbsorption> CURSE_OF_ABSORPTION = ENCHANTMENTS.register("curse_of_absorption", CurseOfAbsorption::new);
+	public static final DeferredHolder<Enchantment, CurseOfVoiding> CURSE_OF_VOIDING = ENCHANTMENTS.register("curse_of_voiding", CurseOfVoiding::new);
+	public static final DeferredHolder<Enchantment, CurseOfCreeping> CURSE_OF_CREEPING = ENCHANTMENTS.register("curse_of_creeping", CurseOfCreeping::new);
+	public static final DeferredHolder<Enchantment, CurseOfCombination> CURSE_OF_COMBINATION = ENCHANTMENTS.register("curse_of_combination", CurseOfCombination::new);
+	public static final DeferredHolder<Enchantment, CurseOfScarcity> CURSE_OF_SCARCITY = ENCHANTMENTS.register("curse_of_scarcity", CurseOfScarcity::new);
+	public static final DeferredHolder<Enchantment, CurseOfHeavyweight> CURSE_OF_HEAVYWEIGHT = ENCHANTMENTS.register("curse_of_heavyweight", CurseOfHeavyweight::new);
+	public static final DeferredHolder<Enchantment, Light> LIGHT = ENCHANTMENTS.register("light", Light::new);
+	public static final DeferredHolder<Enchantment, Reeling> REELING = ENCHANTMENTS.register("reeling", Reeling::new);
+	public static final DeferredHolder<Enchantment, Grappling> GRAPPLING = ENCHANTMENTS.register("grappling", Grappling::new);
+	public static final DeferredHolder<Enchantment, Stretched> STRETCHED = ENCHANTMENTS.register("stretched", Stretched::new);
 
 }

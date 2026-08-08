@@ -13,12 +13,9 @@ import com.natsu.greed.config.ServerConfig;
 import com.natsu.greed.server.enchants.EnchantMenuHandler;
 import com.natsu.greed.server.enchants.EnchantmentTableState;
 
-import net.minecraft.core.HolderSet;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.EnchantmentMenu;
 import net.minecraft.world.item.ItemStack;
@@ -55,9 +52,9 @@ public abstract class EnchantmentMenuMixin {
 		}
 	}
 
-	// 1.21 : getEnchantmentList prend un RegistryAccess et selectEnchantment un Stream<Holder<Enchantment>>.
+	// 1.20.6 : getEnchantmentList prend le FeatureFlagSet des features activées.
 	@Inject(method = "getEnchantmentList", at = @At("HEAD"), cancellable = true)
-	private void onGetEnchantList(RegistryAccess registryAccess, ItemStack stack, int slot, int cost,
+	private void onGetEnchantList(FeatureFlagSet enabledFeatures, ItemStack stack, int slot, int cost,
 			CallbackInfoReturnable<List<EnchantmentInstance>> ci) {
 		if (!ServerConfig.USE_ENCHANTING_SYSTEM.get()) return;
 
@@ -66,12 +63,9 @@ public abstract class EnchantmentMenuMixin {
 		ContainerLevelAccess access = accessor.getAccess();
 		ItemStack item = ((EnchantmentMenu) (Object) this).slots.get(0).getItem();
 
-		// comportement vanilla : tirage des enchants candidats (tag in_enchanting_table)
+		// comportement vanilla : tirage des enchants candidats
 		rng.setSeed((long) (accessor.getEnchantmentSeed().get() + slot));
-		Optional<HolderSet.Named<Enchantment>> pool = registryAccess.registryOrThrow(Registries.ENCHANTMENT)
-				.getTag(EnchantmentTags.IN_ENCHANTING_TABLE);
-		if (pool.isEmpty()) return;
-		List<EnchantmentInstance> vanillaList = EnchantmentHelper.selectEnchantment(rng, stack, cost, pool.get().stream());
+		List<EnchantmentInstance> vanillaList = EnchantmentHelper.selectEnchantment(enabledFeatures, rng, stack, cost, false);
 		if (stack.is(Items.BOOK) && vanillaList.size() > 1) {
 			vanillaList.remove(rng.nextInt(vanillaList.size()));
 		}
@@ -88,7 +82,7 @@ public abstract class EnchantmentMenuMixin {
 			}
 		});
 		if (c.isEmpty()) return;
-		List<EnchantmentInstance> modified = EnchantMenuHandler.onInterceptEnchant(c.get(), rng, item, vanillaList, registryAccess);
+		List<EnchantmentInstance> modified = EnchantMenuHandler.onInterceptEnchant(c.get(), rng, item, vanillaList);
 		if (modified.isEmpty()) {
 			accessor.getCosts()[slot] = 0;
 		}

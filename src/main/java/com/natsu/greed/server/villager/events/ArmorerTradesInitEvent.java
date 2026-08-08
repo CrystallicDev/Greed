@@ -11,9 +11,7 @@ import com.natsu.greed.config.ServerConfig;
 import com.natsu.greed.server.villager.VillagerTradeHandler;
 import com.natsu.greed.server.villager.events.GreedFillingTradesEvent.ProfessionLevel;
 
-import net.minecraft.core.Holder;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.tags.EnchantmentTags;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
@@ -94,9 +92,8 @@ public class ArmorerTradesInitEvent {
 
 		public MerchantOffer getOffer(Entity trader, RandomSource random) {
 			int i = 5 + random.nextInt(15);
-			// 1.21 : enchantItem prend le RegistryAccess ; Optional.empty() = tous les enchants applicables.
-			ItemStack itemstack = EnchantmentHelper.enchantItem(random, new ItemStack(this.itemStack.getItem()), i,
-					trader.level().registryAccess(), Optional.empty());
+			ItemStack itemstack = EnchantmentHelper.enchantItem(trader.level().enabledFeatures(), random,
+					new ItemStack(this.itemStack.getItem()), i, false);
 			int j = Math.min(this.baseEmeraldCost + i, 64);
 			return new MerchantOffer(new ItemCost(Items.EMERALD, j), itemstack, this.maxUses, this.villagerXp, this.priceMultiplier);
 		}
@@ -121,24 +118,23 @@ public class ArmorerTradesInitEvent {
 
 		public MerchantOffer getOffer(Entity trader, RandomSource rng) {
 			ItemStack endItem = itemStack.copy();
-			List<Holder<Enchantment>> enchantList = trader.level().registryAccess().registryOrThrow(Registries.ENCHANTMENT)
-					.holders().filter(h -> endItem.supportsEnchantment(h))
-					.map(h -> (Holder<Enchantment>) h).collect(Collectors.toList());
+			List<Enchantment> enchantList = BuiltInRegistries.ENCHANTMENT.stream()
+					.filter(e -> e.canEnchant(endItem)).collect(Collectors.toList());
 			Collections.shuffle(enchantList);
 			RandomSource random = RandomSource.create();
 			int randomEnchantAmount = Mth.nextInt(random, this.minEnchantCount, this.maxEnchantCount);
 			int emeraldCost = 0;
-			List<Holder<Enchantment>> applied = new ArrayList<>();
+			List<Enchantment> applied = new ArrayList<>();
 			for (int i = 0; i < Math.min(randomEnchantAmount, enchantList.size()); i++) {
-				Holder<Enchantment> enchantment = enchantList.get(i);
-				for (Holder<Enchantment> appliedEnchant : applied) {
-					if (!Enchantment.areCompatible(appliedEnchant, enchantment)) { continue; }
+				Enchantment enchantment = enchantList.get(i);
+				for (Enchantment appliedEnchant : applied) {
+					if (!appliedEnchant.isCompatibleWith(enchantment)) { continue; }
 				}
-				int enchantLevel = Mth.nextInt(random, enchantment.value().getMinLevel(), enchantment.value().getMaxLevel());
-				if (enchantment.is(EnchantmentTags.CURSE)) {
+				int enchantLevel = Mth.nextInt(random, enchantment.getMinLevel(), enchantment.getMaxLevel());
+				if (enchantment.isCurse()) {
 					emeraldCost += -2 + random.nextInt(1 + enchantLevel * 5) + enchantLevel;
 				} else {
-					emeraldCost += 2 + random.nextInt(3 + enchantLevel * (enchantment.is(EnchantmentTags.TREASURE) ? 7 : 5)) + 3 * enchantLevel;
+					emeraldCost += 2 + random.nextInt(3 + enchantLevel * (enchantment.isTreasureOnly() ? 7 : 5)) + 3 * enchantLevel;
 				}
 				emeraldCost = Math.max(emeraldCost, 1);
 				endItem.enchant(enchantment, enchantLevel);

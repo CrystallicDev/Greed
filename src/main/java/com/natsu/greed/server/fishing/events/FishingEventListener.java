@@ -20,9 +20,7 @@ public class FishingEventListener {
 		if (event.getEntity() instanceof FishingHook hook) {
 			if (hook.getOwner() instanceof Player player) {
 				if (!event.getLevel().isClientSide && event.getEntity().tickCount <= 0) {
-					net.minecraft.core.Holder<net.minecraft.world.item.enchantment.Enchantment> light =
-							GreedEnchants.get(player.registryAccess(), GreedEnchants.LIGHT);
-					int lightLevel = light == null ? 0 : EnchantmentHelper.getEnchantmentLevel(light, player);
+					int lightLevel = EnchantmentHelper.getEnchantmentLevel(GreedEnchants.LIGHT.get(), player);
 					hook.setDeltaMovement(hook.getDeltaMovement().multiply(1 + (0.2 * lightLevel), 1 + (0.07 * lightLevel), 1 + (0.2 * lightLevel)));
 				}
 			}
