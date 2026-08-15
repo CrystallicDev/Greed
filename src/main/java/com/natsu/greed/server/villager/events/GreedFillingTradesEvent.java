@@ -6,7 +6,7 @@ import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerTrades.ItemListing;
 import net.neoforged.neoforge.event.village.VillagerTradesEvent;
 
-// Adaptateur autour du VillagerTradesEvent de Forge (posté par métier au démarrage serveur)
+// wrapper around Forge's VillagerTradesEvent (fired per profession on server start)
 public class GreedFillingTradesEvent {
 
 	private final VillagerTradesEvent event;

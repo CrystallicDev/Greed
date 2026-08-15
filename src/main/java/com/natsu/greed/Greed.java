@@ -17,15 +17,13 @@ public class Greed {
 
 	public static final String MODID = "greed";
 
-	// NeoForge injecte le bus et le container ; MixinExtras est fourni par le loader.
-	// 1.20.6 : les enchants sont encore un registre code → DeferredRegister classique.
 	public Greed(IEventBus modEventBus, ModContainer modContainer) {
 		GreedLootModifiers.SERIALIZERS.register(modEventBus);
 		GreedBlockEntities.BLOCK_ENTITIES.register(modEventBus);
 		GreedBlocks.BLOCKS.register(modEventBus);
 		GreedEnchants.ENCHANTMENTS.register(modEventBus);
 		modContainer.registerConfig(ModConfig.Type.SERVER, ServerConfig.SPEC);
-		// 1.21 : le rééquilibrage food patche les composants par défaut au démarrage (bus mod).
+		// food rebalance patches the default components at startup (mod bus).
 		modEventBus.addListener(GreedFoodModifiers::onModifyComponents);
 	}
 

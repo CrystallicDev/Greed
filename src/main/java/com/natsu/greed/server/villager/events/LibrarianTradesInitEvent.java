@@ -31,8 +31,8 @@ import net.neoforged.neoforge.event.village.VillagerTradesEvent;
 @EventBusSubscriber(modid = Greed.MODID, bus = EventBusSubscriber.Bus.GAME)
 public class LibrarianTradesInitEvent {
 
-	// Poids d'origine des raretés 1.18 : COMMON=10, UNCOMMON=5, RARE=2, VERY_RARE=1.
-	// La rareté ayant disparu en 1.21, common||uncommon ≈ poids >= 5.
+	// original rarity weights: COMMON=10, UNCOMMON=5, RARE=2, VERY_RARE=1.
+	// rarity is gone now, so common||uncommon roughly means weight >= 5.
 	private static final int COMMON_UNCOMMON_WEIGHT = 5;
 
 	@SubscribeEvent
@@ -65,7 +65,7 @@ public class LibrarianTradesInitEvent {
 		event.addTradeTo(ProfessionLevel.MASTER, new MultiEnchantBookForEmeralds(15, 2, 5));
 	}
 
-	// enchants négociables (isTradeable) du registre
+	// tradeable enchants (isTradeable) from the registry
 	private static List<Enchantment> tradeable(Entity trader) {
 		return BuiltInRegistries.ENCHANTMENT.stream()
 				.filter(Enchantment::isTradeable)

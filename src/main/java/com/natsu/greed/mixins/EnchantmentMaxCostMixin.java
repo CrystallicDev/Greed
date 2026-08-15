@@ -12,7 +12,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.enchantment.Enchantment;
 
-// 1.20.6 : getMaxCost(int) est final sur Enchantment → cibler la classe de base suffit.
+// getMaxCost(int) is final on Enchantment, so targeting the base class is enough.
 @Mixin(value = Enchantment.class, remap = false)
 public abstract class EnchantmentMaxCostMixin {
 

@@ -43,9 +43,9 @@ import net.minecraft.world.level.saveddata.maps.MapDecorationType;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 
 /**
- * Copies publiques des ItemListing privées de vanilla, portées en 1.21 :
- * les MerchantOffer prennent des ItemCost, la teinture/potion/stew passent par les DataComponents.
- * Les trades d'enchantements (Librarian/Armorer/ToolSmith/WeaponSmith) sont traités au Bloc B.
+ * public copies of vanilla's private ItemListings.
+ * MerchantOffer takes ItemCost, and dye/potion/stew go through DataComponents.
+ * the enchant trades (Librarian/Armorer/ToolSmith/WeaponSmith) are handled separately.
  */
 public class VillagerTradeHandler {
 

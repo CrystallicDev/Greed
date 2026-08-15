@@ -35,7 +35,7 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 @EventBusSubscriber(modid = Greed.MODID)
 public class EnchantListener {
 
-	// Réduire la durée de l'effet re-déclenche MobEffectEvent.Added : on ignore l'instance qu'on repose.
+	// shortening the effect duration re-fires MobEffectEvent.Added, so we skip the instance we re-add.
 	private static final List<MobEffectInstance> instancesToSkip = new ArrayList<>();
 
 	private static int levelOf(LivingEntity entity, Enchantment enchant, ItemStack stack) {

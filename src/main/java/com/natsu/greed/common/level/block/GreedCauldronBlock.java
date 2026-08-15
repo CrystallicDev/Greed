@@ -21,17 +21,17 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 
-// Chaudron à potions ; interactions eau/pluie/feu vanilla neutralisées
+// potion cauldron - the vanilla water/rain/fire interactions are switched off
 public class GreedCauldronBlock extends LayeredCauldronBlock implements EntityBlock {
 
-	// map d'interactions vide : aucune interaction seau/bouteille vanilla
+	// empty interaction map, no vanilla bucket/bottle interactions
 	private static final CauldronInteraction.InteractionMap NO_INTERACTIONS =
 			CauldronInteraction.newInteractionMap("greed_empty");
 
-	// codec() du parent est invariant en MapCodec<LayeredCauldronBlock> : on type le CODEC dessus.
+	// parent's codec() is locked to MapCodec<LayeredCauldronBlock>, so we type our CODEC to match.
 	public static final MapCodec<LayeredCauldronBlock> CODEC = simpleCodec(properties -> new GreedCauldronBlock());
 
-	// 1.21 : ctor (précipitation, interactions, properties) ; la précipitation est un enum (NONE = jamais rempli par la pluie).
+	// precipitation is an enum here, NONE means rain never fills it.
 	public GreedCauldronBlock() {
 		super(Biome.Precipitation.NONE, NO_INTERACTIONS, BlockBehaviour.Properties.ofFullCopy(Blocks.WATER_CAULDRON));
 	}
@@ -48,7 +48,7 @@ public class GreedCauldronBlock extends LayeredCauldronBlock implements EntityBl
 
 	@Override
 	protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
-		// applique les effets du chaudron aux entités qui y baignent, sans le vider
+		// dumps the stored effects on entities standing in it, without draining it
 		if (level.isClientSide() || !(entity instanceof LivingEntity living)) {
 			return;
 		}
@@ -61,7 +61,7 @@ public class GreedCauldronBlock extends LayeredCauldronBlock implements EntityBl
 		}
 		for (MobEffectInstance stored : cauldron.getEffects()) {
 			if (stored.getEffect().value().isInstantenous()) {
-				continue; // un effet instantané serait réappliqué à chaque tick
+				continue; // an instant effect would just re-fire every tick
 			}
 			MobEffectInstance current = living.getEffect(stored.getEffect());
 			if (current == null || (current.getDuration() <= 20 && current.getAmplifier() <= stored.getAmplifier())) {
@@ -70,7 +70,6 @@ public class GreedCauldronBlock extends LayeredCauldronBlock implements EntityBl
 		}
 	}
 
-	// 1.21 : getCloneItemStack a perdu HitResult/Player et ne prend plus qu'un LevelReader.
 	@Override
 	public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
 		return new ItemStack(Items.CAULDRON);

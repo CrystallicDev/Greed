@@ -12,8 +12,8 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.enchantment.Enchantment;
 
-// 1.20.6 : getMaxLevel() est final sur Enchantment (le max vient de l'EnchantmentDefinition), donc
-// cibler la classe de base suffit — plus besoin de lister les sous-classes comme en 1.20.1.
+// getMaxLevel() is final on Enchantment now (the max comes from the EnchantmentDefinition), so
+// targeting the base class is enough.
 @Mixin(value = Enchantment.class, remap = false)
 public abstract class EnchantmentMaxLevelMixin {
 

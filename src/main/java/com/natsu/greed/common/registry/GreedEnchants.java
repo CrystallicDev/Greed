@@ -18,10 +18,6 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
-/**
- * 1.20.6 : les enchantements sont encore enregistrés par code (pas de datapack comme en 1.21), et
- * {@link Enchantment} reste extensible. On revient donc à un DeferredRegister classique de sous-classes.
- */
 public class GreedEnchants {
 
 	public static final DeferredRegister<Enchantment> ENCHANTMENTS = DeferredRegister.create(Registries.ENCHANTMENT, Greed.MODID);

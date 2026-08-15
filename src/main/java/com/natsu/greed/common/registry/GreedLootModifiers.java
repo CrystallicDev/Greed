@@ -12,7 +12,7 @@ import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
 public class GreedLootModifiers {
 
-	// 1.21/NeoForge : le registre des sérialiseurs contient des MapCodec, plus des Codec.
+	// the serializer registry takes MapCodecs, not plain Codecs.
 	public static final DeferredRegister<MapCodec<? extends IGlobalLootModifier>> SERIALIZERS =
 			DeferredRegister.create(NeoForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, Greed.MODID);
 
