@@ -1,17 +1,17 @@
 package com.natsu.greed.server.enchants;
 
 /**
- * Rareté d'enchant personnalisée (useCustomEnchantmentRarity).
+ * Custom enchant rarity (useCustomEnchantmentRarity).
  *
- * <p>1.21 : la "rareté" 1.18 est devenue le champ {@code weight} de l'{@code EnchantmentDefinition},
- * un record immuable — on ne peut plus la muter par réflexion au démarrage. Un pilotage runtime par
- * config n'est plus possible ; il faudrait passer par un datapack qui réécrit les JSON d'enchants.
- * Feature reportée : {@link #init()} est un no-op pour l'instant.
+ * <p>rarity is now the immutable {@code weight} field of the {@code EnchantmentDefinition},
+ * so we can't mutate it by reflection at startup. driving it from config isn't possible;
+ * you'd need a datapack that rewrites the enchant JSONs.
+ * feature is deferred, {@link #init()} is a no-op for now.
  */
 public class GreedEnchantModifiers {
 
 	public static void init() {
-		// no-op (voir javadoc) — TODO 1.21 : override du poids via datapack.
+		// no-op (see javadoc) - TODO: override the weight via a datapack.
 	}
 
 }

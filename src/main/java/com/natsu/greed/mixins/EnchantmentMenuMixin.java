@@ -37,7 +37,7 @@ public abstract class EnchantmentMenuMixin {
 
 	@Inject(method = "clickMenuButton", at = @At("HEAD"))
 	private void captureDisplayedCost(Player player, int id, CallbackInfoReturnable<Boolean> cir) {
-		// le coût affiché est recalculé après l'enchantement : on le capture avant
+		// the shown cost gets recalculated after enchanting, so grab it beforehand
 		int[] costs = ((EnchantmentMenuAccessor) (Object) this).getCosts();
 		greed$displayedCost = (id >= 0 && id < costs.length) ? costs[id] : 0;
 	}
@@ -48,14 +48,14 @@ public abstract class EnchantmentMenuMixin {
 		if (!cir.getReturnValueZ()) return;
 		if (player.getAbilities().instabuild) return;
 
-		// vanilla a retiré (id + 1) niveaux ; on complète jusqu'au coût affiché (façon 1.7)
+		// vanilla only took (id + 1) levels, top it up to the shown cost, 1.7 style
 		int extra = greed$displayedCost - (id + 1);
 		if (extra > 0) {
 			player.giveExperienceLevels(-extra);
 		}
 	}
 
-	// 1.21 : getEnchantmentList prend un RegistryAccess et selectEnchantment un Stream<Holder<Enchantment>>.
+	// getEnchantmentList takes a RegistryAccess, and selectEnchantment a Stream<Holder<Enchantment>>.
 	@Inject(method = "getEnchantmentList", at = @At("HEAD"), cancellable = true)
 	private void onGetEnchantList(RegistryAccess registryAccess, ItemStack stack, int slot, int cost,
 			CallbackInfoReturnable<List<EnchantmentInstance>> ci) {
@@ -66,7 +66,7 @@ public abstract class EnchantmentMenuMixin {
 		ContainerLevelAccess access = accessor.getAccess();
 		ItemStack item = ((EnchantmentMenu) (Object) this).slots.get(0).getItem();
 
-		// comportement vanilla : tirage des enchants candidats (tag in_enchanting_table)
+		// vanilla behaviour: roll the candidate enchants (tag in_enchanting_table)
 		rng.setSeed((long) (accessor.getEnchantmentSeed().get() + slot));
 		Optional<HolderSet.Named<Enchantment>> pool = registryAccess.registryOrThrow(Registries.ENCHANTMENT)
 				.getTag(EnchantmentTags.IN_ENCHANTING_TABLE);
@@ -76,7 +76,7 @@ public abstract class EnchantmentMenuMixin {
 			vanillaList.remove(rng.nextInt(vanillaList.size()));
 		}
 
-		// état de la table (bloc dessous) puis liste modifiée par Greed
+		// table state (block underneath), then the list Greed tweaked
 		Optional<EnchantmentTableState> c = access.evaluate((level, block) -> {
 			try {
 				Block below = level.getBlockState(block.below()).getBlock();

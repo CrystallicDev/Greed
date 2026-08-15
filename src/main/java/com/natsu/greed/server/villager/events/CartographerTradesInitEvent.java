@@ -137,8 +137,8 @@ public class CartographerTradesInitEvent {
 			if (biomesInTag.isEmpty())
 				return null;
 			Holder<Biome> randomBiome = biomesInTag.get(random.nextInt(biomesInTag.size()));
-			// findClosestBiome3d est une recherche 3D coûteuse : on pré-calcule la clé (le prédicat est
-			// appelé pour chaque échantillon) et on utilise des pas grossiers pour éviter un gel serveur.
+			// findClosestBiome3d is an expensive 3D search, so we precompute the key (the predicate runs
+			// for every sample) and step coarsely to avoid freezing the server.
 			ResourceKey<Biome> targetBiome = randomBiome.unwrapKey().orElseThrow();
 			Pair<BlockPos, Holder<Biome>> foundBiome = serverLevel.findClosestBiome3d(
 					holder -> holder.is(targetBiome),

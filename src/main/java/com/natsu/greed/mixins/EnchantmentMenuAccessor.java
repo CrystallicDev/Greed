@@ -8,7 +8,7 @@ import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.inventory.EnchantmentMenu;
 
-// NeoForge : runtime Mojmap → remap=false, les noms d'@Accessor ciblent les champs Mojmap.
+// runtime is Mojmap, so remap=false and the @Accessor names target the Mojmap fields.
 @Mixin(value = EnchantmentMenu.class, remap = false)
 public interface EnchantmentMenuAccessor {
 	@Accessor

@@ -94,7 +94,7 @@ public class ArmorerTradesInitEvent {
 
 		public MerchantOffer getOffer(Entity trader, RandomSource random) {
 			int i = 5 + random.nextInt(15);
-			// 1.21 : enchantItem prend le RegistryAccess ; Optional.empty() = tous les enchants applicables.
+			// enchantItem takes the RegistryAccess; Optional.empty() means all applicable enchants.
 			ItemStack itemstack = EnchantmentHelper.enchantItem(random, new ItemStack(this.itemStack.getItem()), i,
 					trader.level().registryAccess(), Optional.empty());
 			int j = Math.min(this.baseEmeraldCost + i, 64);

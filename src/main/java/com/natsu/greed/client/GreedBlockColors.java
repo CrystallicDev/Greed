@@ -12,7 +12,7 @@ import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 
-// Teinte le liquide du chaudron selon les potions qu'il contient
+// tints the cauldron water based on the potions inside
 @EventBusSubscriber(modid = Greed.MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class GreedBlockColors {
 

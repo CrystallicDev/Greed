@@ -10,10 +10,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.enchantment.Enchantment;
 
 /**
- * 1.21 : Enchantment est un record final, on ne peut plus l'étendre. Les enchants de Greed sont
- * désormais des entrées du registre datapack {@link Registries#ENCHANTMENT}, définies en JSON dans
- * data/greed/enchantment/. Ici on ne garde que les clés ; on résout le Holder à l'usage via le
- * RegistryAccess (voir {@link #get}).
+ * Greed's enchants live as entries in the datapack {@link Registries#ENCHANTMENT} registry,
+ * defined as JSON in data/greed/enchantment/. here we only keep the keys and resolve the
+ * Holder on demand through the RegistryAccess (see {@link #get}), since Enchantment can't be
+ * subclassed anymore.
  */
 public class GreedEnchants {
 
@@ -33,7 +33,7 @@ public class GreedEnchants {
 		return ResourceKey.create(Registries.ENCHANTMENT, ResourceLocation.fromNamespaceAndPath(Greed.MODID, name));
 	}
 
-	/** Résout le Holder de l'enchant, ou null si le datapack ne le fournit pas encore (Bloc B). */
+	/** resolves the enchant's Holder, or null if the datapack doesn't provide it yet. */
 	public static Holder<Enchantment> get(RegistryAccess access, ResourceKey<Enchantment> key) {
 		return access.lookupOrThrow(Registries.ENCHANTMENT).get(key).orElse(null);
 	}

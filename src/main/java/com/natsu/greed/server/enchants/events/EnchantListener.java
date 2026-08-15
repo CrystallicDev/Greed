@@ -35,10 +35,10 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 @EventBusSubscriber(modid = Greed.MODID)
 public class EnchantListener {
 
-	// Réduire la durée de l'effet re-déclenche MobEffectEvent.Added : on ignore l'instance qu'on repose.
+	// shortening the effect duration re-fires MobEffectEvent.Added, so we skip the instance we re-add.
 	private static final List<MobEffectInstance> instancesToSkip = new ArrayList<>();
 
-	// 1.21 : les enchants sont des Holder résolus via le RegistryAccess de l'entité.
+	// enchants are Holders resolved through the entity's RegistryAccess.
 	private static int levelOf(LivingEntity entity, ResourceKey<Enchantment> key, ItemStack stack) {
 		Holder<Enchantment> holder = GreedEnchants.get(entity.registryAccess(), key);
 		return holder == null ? 0 : EnchantmentHelper.getItemEnchantmentLevel(holder, stack);

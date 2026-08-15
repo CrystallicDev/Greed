@@ -11,7 +11,7 @@ import net.minecraft.world.item.alchemy.PotionContents;
 
 public class PotionCreatorUtils {
 
-	// 1.21 : plus de NBT CustomPotionColor/CustomPotionEffects, tout passe par le composant POTION_CONTENTS.
+	// potion data all lives in the POTION_CONTENTS component now.
 	public static ItemStack makeIntoPotion(Item item, List<MobEffectInstance> effects, int color) {
 		ItemStack stack = new ItemStack(item);
 		PotionContents contents = new PotionContents(Optional.empty(), Optional.of(color), List.copyOf(effects));
