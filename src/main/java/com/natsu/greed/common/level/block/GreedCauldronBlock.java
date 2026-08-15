@@ -21,19 +21,16 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 
-// Chaudron à potions ; interactions eau/pluie/feu vanilla neutralisées
+// potion cauldron - the vanilla water/rain/fire interactions are switched off
 public class GreedCauldronBlock extends LayeredCauldronBlock implements EntityBlock {
 
-	// map d'interactions vide : aucune interaction seau/bouteille vanilla
-	// 26.1 : InteractionMap → CauldronInteraction.Dispatcher (non sérialisé par le codec du bloc).
+	// empty interaction map, no vanilla bucket/bottle interactions
 	private static final CauldronInteraction.Dispatcher NO_INTERACTIONS =
 			new CauldronInteraction.Dispatcher();
 
-	// codec() du parent est invariant en MapCodec<LayeredCauldronBlock> : on type le CODEC dessus.
+	// parent's codec() is locked to MapCodec<LayeredCauldronBlock>, so we type our CODEC to match.
 	public static final MapCodec<LayeredCauldronBlock> CODEC = simpleCodec(GreedCauldronBlock::new);
 
-	// 1.21 : ctor (précipitation, interactions, properties). 26.1 : les Properties doivent porter l'ID
-	// de registre (injecté par DeferredRegister.Blocks.registerBlock) → le bloc les reçoit en paramètre.
 	public GreedCauldronBlock(BlockBehaviour.Properties properties) {
 		super(Biome.Precipitation.NONE, NO_INTERACTIONS, properties);
 	}
@@ -48,12 +45,10 @@ public class GreedCauldronBlock extends LayeredCauldronBlock implements EntityBl
 		return new GreedCauldronBlockEntity(pos, state);
 	}
 
-	// 26.1 : entityInside gagne (InsideBlockEffectApplier, boolean isPrecise). On garde l'override
-	// complet (chaudron à potions, pas d'extinction de feu comme le vanilla).
 	@Override
 	protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity,
 			InsideBlockEffectApplier effectApplier, boolean isPrecise) {
-		// applique les effets du chaudron aux entités qui y baignent, sans le vider
+		// dumps the stored effects on entities standing in it, without draining it
 		if (level.isClientSide() || !(entity instanceof LivingEntity living)) {
 			return;
 		}
@@ -66,7 +61,7 @@ public class GreedCauldronBlock extends LayeredCauldronBlock implements EntityBl
 		}
 		for (MobEffectInstance stored : cauldron.getEffects()) {
 			if (stored.getEffect().value().isInstantenous()) {
-				continue; // un effet instantané serait réappliqué à chaque tick
+				continue; // an instant effect would just re-fire every tick
 			}
 			MobEffectInstance current = living.getEffect(stored.getEffect());
 			if (current == null || (current.getDuration() <= 20 && current.getAmplifier() <= stored.getAmplifier())) {
@@ -75,13 +70,11 @@ public class GreedCauldronBlock extends LayeredCauldronBlock implements EntityBl
 		}
 	}
 
-	// 26.1 : isEntityInsideContent supprimé d'AbstractCauldronBlock → réimplémenté via getContentHeight.
 	private boolean greed$isInContent(BlockState state, BlockPos pos, Entity entity) {
 		return entity.getY() < pos.getY() + this.getContentHeight(state)
 				&& entity.getBoundingBox().maxY > pos.getY() + 0.25;
 	}
 
-	// 26.1 : getCloneItemStack gagne un boolean includeData.
 	@Override
 	public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData) {
 		return new ItemStack(Items.CAULDRON);

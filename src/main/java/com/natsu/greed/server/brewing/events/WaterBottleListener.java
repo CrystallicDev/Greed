@@ -16,7 +16,7 @@ import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 
-// Empêche de remplir une bouteille d'eau à une source (il faut un chaudron)
+// stops you filling a water bottle straight from a source, you need a cauldron
 @EventBusSubscriber(modid = Greed.MODID)
 public class WaterBottleListener {
 

@@ -24,14 +24,12 @@ public class VoidingLootModifier extends LootModifier {
 	public static final Supplier<MapCodec<VoidingLootModifier>> CODEC = Suppliers.memoize(
 			() -> RecordCodecBuilder.mapCodec(inst -> LootModifier.codecStart(inst).apply(inst, VoidingLootModifier::new)));
 
-	// 26.1 : LootModifier gagne un champ int priority (ctor + codec).
 	protected VoidingLootModifier(LootItemCondition[] conditions, int priority) {
 		super(conditions, priority);
 	}
 
 	@Override
 	protected ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
-		// 26.1 : getParamOrNull → getOptionalParameter ; le param TOOL est un ItemInstance.
 		ItemInstance tool = context.getOptionalParameter(LootContextParams.TOOL);
 		if (tool == null) return generatedLoot;
 

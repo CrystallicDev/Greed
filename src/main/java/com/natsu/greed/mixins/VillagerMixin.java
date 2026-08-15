@@ -24,9 +24,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.maps.MapDecorationTypes;
 
 /**
- * 26.1 : l'API programmatique de trades villageois a disparu (les trades sont data-driven). Pour les
- * trades qui nécessitent un accès runtime (recherche de biome/structure, registre complet d'enchants),
- * on ajoute nos MerchantOffer à la fin de updateTrades — l'équivalent moderne du VillagerTradesEvent.
+ * villager trades are data-driven now, so there's no programmatic trade API. the trades that need
+ * runtime access (biome/structure search, the full enchant registry) get their MerchantOffers
+ * appended at the end of updateTrades - the modern equivalent of the old VillagerTradesEvent.
  */
 @Mixin(value = Villager.class, remap = false)
 public abstract class VillagerMixin {

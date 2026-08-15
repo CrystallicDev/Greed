@@ -17,8 +17,8 @@ import net.minecraft.world.item.enchantment.EnchantmentInstance;
 
 public class EnchantMenuHandler {
 
-	// 1.21 : EnchantmentInstance wrappe un Holder<Enchantment> ; on résout les clés de curses de la
-	// config via le RegistryAccess et on ne garde que celles applicables à l'item.
+	// EnchantmentInstance wraps a Holder<Enchantment>. we resolve the config's curse keys through
+	// the RegistryAccess and keep only the ones that apply to the item.
 	public static List<EnchantmentInstance> onInterceptEnchant(EnchantmentTableState state, RandomSource rng,
 			ItemStack item, List<EnchantmentInstance> original, RegistryAccess access) {
 		if (state == EnchantmentTableState.DEFAULT && item.getItem() == Items.BOOK) return new ArrayList<>();
@@ -28,7 +28,7 @@ public class EnchantMenuHandler {
 		List<EnchantmentInstance> allowedEnchants = filterEnchants(state, original);
 		if (allowedEnchants.isEmpty()) return allowedEnchants;
 
-		// curses peut être vide (config vide, ou aucune curse applicable à l'item) : pas de tirage.
+		// curses can be empty (empty config, or no curse fits the item), so nothing gets rolled.
 		boolean rollCurse = !curses.isEmpty() && rng.nextFloat() <= ServerConfig.getCurseProbability(state);
 
 		if (state == EnchantmentTableState.DEFAULT) {
@@ -70,7 +70,7 @@ public class EnchantMenuHandler {
 		List<ResourceKey<Enchantment>> stageEnchants = ServerConfig.getEnchantmentList(state);
 		for (EnchantmentInstance instance : original) {
 			boolean listed = instance.enchantment().unwrapKey().map(stageEnchants::contains).orElse(false);
-			// liste blanche : on garde les enchants listés ; liste noire : on garde les non-listés.
+			// whitelist: keep the listed enchants; blacklist: keep the ones not listed.
 			if (listed == isWhiteList) {
 				allowed.add(instance);
 			}

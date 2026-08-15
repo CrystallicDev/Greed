@@ -12,7 +12,6 @@ public class GreedBlocks {
 
 	public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(Greed.MODID);
 
-	// 26.1 : registerBlock(name, factory, propsSupplier) injecte l'ID de registre dans les Properties.
 	public static final DeferredBlock<GreedCauldronBlock> CAULDRON = BLOCKS.registerBlock("greed_cauldron",
 			GreedCauldronBlock::new,
 			() -> BlockBehaviour.Properties.ofFullCopy(Blocks.WATER_CAULDRON));

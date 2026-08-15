@@ -12,13 +12,13 @@ import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.event.ModifyDefaultComponentsEvent;
 
 /**
- * Farmer's Delight : réduit la nutrition des viandes cuites simples.
+ * Farmer's Delight - drops the nutrition on plain cooked meats.
  *
- * <p>1.21 : la nourriture n'est plus un champ mutable de l'Item mais le composant
- * {@link DataComponents#FOOD}. On patche donc les composants par défaut au démarrage via
- * {@link ModifyDefaultComponentsEvent} (bus mod). Conséquence vs 1.20.1 : le rééquilibrage n'est
- * plus re-piloté à chaud par la config SERVER (non chargée à ce stade) ; il applique le facteur par
- * défaut. Le pilotage runtime fin est reporté au Bloc B si besoin.
+ * <p>food isn't a mutable Item field anymore, it's the
+ * {@link DataComponents#FOOD} component, so we patch the default components at startup via
+ * {@link ModifyDefaultComponentsEvent} (mod bus). downside: the rebalance can't be re-driven
+ * live by the SERVER config (not loaded yet at this point), so it just applies the default
+ * factor. fine-grained runtime control is deferred if we ever need it.
  */
 public class GreedFoodModifiers {
 

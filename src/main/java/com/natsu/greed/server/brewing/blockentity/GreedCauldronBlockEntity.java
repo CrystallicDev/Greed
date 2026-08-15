@@ -20,7 +20,7 @@ import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-// Contenu d'un chaudron Greed (le niveau est porté par le blockstate)
+// what's inside a Greed cauldron (fill level lives on the blockstate)
 public class GreedCauldronBlockEntity extends BlockEntity {
 
 	private List<MobEffectInstance> effects = new ArrayList<>();
@@ -37,8 +37,8 @@ public class GreedCauldronBlockEntity extends BlockEntity {
 		return !effects.isEmpty();
 	}
 
-	// Fusionne la potion au contenu ; sur effet commun, garde le plus haut ampli et
-	// ajoute une fraction de la durée du plus faible. Ex : Speed II 1:30 + Speed I 8:00 = Speed II 5:30
+	// merges the potion into what's already there. on a shared effect, keeps the higher amplifier and
+	// adds a slice of the weaker one's duration. e.g. Speed II 1:30 + Speed I 8:00 = Speed II 5:30
 	public boolean addPotion(Potion incoming) {
 		if (incoming.getEffects().isEmpty()) {
 			return false;
@@ -84,7 +84,7 @@ public class GreedCauldronBlockEntity extends BlockEntity {
 		return new MobEffectInstance(strong.getEffect(), duration, strong.getAmplifier());
 	}
 
-	/** Vide le chaudron et retourne son contenu. */
+	/** empties the cauldron and hands back what was in it. */
 	public List<MobEffectInstance> drain() {
 		List<MobEffectInstance> out = effects;
 		effects = new ArrayList<>();
@@ -108,8 +108,6 @@ public class GreedCauldronBlockEntity extends BlockEntity {
 		}
 	}
 
-	// 26.1 : la persistance NBT passe par ValueOutput/ValueInput (codec-based). MobEffectInstance a un
-	// CODEC public → on stocke/lit la liste d'effets directement.
 	@Override
 	protected void saveAdditional(ValueOutput output) {
 		super.saveAdditional(output);
@@ -133,11 +131,10 @@ public class GreedCauldronBlockEntity extends BlockEntity {
 		return saveWithFullMetadata(registries);
 	}
 
-	// 26.1 : onDataPacket reçoit directement un ValueInput (le framework a déjà décodé le packet).
 	@Override
 	public void onDataPacket(Connection net, ValueInput input) {
 		loadAdditional(input);
-		// invalide le rendu pour rafraîchir la teinte dès le changement d'effets
+		// nudge a render update so the tint refreshes the moment the effects change
 		if (level != null && level.isClientSide()) {
 			level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
 		}

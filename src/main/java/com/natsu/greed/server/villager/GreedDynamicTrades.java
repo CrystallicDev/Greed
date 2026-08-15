@@ -32,9 +32,9 @@ import net.minecraft.world.level.saveddata.maps.MapDecorationType;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 
 /**
- * Trades villageois dynamiques (cartes de biome, cartes cross-dimension, livres multi-enchant) qui ne
- * s'expriment pas en datapack : ils nécessitent une recherche dans le monde ou le registre complet
- * d'enchants (donc les enchants de mods). Injectés à l'exécution via VillagerMixin (updateTrades TAIL).
+ * dynamic villager trades (biome maps, cross-dimension maps, multi-enchant books) that can't be
+ * expressed in a datapack: they need a world search or the full enchant registry (so modded
+ * enchants too). injected at runtime through VillagerMixin (updateTrades TAIL).
  */
 public final class GreedDynamicTrades {
 
@@ -55,7 +55,7 @@ public final class GreedDynamicTrades {
 		return new MerchantOffer(new ItemCost(Items.EMERALD, cost), Optional.of(COMPASS), map, maxUses, xp, 0.2f);
 	}
 
-	/** Carte vers un biome aléatoire du tag (recherche dans la dimension du villageois). */
+	/** map to a random biome from the tag (searched in the villager's dimension). */
 	public static MerchantOffer biomeMap(ServerLevel level, RandomSource rng, int cost, TagKey<Biome> biomeTag,
 			String nameKey, Holder<MapDecorationType> deco, BlockPos origin, int maxUses, int xp) {
 		List<Holder<Biome>> biomes = new ArrayList<>();
@@ -63,13 +63,13 @@ public final class GreedDynamicTrades {
 		if (biomes.isEmpty()) return null;
 		ResourceKey<Biome> target = biomes.get(rng.nextInt(biomes.size())).unwrapKey().orElse(null);
 		if (target == null) return null;
-		// recherche 3D coûteuse : pas grossiers (32/64) sur rayon 2400 pour éviter un gel serveur.
+		// expensive 3D search: coarse steps (32/64) over a 2400 radius to avoid freezing the server.
 		Pair<BlockPos, Holder<Biome>> found = level.findClosestBiome3d(h -> h.is(target), origin, 2400, 32, 64);
 		if (found == null || found.getFirst() == null) return emptyMapFallback(xp);
 		return mapOffer(level, found.getFirst(), nameKey, deco, cost, maxUses, xp);
 	}
 
-	/** Carte vers une structure dans une AUTRE dimension (Nether/End). */
+	/** map to a structure in ANOTHER dimension (Nether/End). */
 	public static MerchantOffer dimStructMap(MinecraftServer server, ResourceKey<Level> dimension, int cost,
 			TagKey<Structure> dest, String nameKey, Holder<MapDecorationType> deco, BlockPos origin, int maxUses, int xp) {
 		if (server == null) return null;
@@ -80,7 +80,7 @@ public final class GreedDynamicTrades {
 		return mapOffer(level, pos, nameKey, deco, cost, maxUses, xp);
 	}
 
-	/** Livre à 1..N enchants tirés du registre complet (tag tradeable, enchants de mods inclus). */
+	/** book with 1..N enchants pulled from the full registry (tradeable tag, modded enchants included). */
 	public static MerchantOffer multiBook(ServerLevel level, RandomSource rng, int minEnch, int maxEnch, int xp) {
 		List<Holder<Enchantment>> pool = new ArrayList<>();
 		level.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getTagOrEmpty(EnchantmentTags.TRADEABLE).forEach(pool::add);

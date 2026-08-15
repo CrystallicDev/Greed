@@ -15,7 +15,6 @@ public class GreedBlockEntities {
 	public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES =
 			DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, Greed.MODID);
 
-	// 26.1 : BlockEntityType.Builder supprimé → ctor direct (factory, Set<Block> valides).
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<GreedCauldronBlockEntity>> CAULDRON =
 			BLOCK_ENTITIES.register("potion_cauldron",
 					() -> new BlockEntityType<>(GreedCauldronBlockEntity::new, Set.of(GreedBlocks.CAULDRON.get())));

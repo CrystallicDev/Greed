@@ -20,7 +20,6 @@ public class EnchantHelperMixin {
 	@Inject(method = "getEnchantmentCost", at = @At("HEAD"), cancellable = true)
 	private static void getEnchantmentCost(RandomSource random, int slot, int enchantPowerBonus, ItemStack itemstack, CallbackInfoReturnable<Integer> ci) {
 		if (ServerConfig.DISABLE_BOOKSHELVES_CAP.get()) {
-			// 26.1 : getEnchantmentValue() supprimé → composant DataComponents.ENCHANTABLE (record value).
 			Enchantable enchantable = itemstack.get(DataComponents.ENCHANTABLE);
 			int i = enchantable == null ? 0 : enchantable.value();
 			if (i <= 0) {

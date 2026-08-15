@@ -36,7 +36,6 @@ public class RawFoodListener {
 	private static void block(LivingEntityUseItemEvent.Start event, String messageKey) {
 		event.setCanceled(true);
 		if (event.getEntity() instanceof ServerPlayer player) {
-			// 26.1 : displayClientMessage → sendSystemMessage(Component, boolean overlay).
 			player.sendSystemMessage(Component.translatable(messageKey), true);
 		}
 	}
