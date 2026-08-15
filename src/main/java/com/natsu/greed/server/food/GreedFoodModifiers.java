@@ -12,7 +12,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.fml.ModList;
 
-// Farmer's Delight : réduit la nutrition des viandes cuites simples
+// Farmer's Delight - drops the nutrition on plain cooked meats
 public class GreedFoodModifiers {
 
 	private static final List<Item> PLAIN_COOKED_MEATS = List.of(

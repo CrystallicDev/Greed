@@ -24,7 +24,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.HitResult;
 
-// Chaudron à potions ; interactions eau/pluie/feu vanilla neutralisées
+// potion cauldron - the vanilla water/rain/fire interactions are switched off
 public class GreedCauldronBlock extends LayeredCauldronBlock implements EntityBlock {
 
 	private static final Map<Item, CauldronInteraction> NO_INTERACTIONS = CauldronInteraction.newInteractionMap();
@@ -40,7 +40,7 @@ public class GreedCauldronBlock extends LayeredCauldronBlock implements EntityBl
 
 	@Override
 	public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
-		// applique les effets du chaudron aux entités qui y baignent, sans le vider
+		// dumps the stored effects on entities standing in it, without draining it
 		if (level.isClientSide() || !(entity instanceof LivingEntity living)) {
 			return;
 		}
@@ -53,7 +53,7 @@ public class GreedCauldronBlock extends LayeredCauldronBlock implements EntityBl
 		}
 		for (MobEffectInstance stored : cauldron.getEffects()) {
 			if (stored.getEffect().isInstantenous()) {
-				continue; // un effet instantané serait réappliqué à chaque tick
+				continue; // an instant effect would just re-fire every tick
 			}
 			MobEffectInstance current = living.getEffect(stored.getEffect());
 			if (current == null || (current.getDuration() <= 20 && current.getAmplifier() <= stored.getAmplifier())) {

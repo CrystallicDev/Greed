@@ -20,8 +20,8 @@ public class GreedBlockStateProvider extends BlockStateProvider {
     protected void registerStatesAndModels() {
         IntegerProperty LEVEL = LayeredCauldronBlock.LEVEL;
 
-        // modèles vanilla du chaudron d'eau : leur face "content" a un tintindex,
-        // ce qui permet de teinter le liquide via le BlockColor handler (GreedBlockColors)
+        // reuse the vanilla water cauldron models - their "content" face has a tintindex,
+        // which lets us tint the liquid through the BlockColor handler (GreedBlockColors)
         getVariantBuilder(GreedBlocks.CAULDRON.get())
             .partialState().with(LEVEL, 1)
                 .modelForState().modelFile(

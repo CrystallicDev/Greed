@@ -35,7 +35,7 @@ public class Greed {
     	MixinExtrasBootstrap.init();
     }
 
-    // appliquer les modificateurs seulement une fois la config chargée
+    // only apply the modifiers once the config is actually loaded
     private static void onConfigLoading(final ModConfigEvent.Loading event) {
     	applyConfigModifiers(event);
     }
