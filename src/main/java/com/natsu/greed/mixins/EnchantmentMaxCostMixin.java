@@ -12,8 +12,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraftforge.registries.ForgeRegistries;
 
-// Meme logique que EnchantmentMaxLevelMixin mais pour getMaxCost, overridé sur un jeu de
-// classes plus large (d'ou la liste distincte).
+// same idea as EnchantmentMaxLevelMixin but for getMaxCost, which is overridden on a wider
+// set of classes (hence the separate list).
 @Mixin(targets = {
 		"net.minecraft.world.item.enchantment.Enchantment",
 		"net.minecraft.world.item.enchantment.ProtectionEnchantment",

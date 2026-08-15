@@ -27,7 +27,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-// Swap chaudron vanilla <-> chaudron Greed selon qu'on y verse/retire une potion
+// swaps the vanilla cauldron <-> Greed cauldron as you pour potions in or take them out
 @Mod.EventBusSubscriber(modid = Greed.MODID)
 public class ForgeCauldronListener {
 
@@ -43,7 +43,7 @@ public class ForgeCauldronListener {
 		if (state.is(Blocks.CAULDRON) && e.getItemStack().getItem() == Items.POTION) {
 			Potion potion = PotionUtils.getPotion(e.getItemStack());
 			if (potion.getEffects().isEmpty()) {
-				return; // eau, awkward, etc. : comportement vanilla
+				return; // water, awkward, whatever - let vanilla handle it
 			}
 			consumeEvent(e, level);
 			if (!level.isClientSide()) {
@@ -56,7 +56,7 @@ public class ForgeCauldronListener {
 					return;
 				}
 				if (state.getValue(LayeredCauldronBlock.LEVEL) >= 3) {
-					return; // plein : on laisse le comportement vanilla (boire la potion)
+					return; // full, so let vanilla take over (drinking the potion)
 				}
 				consumeEvent(e, level);
 				if (!level.isClientSide()) {
@@ -87,7 +87,7 @@ public class ForgeCauldronListener {
 		if (!MinecraftForge.EVENT_BUS.post(event) && cauldron.addPotion(potion)) {
 			exchangeBottle(e, level, pos, new ItemStack(Items.GLASS_BOTTLE), SoundEvents.BOTTLE_EMPTY);
 		} else {
-			level.setBlock(pos, oldState, 3); // annulé : on restaure le chaudron vanilla
+			level.setBlock(pos, oldState, 3); // cancelled, put the vanilla cauldron back
 		}
 	}
 
@@ -113,7 +113,7 @@ public class ForgeCauldronListener {
 		CauldronTakingPotionEvent event = new CauldronTakingPotionEvent(e.getEntity(), e.getHand(), pos, cauldron);
 		if (!MinecraftForge.EVENT_BUS.post(event)) {
 			ItemStack potionStack = PotionCreatorUtils.makeIntoPotion(Items.POTION, cauldron.drain());
-			level.setBlock(pos, Blocks.CAULDRON.defaultBlockState(), 3); // retour au chaudron vanilla vide
+			level.setBlock(pos, Blocks.CAULDRON.defaultBlockState(), 3); // back to an empty vanilla cauldron
 			exchangeBottle(e, level, pos, potionStack, SoundEvents.BOTTLE_FILL);
 		}
 	}

@@ -12,10 +12,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraftforge.registries.ForgeRegistries;
 
-// getMaxLevel est overridé dans chaque sous-classe : cibler Enchantment seule ne suffit pas,
-// le dispatch passe par l'override. On liste donc les sous-classes qui l'overrident (+ la base
-// pour les enchants qui la laissent renvoyer 1). Separe de EnchantmentMaxCostMixin car les deux
-// methodes ne sont pas overridees sur le meme jeu de classes.
+// getMaxLevel is overridden in every subclass, so targeting Enchantment alone isn't enough -
+// the call dispatches through the override, so we list every subclass that overrides it (+ the base
+// for enchants that let it return 1). kept separate from EnchantmentMaxCostMixin since the two
+// methods aren't overridden on the same set of classes.
 @Mixin(targets = {
 		"net.minecraft.world.item.enchantment.Enchantment",
 		"net.minecraft.world.item.enchantment.ProtectionEnchantment",
