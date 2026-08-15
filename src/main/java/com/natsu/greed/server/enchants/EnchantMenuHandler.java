@@ -26,8 +26,8 @@ public class EnchantMenuHandler {
         List<EnchantmentInstance> allowedEnchants = filterEnchants(state, original);
         if (allowedEnchants.isEmpty()) { return allowedEnchants; }
         
-        // curses peut être vide (liste config vide, ou aucune curse applicable à l'item —
-        // fréquent avec les items d'autres mods) : dans ce cas on ne tire jamais de curse
+        // curses can be empty (empty config list, or no curse fits the item -
+        // happens a lot with modded items), in which case we never roll one
         boolean rollCurse = curses.length > 0 && rng.nextFloat() <= ServerConfig.getCurseProbability(state);
 
         if (state == EnchantmentTableState.DEFAULT) {

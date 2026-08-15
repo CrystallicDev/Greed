@@ -20,7 +20,6 @@ import net.minecraftforge.registries.RegistryObject;
 
 public class GreedEnchants {
 
-	// 1.20.6 : les enchants restent un registre code → DeferredRegister sur le registre vanilla.
 	public static final DeferredRegister<Enchantment> ENCHANTMENTS = DeferredRegister.create(Registries.ENCHANTMENT, Greed.MODID);
 	
 	public static final RegistryObject<Enchantment> CURSE_OF_THE_SPONGE = ENCHANTMENTS.register("curse_of_the_sponge", 

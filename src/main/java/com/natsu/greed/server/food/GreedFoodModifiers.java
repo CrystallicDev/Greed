@@ -15,12 +15,12 @@ import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 
 /**
- * Farmer's Delight : réduit la nutrition des viandes cuites simples.
+ * Farmer's Delight - drops the nutrition on plain cooked meats.
  *
- * <p>1.20.6 : la nourriture n'est plus un champ mutable de l'Item mais le composant
- * {@link DataComponents#FOOD}. On patche donc les composants par défaut au moment de leur
- * construction via {@link GatherComponentsEvent.Item} (bus Forge). Le rééquilibrage n'est plus
- * re-piloté à chaud par la config SERVER (non chargée à ce stade) : on applique le facteur par défaut.
+ * <p>food isn't a mutable Item field anymore, it's the
+ * {@link DataComponents#FOOD} component. so we patch the default components as they're
+ * built, via {@link GatherComponentsEvent.Item} (Forge bus). we can't rebalance live from
+ * the SERVER config (not loaded yet at this point), so we just apply the default factor.
  */
 @Mod.EventBusSubscriber(modid = Greed.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class GreedFoodModifiers {

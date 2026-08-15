@@ -47,7 +47,7 @@ public abstract class EnchantmentMenuMixin {
 
 	@Inject(method = "clickMenuButton", at = @At("HEAD"))
 	private void captureDisplayedCost(Player player, int id, CallbackInfoReturnable<Boolean> cir) {
-		// le coût affiché est recalculé après l'enchantement : on le capture avant
+		// the shown cost gets recalculated after enchanting, so grab it beforehand
 		int[] costs = ((EnchantmentMenu) (Object) this).costs;
 		greed$displayedCost = (id >= 0 && id < costs.length) ? costs[id] : 0;
 	}
@@ -58,7 +58,7 @@ public abstract class EnchantmentMenuMixin {
 		if (!cir.getReturnValueZ()) return;
 		if (player.getAbilities().instabuild) return;
 
-		// vanilla a retiré (id + 1) niveaux ; on complète jusqu'au coût affiché (façon 1.7)
+		// vanilla only took (id + 1) levels, top it up to the shown cost, 1.7 style
 		int extra = greed$displayedCost - (id + 1);
 		if (extra > 0) {
 			player.giveExperienceLevels(-extra);

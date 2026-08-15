@@ -12,7 +12,7 @@ import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-// Teinte le liquide du chaudron selon les potions qu'il contient
+// tints the cauldron water based on the potions inside
 @Mod.EventBusSubscriber(modid = Greed.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class GreedBlockColors {
 

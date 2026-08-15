@@ -16,7 +16,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-// Empêche de remplir une bouteille d'eau à une source (il faut un chaudron)
+// stops you filling a water bottle straight from a source, you need a cauldron
 @Mod.EventBusSubscriber(modid = Greed.MODID)
 public class WaterBottleListener {
 
