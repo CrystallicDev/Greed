@@ -27,7 +27,7 @@ public abstract class EnchantmentMaxCostMixin {
 		if (server == null) { return original; }
 		Registry<Enchantment> registry = server.registryAccess().registryOrThrow(Registries.ENCHANTMENT);
 		ResourceLocation id = registry.getKey((Enchantment) (Object) this);
-		if (id == null || !id.getNamespace().equals("minecraft")) { return original; }
+		if (id == null) { return original; }
 		Map<String, Integer> map = ServerConfig.getMap(ServerConfig.ENCHANTMENTS_MAX_COST.get());
 		Integer override = map.get(id.toString());
 		return override != null ? override : original;
