@@ -6,6 +6,8 @@
     "mixins": [
         "FishHookMixin",
         "EnchantHelperMixin",
+        "EnchantmentMaxLevelMixin",
+        "EnchantmentMaxCostMixin",
         "EnchantmentMenuMixin",
         "EnchantmentMenuAccessor"
     ],
