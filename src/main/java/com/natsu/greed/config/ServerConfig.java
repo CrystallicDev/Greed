@@ -224,21 +224,21 @@ public class ServerConfig {
 		ENCHANTMENTS_RARITY = builder.comment(
 	                "Map each enchantment to a rarity value:\n" +
 	                "  0 = COMMON, 1 = UNCOMMON, 2 = RARE, 3 = VERY_RARE"
-	        ).define("rarities", getDefaultRarities());
+	        ).defineList("rarities", getDefaultRarities(), o -> o instanceof String);
 		builder.pop();
 
 		builder.push("enchantmentMaxLevels");
 		USE_CUSTOM_MAX_LEVELS = builder.comment("Use a custom max level for each enchantment. Disable this to use vanilla.").define("useCustomEnchantmentMaxLevels", true);
 		ENCHANTMENTS_MAX_LEVELS = builder.comment(
 	                "Map each enchantment to a max level."
-	        ).define("maxLevels", getDefaultMaxLevels());
+	        ).defineList("maxLevels", getDefaultMaxLevels(), o -> o instanceof String);
 		builder.pop();
 
 		builder.push("enchantmentMaxCosts");
 		USE_CUSTOM_MAX_COST = builder.comment("Use a custom max cost for each enchantment. This is recommended to be put at 999, otherwise, some enchants become unavailable at higher bookshelves level. Disable this to use vanilla.").define("useCustomEnchantmentMaxCosts", true);
 		ENCHANTMENTS_MAX_COST = builder.comment(
 	                "Map each enchantment to a max cost."
-	        ).define("maxCosts", getDefaultMaxCosts());
+	        ).defineList("maxCosts", getDefaultMaxCosts(), o -> o instanceof String);
 		builder.pop();
 
 		builder.push("villagerTrades");
