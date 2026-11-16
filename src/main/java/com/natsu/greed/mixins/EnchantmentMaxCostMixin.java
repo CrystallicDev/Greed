@@ -57,7 +57,6 @@ public abstract class EnchantmentMaxCostMixin {
 		Enchantment self = (Enchantment) (Object) this;
 		ResourceLocation id = ForgeRegistries.ENCHANTMENTS.getKey(self);
 		if (id == null) return original;
-		if (!id.getNamespace().equals("minecraft")) return original;
 		Map<String, Integer> maxCostMap = ServerConfig.getMap(ServerConfig.ENCHANTMENTS_MAX_COST.get());
 		Integer override = maxCostMap.get(id.toString());
 		return override != null ? override : original;
